@@ -39,7 +39,7 @@ const start = async () => {
 		schema,
 		context: async ({ req }) => {
 			const auth = req ? req.headers.authorization : null
-			if (auth && auth.toLowerCase().startsWith('bearer  ')) {
+			if (auth && auth.toLowerCase().startsWith('bearer ')) {
 				const decodedToken = jwt.verify(auth.substring(7), config.SECRET)
 				const currentUser = await User.findById(decodedToken.id)
 				return { currentUser }
@@ -59,8 +59,8 @@ const start = async () => {
 		],
 	})
 	await server.start()
-	app.use(cors)
-	app.use('/', (req, res) => {
+	app.use(cors())
+	app.get('/', (req, res) => {
 		res.json({
 			message: 'ShootDrop API',
 		})

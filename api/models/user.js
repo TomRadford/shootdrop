@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+
 const schema = mongoose.Schema({
 	username: {
 		type: String,
@@ -9,6 +10,15 @@ const schema = mongoose.Schema({
 		type: String,
 		required: true,
 	},
-	isGearhouse: Boolean,
+	gearhouse: {
+		type: Boolean,
+		default: false,
+	},
+	// drops: [
+	// 	{
+	// 		type: mongoose.Schema.Types.ObjectId,
+	// 		ref: 'Drop',
+	// 	},
+	// ],
 })
 module.exports = mongoose.model('User', schema)
