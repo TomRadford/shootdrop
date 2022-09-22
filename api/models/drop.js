@@ -6,8 +6,9 @@ const schema = mongoose.Schema(
 	{
 		project: String,
 		client: String,
-		dop: mongoose.Schema.Types.ObjectId || String,
-		director: mongoose.Schema.Types.ObjectId || String,
+		director: String,
+		dop: String,
+		soundie: String,
 		gearCheckDate: Date,
 		startDate: Date,
 		endDate: Date,

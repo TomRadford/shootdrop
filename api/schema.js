@@ -5,6 +5,7 @@ const typeDefs = gql`
 
 	type User {
 		id: ID!
+		fullname: String
 		username: String!
 		gearhouse: Boolean!
 		drops: [Drop]
@@ -14,8 +15,9 @@ const typeDefs = gql`
 		id: ID!
 		project: String!
 		client: String
-		dop: User
-		director: User
+		director: String
+		dop: String
+		soundie: String
 		gearCheckDate: Date
 		startDate: Date
 		endDate: Date
@@ -40,8 +42,9 @@ const typeDefs = gql`
 		addDrop(
 			project: String!
 			client: String
-			dop: String
 			director: String
+			dop: String
+			soundie: String
 			gearCheckDate: Date
 			startDate: Date
 			endDate: Date

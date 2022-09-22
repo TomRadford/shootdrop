@@ -14,11 +14,6 @@ const schema = mongoose.Schema({
 		type: Boolean,
 		default: false,
 	},
-	// drops: [
-	// 	{
-	// 		type: mongoose.Schema.Types.ObjectId,
-	// 		ref: 'Drop',
-	// 	},
-	// ],
+	fullName: String,
 })
 module.exports = mongoose.model('User', schema)

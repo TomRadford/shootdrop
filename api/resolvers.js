@@ -42,6 +42,7 @@ const resolvers = {
 				...args,
 				users: [currentUser],
 			})
+
 			await drop.populate('users')
 			return await drop.save()
 		},
