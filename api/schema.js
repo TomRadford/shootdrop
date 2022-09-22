@@ -3,6 +3,13 @@ const { gql } = require('apollo-server-core')
 const typeDefs = gql`
 	scalar Date
 
+	enum GearCategory {
+		CAMERA
+		GRIPS
+		LIGHTING
+		SOUND
+	}
+
 	type User {
 		id: ID!
 		fullname: String
