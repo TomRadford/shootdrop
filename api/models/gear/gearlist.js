@@ -11,6 +11,20 @@ const subSchema = mongoose.Schema(
 			type: Number,
 			default: 1,
 		},
+		prefs: [
+			{
+				pref: {
+					type: mongoose.Schema.Types.ObjectId,
+					ref: 'GearPref',
+				},
+				opts: [
+					{
+						type: mongoose.Schema.Types.ObjectId,
+						ref: 'GearPrefOpts',
+					},
+				],
+			},
+		],
 		comment: String,
 	},
 	{ timestamps: true }

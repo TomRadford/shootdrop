@@ -60,7 +60,7 @@ const resolvers = {
 				throw new AuthenticationError('User not authorized to delete')
 			}
 			try {
-				Drop.findByIdAndDelete(args.drop)
+				await Drop.findByIdAndDelete(args.drop)
 			} catch (e) {
 				throw new UserInputError('Delete error:', e)
 			}
