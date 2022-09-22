@@ -6,8 +6,6 @@ const User = require('./models/user')
 const Drop = require('./models/drop')
 const config = require('./utils/config')
 const logger = require('./utils/logger')
-const { default: mongoose } = require('mongoose')
-
 const dateScalar = new GraphQLScalarType({
 	name: 'Date',
 	description: 'Date scalar type',
@@ -27,33 +25,45 @@ const dateScalar = new GraphQLScalarType({
 
 const resolvers = {
 	Date: dateScalar,
+	User: {
+		drops: async (root, args, context, info) => {
+			const { currentUser } = context
+			const userDrops = await Drop.find({ users: currentUser })
+			return userDrops
+		},
+	},
 	Mutation: {
 		addDrop: async (root, args, context) => {
 			const { currentUser } = context
 			if (!currentUser) {
 				throw new AuthenticationError('User not authenticated')
 			}
-			const drop = new Drop({ ...args, users: [currentUser._id] })
-			currentUser.drops = currentUser.drops.concat(drop._id)
-			await currentUser.save()
+			const drop = new Drop({
+				...args,
+				users: [currentUser],
+			})
+			await drop.populate('users')
 			return await drop.save()
 		},
 
 		removeDrop: async (root, args, context) => {
 			const { currentUser } = context
 			const drop = await Drop.findById(args.drop)
-			const canRemove = !drop
-				? false
-				: drop.users.find(
-					(user) => user._id.toString() === currentUser._id.toString()
-				)
-			// console.log(canRemove)
-			// console.log(drop.users[0]._id)
-			// console.log(currentUser._id)
+			if (!drop) {
+				throw new UserInputError('Drop not found')
+			}
+			const canRemove = drop.users.find(
+				(user) => user._id.toString() === currentUser._id.toString()
+			)
 			if (!canRemove) {
 				throw new AuthenticationError('User not authorized to delete')
 			}
-			return false
+			try {
+				Drop.findByIdAndDelete(args.drop)
+			} catch (e) {
+				throw new UserInputError('Delete error:', e)
+			}
+			return true
 		},
 
 		createUser: async (root, args) => {
@@ -95,7 +105,7 @@ const resolvers = {
 	Query: {
 		me: async (root, args, context) => {
 			const { currentUser } = context
-			await currentUser.populate('drops')
+			await currentUser
 			return currentUser
 		},
 
