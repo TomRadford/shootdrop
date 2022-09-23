@@ -3,15 +3,16 @@ const mongoose = require('mongoose')
 //['v-mount', 'b-mount', 'gold-mount']
 //to selectable get _id to use in gearlist
 // to be able to select opts
-const prefOptsSchema = mongoose.Schema({
+const prefOptSchema = mongoose.Schema({
 	name: String,
 })
 
-//"Power Solution"
+//eg: "Power Solution"
 const prefSchema = mongoose.Schema({
 	gearItem: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'GearItem',
+		required: true,
 	},
 	name: {
 		type: String,
@@ -26,6 +27,6 @@ const prefSchema = mongoose.Schema({
 })
 
 module.exports = {
-	GrearPrefOpts: mongoose.model(prefOptsSchema, 'GearPrefOpts'),
+	GrearPrefOpts: mongoose.model(prefOptSchema, 'GearPrefOpt'),
 	GearPref: mongoose.model(prefSchema, 'GearPref'),
 }

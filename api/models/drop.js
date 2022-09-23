@@ -14,6 +14,12 @@ const schema = mongoose.Schema(
 		endDate: Date,
 		wrapDate: Date,
 		users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+		lists: [
+			{
+				type: mongoose.Schema.Types.ObjectId,
+				ref: 'GearList',
+			},
+		],
 	},
 	{ timestamps: true }
 )

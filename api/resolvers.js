@@ -47,6 +47,21 @@ const resolvers = {
 			return await drop.save()
 		},
 
+		updateDrop: async (root, args, context) => {
+			const { currentUser } = context
+			if (!currentUser) {
+				throw new AuthenticationError('User not authenticated')
+			}
+			const existingDrop = await Drop.findByIdAndUpdate(
+				args.id,
+				{
+					...args,
+				},
+				{ returnDocument: 'after' }
+			)
+			return existingDrop
+		},
+
 		removeDrop: async (root, args, context) => {
 			const { currentUser } = context
 			const drop = await Drop.findById(args.drop)
@@ -111,6 +126,17 @@ const resolvers = {
 		},
 
 		allDrops: async (root, args, context) => {
+			if (args.drop) {
+				try {
+					const drop = await Drop.findById(args.drop).populate('users')
+					return [drop]
+				} catch {
+					throw new UserInputError('Drop not found', {
+						args: args,
+					})
+				}
+			}
+
 			if (!process.env.NODE_ENV === 'development') {
 				//placeholder to protect all drops on prod
 				throw new AuthenticationError('Unauthoized')

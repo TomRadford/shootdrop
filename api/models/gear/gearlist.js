@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 
+//GearListItem
 const subSchema = mongoose.Schema(
 	{
 		gearItem: {
