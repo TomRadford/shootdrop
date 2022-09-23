@@ -41,6 +41,7 @@ const typeDefs = gql`
 	type GearList {
 		id: ID!
 		category: String
+		comment: String
 		items: [GearListItem]
 	}
 
@@ -101,6 +102,7 @@ const typeDefs = gql`
 			startDate: Date
 			endDate: Date
 			wrapDate: Date
+      //add list here or new mutator?
 		): Drop!
 		updateDrop(
 			id: String!

@@ -36,6 +36,7 @@ const schema = mongoose.Schema({
 		type: String,
 		required: true,
 	},
+	comment: String,
 	items: [subSchema],
 })
 

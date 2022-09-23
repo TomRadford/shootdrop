@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const User = require('./models/user')
 const Drop = require('./models/drop')
+const GearList = require('./models/gear/list')
 const config = require('./utils/config')
 const logger = require('./utils/logger')
 const dateScalar = new GraphQLScalarType({
@@ -81,6 +82,18 @@ const resolvers = {
 			}
 			return true
 		},
+
+		// createGearList: async (root, args, context) => {
+		// 	const { currentUser } = context
+		// 	if (!currentUser) {
+		// 		throw new AuthenticationError('User not authenticated')
+		// 	}
+		// 	const newGearList = new GearList({
+		// 		...args,
+		// 	})
+		// 	await
+		// 	return await newGearList.save()
+		// },
 
 		createUser: async (root, args) => {
 			const existingUser = await User.findOne({ username: args.username })
