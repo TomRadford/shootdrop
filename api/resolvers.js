@@ -39,9 +39,11 @@ const resolvers = {
 			if (!currentUser) {
 				throw new AuthenticationError('User not authenticated')
 			}
+			const list = new GearList({}) //HERE!
 			const drop = new Drop({
 				...args,
 				users: [currentUser],
+				lists: [list],
 			})
 
 			await drop.populate('users')
