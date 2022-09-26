@@ -65,6 +65,7 @@ const typeDefs = gql`
 		images: [Image]
 		productURL: String
 		allPrefs: [GearPref]
+		tags: [String]
 	}
 
 	type GearPref {
@@ -92,6 +93,16 @@ const typeDefs = gql`
 		login(username: String!, password: String!): Token!
 		createUser(username: String!, password: String!): User!
 		editMe(password: String!): Boolean!
+		addGearItem(
+			category: GearCategory!
+			manufacturer: String!
+			model: String!
+			description: String
+			images: [String]
+			productURL: String
+			tags: [String]
+		): GearItem!
+		editGearItem(id: String): GearItem!
 		addDrop(
 			project: String!
 			client: String
@@ -102,7 +113,6 @@ const typeDefs = gql`
 			startDate: Date
 			endDate: Date
 			wrapDate: Date
-      //add list here or new mutator?
 		): Drop!
 		updateDrop(
 			id: String!
@@ -117,6 +127,9 @@ const typeDefs = gql`
 			wrapDate: Date
 		): Drop!
 		removeDrop(drop: String!): Boolean!
+		addList(drop: String!, category: GearCategory!, comment: String): GearList!
+		editList(id: String!, comment: String!): GearList!
+		removeList(id: String!): Boolean!
 	}
 `
 

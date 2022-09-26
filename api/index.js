@@ -15,7 +15,7 @@ const mongoose = require('mongoose')
 const User = require('./models/user')
 
 const typeDefs = require('./schema')
-const resolvers = require('./resolvers')
+const resolvers = require('./resolvers/resolvers')
 
 const logger = require('./utils/logger')
 const config = require('./utils/config')

@@ -2,11 +2,14 @@ const { UserInputError, AuthenticationError } = require('apollo-server-core')
 const { GraphQLScalarType, Kind } = require('graphql')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
-const User = require('./models/user')
-const Drop = require('./models/drop')
-const GearList = require('./models/gear/list')
-const config = require('./utils/config')
-const logger = require('./utils/logger')
+const User = require('../models/user')
+const Drop = require('../models/drop')
+const GearList = require('../models/gear/list')
+const GearItem = require('../models/gear/item')
+const config = require('../utils/config')
+const logger = require('../utils/logger')
+const { checkAuth, checkListPermissions } = require('../utils/auth')
+const { handleTags } = require('../utils/tags')
 const dateScalar = new GraphQLScalarType({
 	name: 'Date',
 	description: 'Date scalar type',
@@ -34,16 +37,34 @@ const resolvers = {
 		},
 	},
 	Mutation: {
+		addGearItem: async (root, args, context) => {
+			checkAuth(context)
+			const {
+				category,
+				manufacturer,
+				model,
+				description,
+				images,
+				productURL,
+				tags,
+			} = args
+			const tagObjects = await handleTags(tags)
+			const newGearItem = new GearItem({
+				category,
+				manufacturer,
+				model,
+				description,
+				images,
+				productURL,
+			})
+		},
+
 		addDrop: async (root, args, context) => {
+			checkAuth(context)
 			const { currentUser } = context
-			if (!currentUser) {
-				throw new AuthenticationError('User not authenticated')
-			}
-			const list = new GearList({}) //HERE!
 			const drop = new Drop({
 				...args,
 				users: [currentUser],
-				lists: [list],
 			})
 
 			await drop.populate('users')
@@ -51,10 +72,7 @@ const resolvers = {
 		},
 
 		updateDrop: async (root, args, context) => {
-			const { currentUser } = context
-			if (!currentUser) {
-				throw new AuthenticationError('User not authenticated')
-			}
+			checkAuth(context)
 			const existingDrop = await Drop.findByIdAndUpdate(
 				args.id,
 				{
@@ -66,11 +84,13 @@ const resolvers = {
 		},
 
 		removeDrop: async (root, args, context) => {
+			checkAuth(context)
 			const { currentUser } = context
 			const drop = await Drop.findById(args.drop)
 			if (!drop) {
 				throw new UserInputError('Drop not found')
 			}
+			//change to includes method?
 			const canRemove = drop.users.find(
 				(user) => user._id.toString() === currentUser._id.toString()
 			)
@@ -85,17 +105,64 @@ const resolvers = {
 			return true
 		},
 
-		// createGearList: async (root, args, context) => {
-		// 	const { currentUser } = context
-		// 	if (!currentUser) {
-		// 		throw new AuthenticationError('User not authenticated')
-		// 	}
-		// 	const newGearList = new GearList({
-		// 		...args,
-		// 	})
-		// 	await
-		// 	return await newGearList.save()
-		// },
+		addList: async (root, args, context) => {
+			checkAuth(context)
+			const existingDrop = await Drop.findById(args.drop)
+			await checkListPermissions(context, existingDrop)
+			const { category, comment } = args
+
+			const newGearList = new GearList({
+				category,
+				comment,
+			})
+
+			existingDrop.lists = existingDrop.lists.concat(newGearList)
+			await existingDrop.save()
+
+			return await newGearList.save()
+		},
+
+		editList: async (root, args, context) => {
+			checkAuth(context)
+			const existingGearList = await GearList.findById(args.id)
+			if (!existingGearList) {
+				throw new UserInputError('List not found')
+			}
+			const parentDrop = await Drop.findOne({ lists: existingGearList })
+			const { currentUser } = context
+			if (!parentDrop.users.includes(currentUser._id)) {
+				throw new UserInputError('User is not part of this drop')
+			}
+			const { comment } = args
+			const newList = await GearList.findByIdAndUpdate(
+				args.id,
+				{
+					comment,
+				},
+				{ returnDocument: 'after' }
+			)
+			return newList
+		},
+
+		removeList: async (root, args, context) => {
+			checkAuth(context)
+			const listToDelete = await GearList.findById(args.id)
+			if (!listToDelete) {
+				throw new UserInputError('List does not exist')
+			}
+			const parentDrop = await Drop.findOne({ lists: listToDelete })
+			await checkListPermissions(context, parentDrop)
+			try {
+				parentDrop.lists.filter((list) => list !== listToDelete)
+				await listToDelete.delete()
+				return true
+			} catch (e) {
+				throw new UserInputError(
+					'Failed to remove list with error: ',
+					e.message
+				)
+			}
+		},
 
 		createUser: async (root, args) => {
 			const existingUser = await User.findOne({ username: args.username })
@@ -143,7 +210,9 @@ const resolvers = {
 		allDrops: async (root, args, context) => {
 			if (args.drop) {
 				try {
-					const drop = await Drop.findById(args.drop).populate('users')
+					const drop = await Drop.findById(args.drop)
+						.populate('users')
+						.populate('lists')
 					return [drop]
 				} catch {
 					throw new UserInputError('Drop not found', {

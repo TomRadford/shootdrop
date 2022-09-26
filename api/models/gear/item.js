@@ -16,6 +16,12 @@ const schema = mongoose.Schema({
 	description: String,
 	images: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Image' }],
 	productURL: String,
+	tags: [
+		{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Tag',
+		},
+	],
 })
 
 module.exports = mongoose.model('GearItem', schema)
