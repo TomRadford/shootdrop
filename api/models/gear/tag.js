@@ -7,7 +7,6 @@ const schema = mongoose.Schema({
 	},
 	category: {
 		type: String,
-		required: true,
 	},
 })
 

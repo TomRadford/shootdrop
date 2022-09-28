@@ -58,7 +58,8 @@ const typeDefs = gql`
 
 	type Tag {
 		name: String!
-		category: String!
+		category: String
+		id: ID!
 	}
 
 	type GearItem {
@@ -95,9 +96,10 @@ const typeDefs = gql`
 		allTags(tag: String): [Tag!]
 		allGearItems(
 			id: String
-			category: String
+			category: GearCategory
 			manufacturer: String
 			model: String
+			tags: [String]
 		): [GearItem!]
 	}
 

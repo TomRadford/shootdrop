@@ -49,8 +49,7 @@ const resolvers = {
 				productURL,
 				tags,
 			} = args
-			const tagObjects = await handleTags(tags, category)
-			console.log(tagObjects)
+			const tagObjects = tags ? await handleTags(tags, category) : []
 			const newGearItem = new GearItem({
 				category,
 				manufacturer,
@@ -62,7 +61,8 @@ const resolvers = {
 			})
 			return await newGearItem.save()
 		},
-
+		//HERE:
+		addGearItem: async (root, args, context) => { },
 		addDrop: async (root, args, context) => {
 			checkAuth(context)
 			const { currentUser } = context
@@ -248,17 +248,30 @@ const resolvers = {
 		},
 
 		allGearItems: async (root, args, context) => {
-			if (Object.keys(args).length > 0) {
-				console.log(args)
-				try {
-					return await GearItem.find({
-						id: args.id,
-					})
-				} catch {
-					throw new UserInputError(`Error searching`)
-				}
+			if (args.id) {
+				return [await GearItem.findById(args.id)]
 			}
-			return await GearItem.find({}).populate('tags')
+			try {
+				const searchTerms = {}
+				if (args.manufacturer) {
+					searchTerms.manufacturer = {
+						$regex: args.manufacturer,
+						$options: 'i',
+					}
+				}
+				if (args.model) {
+					searchTerms.model = { $regex: args.model, $options: 'i' }
+				}
+				if (args.category) {
+					searchTerms.category = { $regex: args.category }
+				}
+				if (args.tags) {
+					searchTerms.tags = { $in: args.tags }
+				}
+				return await GearItem.find(searchTerms).populate('tags')
+			} catch (e) {
+				throw new UserInputError(`Error searching: ${e}`)
+			}
 		},
 	},
 }
