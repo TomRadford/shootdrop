@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const User = require('../models/user')
 const Drop = require('../models/drop')
+const Tag = require('../models/gear/tag')
 const GearList = require('../models/gear/list')
 const GearItem = require('../models/gear/item')
 const config = require('../utils/config')
@@ -48,7 +49,8 @@ const resolvers = {
 				productURL,
 				tags,
 			} = args
-			const tagObjects = handleTags(tags, category)
+			const tagObjects = await handleTags(tags, category)
+			console.log(tagObjects)
 			const newGearItem = new GearItem({
 				category,
 				manufacturer,
@@ -229,6 +231,34 @@ const resolvers = {
 			}
 			const drops = await Drop.find({}).populate('users')
 			return drops
+		},
+
+		allTags: async (root, args, context) => {
+			if (args.tag) {
+				try {
+					const tagSearch = await Tag.find({
+						name: { $regex: args.tag, $options: 'i' },
+					})
+					return tagSearch
+				} catch {
+					throw new UserInputError(`Error searching for tag: ${args.tag}`)
+				}
+			}
+			return await Tag.find({})
+		},
+
+		allGearItems: async (root, args, context) => {
+			if (Object.keys(args).length > 0) {
+				console.log(args)
+				try {
+					return await GearItem.find({
+						id: args.id,
+					})
+				} catch {
+					throw new UserInputError(`Error searching`)
+				}
+			}
+			return await GearItem.find({}).populate('tags')
 		},
 	},
 }

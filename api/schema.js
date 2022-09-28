@@ -56,6 +56,11 @@ const typeDefs = gql`
 		opts: [GearPrefOpt]
 	}
 
+	type Tag {
+		name: String!
+		category: String!
+	}
+
 	type GearItem {
 		id: ID!
 		category: String!
@@ -65,7 +70,7 @@ const typeDefs = gql`
 		images: [Image]
 		productURL: String
 		allPrefs: [GearPref]
-		tags: [String]
+		tags: [Tag]
 	}
 
 	type GearPref {
@@ -87,6 +92,13 @@ const typeDefs = gql`
 	type Query {
 		me: User!
 		allDrops(drop: String): [Drop!]
+		allTags(tag: String): [Tag!]
+		allGearItems(
+			id: String
+			category: String
+			manufacturer: String
+			model: String
+		): [GearItem!]
 	}
 
 	type Mutation {
