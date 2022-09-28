@@ -49,7 +49,6 @@ const resolvers = {
 				tags,
 			} = args
 			const tagObjects = handleTags(tags, category)
-			// console.log('tag objs: ' + tagObjects)
 			const newGearItem = new GearItem({
 				category,
 				manufacturer,
