@@ -2,24 +2,27 @@ const Tag = require('../models/gear/tag')
 
 //Gets new tags, merges and returns object array
 // of all inputed tags
-const handleTags = async (tags, category) => {
-	let outputTags = []
-	const promiseArray = tags.map((tag) => {
-		const existingTag = Tag.findOne({ name: tag })
-		if (existingTag) {
-			const newTag = new Tag({
-				name: tag,
-				category,
-			})
-			outputTags = outputTags.concat(newTag)
-			return newTag.save()
-		} else {
-			outputTags = outputTags.concat(existingTag)
-		}
-	})
-	await Promise.all(promiseArray)
-	console.log(outputTags) //HERE! Getting tags to stop duplicating with name key
-	return outputTags
+const handleTags = (tags, category) => {
+	// TO WORK OUT LATER
+	// let outputTags = []
+	// const promiseArray = tags.map((tag) => {
+	// 	Tag.findOne({ name: tag }).then((existingTag) => {
+	// 		if (!existingTag) {
+	// 			const newTag = new Tag({
+	// 				name: tag,
+	// 				category,
+	// 			})
+	// 			outputTags = [...outputTags, newTag]
+	// 			return newTag.save()
+	// 		} else {
+	// 			outputTags = [...outputTags, existingTag]
+	// 		}
+	// 	})
+	// })
+	// //run all .save promises
+	// return Promise.all(promiseArray).then(() => {
+	// 	console.log('promise done')
+	// })
 }
 
 module.exports = { handleTags }

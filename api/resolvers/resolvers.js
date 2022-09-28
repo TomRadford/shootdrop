@@ -48,7 +48,8 @@ const resolvers = {
 				productURL,
 				tags,
 			} = args
-			const tagObjects = await handleTags(tags)
+			const tagObjects = handleTags(tags, category)
+			// console.log('tag objs: ' + tagObjects)
 			const newGearItem = new GearItem({
 				category,
 				manufacturer,
@@ -56,7 +57,9 @@ const resolvers = {
 				description,
 				images,
 				productURL,
+				tags: tagObjects,
 			})
+			return await newGearItem.save()
 		},
 
 		addDrop: async (root, args, context) => {
