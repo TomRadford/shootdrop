@@ -13,7 +13,7 @@ const logger = require('../utils/logger')
 const { checkAuth, checkListPermissions } = require('../utils/auth')
 const { handleTags } = require('../utils/tags')
 const { GearPref } = require('../models/gear/pref')
-const handlePrefs = require('../utils/prefs')
+const { handlePrefs, handleEditPrefs } = require('../utils/prefs')
 const dateScalar = new GraphQLScalarType({
 	name: 'Date',
 	description: 'Date scalar type',
@@ -89,7 +89,7 @@ const resolvers = {
 					prefs,
 				} = args
 				const tagObjects = tags ? await handleTags(tags, category) : []
-				await handlePrefs(prefs, mongoose.Types.ObjectId(args.id))
+				await handleEditPrefs(prefs, mongoose.Types.ObjectId(args.id))
 				return await GearItem.findByIdAndUpdate(
 					args.id,
 					{
@@ -106,7 +106,7 @@ const resolvers = {
 					}
 				).populate('tags')
 			} catch (e) {
-				throw new UserInputError('Editing Gear Item failed with error' + e)
+				throw new UserInputError('Editing Gear Item failed with error: ' + e)
 			}
 		},
 		addDrop: async (root, args, context) => {

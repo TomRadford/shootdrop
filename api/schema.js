@@ -75,6 +75,7 @@ const typeDefs = gql`
 	}
 
 	type GearPref {
+		id: ID
 		gearItem: GearItem!
 		name: String!
 		allOpts: [GearPrefOpt]
@@ -104,7 +105,8 @@ const typeDefs = gql`
 	}
 
 	input GearPrefInput {
-		name: String!
+		id: String
+		name: String
 		allOpts: [String!]
 	}
 
