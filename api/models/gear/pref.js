@@ -21,12 +21,12 @@ const prefSchema = mongoose.Schema({
 	allOpts: [
 		{
 			type: mongoose.Schema.Types.ObjectId,
-			ref: 'GearPrefOpts',
+			ref: 'GearPrefOpt',
 		},
 	],
 })
 
 module.exports = {
-	GrearPrefOpts: mongoose.model(prefOptSchema, 'GearPrefOpt'),
-	GearPref: mongoose.model(prefSchema, 'GearPref'),
+	GearPrefOpt: mongoose.model('GearPrefOpt', prefOptSchema),
+	GearPref: mongoose.model('GearPref', prefSchema),
 }

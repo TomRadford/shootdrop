@@ -103,6 +103,11 @@ const typeDefs = gql`
 		): [GearItem!]
 	}
 
+	input GearPrefInput {
+		name: String!
+		allOpts: [String!]
+	}
+
 	type Mutation {
 		login(username: String!, password: String!): Token!
 		createUser(username: String!, password: String!): User!
@@ -115,8 +120,19 @@ const typeDefs = gql`
 			images: [String]
 			productURL: String
 			tags: [String]
+			prefs: [GearPrefInput]
 		): GearItem!
-		editGearItem(id: String): GearItem!
+		editGearItem(
+			id: String!
+			category: GearCategory
+			manufacturer: String
+			model: String
+			description: String
+			images: [String]
+			productURL: String
+			tags: [String]
+			prefs: [GearPrefInput]
+		): GearItem!
 		addDrop(
 			project: String!
 			client: String

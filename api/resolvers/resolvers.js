@@ -1,5 +1,6 @@
 const { UserInputError, AuthenticationError } = require('apollo-server-core')
 const { GraphQLScalarType, Kind } = require('graphql')
+const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const User = require('../models/user')
@@ -11,6 +12,8 @@ const config = require('../utils/config')
 const logger = require('../utils/logger')
 const { checkAuth, checkListPermissions } = require('../utils/auth')
 const { handleTags } = require('../utils/tags')
+const { GearPref } = require('../models/gear/pref')
+const handlePrefs = require('../utils/prefs')
 const dateScalar = new GraphQLScalarType({
 	name: 'Date',
 	description: 'Date scalar type',
@@ -37,6 +40,15 @@ const resolvers = {
 			return userDrops
 		},
 	},
+	GearItem: {
+		allPrefs: async (root, args, context) => {
+			const gearItemPrefs = await GearPref.find({
+				gearItem: root,
+			}).populate('allOpts')
+
+			return gearItemPrefs
+		},
+	},
 	Mutation: {
 		addGearItem: async (root, args, context) => {
 			checkAuth(context)
@@ -48,6 +60,7 @@ const resolvers = {
 				images,
 				productURL,
 				tags,
+				prefs,
 			} = args
 			const tagObjects = tags ? await handleTags(tags, category) : []
 			const newGearItem = new GearItem({
@@ -59,10 +72,43 @@ const resolvers = {
 				productURL,
 				tags: tagObjects,
 			})
+			await handlePrefs(prefs, newGearItem)
 			return await newGearItem.save()
 		},
-		//HERE:
-		addGearItem: async (root, args, context) => { },
+		editGearItem: async (root, args, context) => {
+			checkAuth(context)
+			try {
+				const {
+					category,
+					manufacturer,
+					model,
+					description,
+					images,
+					productURL,
+					tags,
+					prefs,
+				} = args
+				const tagObjects = tags ? await handleTags(tags, category) : []
+				await handlePrefs(prefs, mongoose.Types.ObjectId(args.id))
+				return await GearItem.findByIdAndUpdate(
+					args.id,
+					{
+						category,
+						manufacturer,
+						model,
+						description,
+						images,
+						productURL,
+						tags: tagObjects,
+					},
+					{
+						returnDocument: 'after',
+					}
+				).populate('tags')
+			} catch (e) {
+				throw new UserInputError('Editing Gear Item failed with error' + e)
+			}
+		},
 		addDrop: async (root, args, context) => {
 			checkAuth(context)
 			const { currentUser } = context
@@ -249,7 +295,7 @@ const resolvers = {
 
 		allGearItems: async (root, args, context) => {
 			if (args.id) {
-				return [await GearItem.findById(args.id)]
+				return [await GearItem.findById(args.id).populate('tags')]
 			}
 			try {
 				const searchTerms = {}
