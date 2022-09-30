@@ -7,7 +7,7 @@ const checkAuth = (context) => {
 	}
 }
 
-const checkListPermissions = async (context, existingDrop) => {
+const checkDropPermissions = async (context, existingDrop) => {
 	const { currentUser } = context
 	if (!existingDrop) {
 		throw new UserInputError('Drop does not exist')
@@ -18,4 +18,4 @@ const checkListPermissions = async (context, existingDrop) => {
 	}
 }
 
-module.exports = { checkAuth, checkListPermissions }
+module.exports = { checkAuth, checkDropPermissions }

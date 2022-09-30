@@ -10,7 +10,7 @@ const GearList = require('../models/gear/list')
 const GearItem = require('../models/gear/item')
 const config = require('../utils/config')
 const logger = require('../utils/logger')
-const { checkAuth, checkListPermissions } = require('../utils/auth')
+const { checkAuth, checkDropPermissions } = require('../utils/auth')
 const { handleTags } = require('../utils/tags')
 const { GearPref } = require('../models/gear/pref')
 const { handlePrefs, handleEditPrefs } = require('../utils/prefs')
@@ -49,6 +49,19 @@ const resolvers = {
 			return gearItemPrefs
 		},
 	},
+	GearList: {
+		items: async (root, args, context) => {
+			await root.populate({
+				path: 'items',
+				populate: {
+					path: 'gearItem',
+					model: 'GearItem',
+				},
+			})
+			//HERE trying to lists to return items
+			console.log(root.items[0].gearItem)
+		},
+	},
 	Mutation: {
 		addGearItem: async (root, args, context) => {
 			checkAuth(context)
@@ -72,7 +85,9 @@ const resolvers = {
 				productURL,
 				tags: tagObjects,
 			})
-			await handlePrefs(prefs, newGearItem)
+			if (prefs) {
+				await handlePrefs(prefs, newGearItem)
+			}
 			return await newGearItem.save()
 		},
 		editGearItem: async (root, args, context) => {
@@ -89,7 +104,9 @@ const resolvers = {
 					prefs,
 				} = args
 				const tagObjects = tags ? await handleTags(tags, category) : []
-				await handleEditPrefs(prefs, mongoose.Types.ObjectId(args.id))
+				if (prefs) {
+					await handleEditPrefs(prefs, mongoose.Types.ObjectId(args.id))
+				}
 				return await GearItem.findByIdAndUpdate(
 					args.id,
 					{
@@ -158,7 +175,7 @@ const resolvers = {
 		addList: async (root, args, context) => {
 			checkAuth(context)
 			const existingDrop = await Drop.findById(args.drop)
-			await checkListPermissions(context, existingDrop)
+			await checkDropPermissions(context, existingDrop)
 			const { category, comment } = args
 
 			const newGearList = new GearList({
@@ -176,13 +193,10 @@ const resolvers = {
 			checkAuth(context)
 			const existingGearList = await GearList.findById(args.id)
 			if (!existingGearList) {
-				throw new UserInputError('List not found')
+				throw new UserInputError('List does not exist')
 			}
 			const parentDrop = await Drop.findOne({ lists: existingGearList })
-			const { currentUser } = context
-			if (!parentDrop.users.includes(currentUser._id)) {
-				throw new UserInputError('User is not part of this drop')
-			}
+			await checkDropPermissions(context, parentDrop)
 			const { comment } = args
 			const newList = await GearList.findByIdAndUpdate(
 				args.id,
@@ -201,7 +215,7 @@ const resolvers = {
 				throw new UserInputError('List does not exist')
 			}
 			const parentDrop = await Drop.findOne({ lists: listToDelete })
-			await checkListPermissions(context, parentDrop)
+			await checkDropPermissions(context, parentDrop)
 			try {
 				parentDrop.lists.filter((list) => list !== listToDelete)
 				await listToDelete.delete()
@@ -214,6 +228,23 @@ const resolvers = {
 			}
 		},
 
+		addListItem: async (root, args, context) => {
+			checkAuth(context)
+			const listToAdd = await GearList.findById(args.list)
+			if (!listToAdd) {
+				throw new UserInputError('List does not exist')
+			}
+			const parentDrop = await Drop.findOne({ lists: listToAdd })
+			await checkDropPermissions(context, parentDrop)
+			const { gearItem, quantity, prefs, comment } = args
+			listToAdd.items.push({
+				gearItem,
+				quantity,
+				comment,
+			})
+			return await listToAdd.save()
+		},
+
 		createUser: async (root, args) => {
 			const existingUser = await User.findOne({ username: args.username })
 			if (existingUser) {
@@ -224,11 +255,13 @@ const resolvers = {
 				username: args.username,
 				passwordHash,
 			})
-			return newUser.save().catch((e) => {
-				return new UserInputError(e.message, {
+			try {
+				return newUser.save()
+			} catch (e) {
+				throw new UserInputError(e.message, {
 					invalidArgs: args,
 				})
-			})
+			}
 		},
 
 		login: async (root, args) => {
@@ -275,7 +308,8 @@ const resolvers = {
 				//placeholder to protect all drops on prod
 				throw new AuthenticationError('Unauthoized')
 			}
-			const drops = await Drop.find({}).populate('users')
+			const drops = await Drop.find({}).populate('users').populate('lists')
+
 			return drops
 		},
 

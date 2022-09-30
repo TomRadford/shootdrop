@@ -46,9 +46,11 @@ const typeDefs = gql`
 	}
 
 	type GearListItem {
+		id: ID!
 		gearItem: GearItem!
 		quantity: Int
 		prefs: [GearListGearPref]
+		comment: String
 	}
 
 	type GearListGearPref {
@@ -82,6 +84,7 @@ const typeDefs = gql`
 	}
 
 	type GearPrefOpt {
+		id: ID!
 		name: String!
 	}
 
@@ -108,6 +111,11 @@ const typeDefs = gql`
 		id: String
 		name: String
 		allOpts: [String!]
+	}
+
+	input ListPrefInput {
+		id: String
+		opts: [String!]
 	}
 
 	type Mutation {
@@ -162,6 +170,13 @@ const typeDefs = gql`
 		addList(drop: String!, category: GearCategory!, comment: String): GearList!
 		editList(id: String!, comment: String!): GearList!
 		removeList(id: String!): Boolean!
+		addListItem(
+			list: String!
+			gearItem: String!
+			quantity: Int
+			prefs: [ListPrefInput]
+			comment: String
+		): GearList!
 	}
 `
 
