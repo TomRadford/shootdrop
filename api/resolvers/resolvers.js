@@ -12,7 +12,7 @@ const config = require('../utils/config')
 const logger = require('../utils/logger')
 const { checkAuth, checkDropPermissions } = require('../utils/auth')
 const { handleTags } = require('../utils/tags')
-const { GearPref } = require('../models/gear/pref')
+const { GearPref, GearPrefOpt } = require('../models/gear/pref')
 const { handlePrefs, handleEditPrefs } = require('../utils/prefs')
 const dateScalar = new GraphQLScalarType({
 	name: 'Date',
@@ -49,18 +49,30 @@ const resolvers = {
 			return gearItemPrefs
 		},
 	},
-	GearList: {
-		items: async (root, args, context) => {
-			await root.populate({
-				path: 'items',
-				populate: {
-					path: 'gearItem',
-					model: 'GearItem',
-				},
-			})
-			//HERE trying to lists to return items
-			console.log(root.items[0].gearItem)
+	// GearList: {
+	// 	items: async (root, args, context) => {
+	// 		// await root.populate({
+	// 		// 	path: 'items',
+	// 		// 	populate: {
+	// 		// 		path: 'gearItem',
+	// 		// 		model: 'GearItem',
+	// 		// 	},
+	// 		// })
+	// 		//HERE trying to lists to return items
+	// 		console.log(root.items[0].gearItem)
+	// 	},
+	GearListItem: {
+		gearItem: async (root, args, context) => {
+			const gearItem = await GearItem.findById(root.gearItem)
+			return gearItem
 		},
+	},
+	GearListGearPref: {
+		pref: async (root, args, context) => {
+			const pref = await GearPref.findById(root.pref)
+			return pref
+		},
+		//HERE GET OPTS TO RESOLVE!
 	},
 	Mutation: {
 		addGearItem: async (root, args, context) => {
@@ -241,6 +253,14 @@ const resolvers = {
 				gearItem,
 				quantity,
 				comment,
+				prefs: prefs
+					? prefs.map((pref) => {
+						return {
+							pref: mongoose.Types.ObjectId(pref.id),
+							opts: pref.opts.map((opt) => mongoose.Types.ObjectId(opt)),
+						}
+					})
+					: null,
 			})
 			return await listToAdd.save()
 		},
@@ -296,10 +316,11 @@ const resolvers = {
 					const drop = await Drop.findById(args.drop)
 						.populate('users')
 						.populate('lists')
+					// console.log(drop.lists[0].items)
 					return [drop]
-				} catch {
-					throw new UserInputError('Drop not found', {
-						args: args,
+				} catch (e) {
+					throw new UserInputError('Error finding drop', {
+						error: e,
 					})
 				}
 			}
