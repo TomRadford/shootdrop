@@ -177,6 +177,14 @@ const typeDefs = gql`
 			prefs: [ListPrefInput]
 			comment: String
 		): GearList!
+		editListItem(
+			list: String!
+			id: String!
+			quantity: Int
+			prefs: [ListPrefInput]
+			comment: String
+		): GearList!
+		removeListItem(list: String!, id: String!): GearList!
 	}
 `
 

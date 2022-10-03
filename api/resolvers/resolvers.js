@@ -58,7 +58,7 @@ const resolvers = {
 	// 		// 		model: 'GearItem',
 	// 		// 	},
 	// 		// })
-	// 		//HERE trying to lists to return items
+	//
 	// 		console.log(root.items[0].gearItem)
 	// 	},
 	GearListItem: {
@@ -72,7 +72,12 @@ const resolvers = {
 			const pref = await GearPref.findById(root.pref)
 			return pref
 		},
-		//HERE GET OPTS TO RESOLVE!
+		opts: async (root, args, context) => {
+			const opts = await GearPrefOpt.find({
+				_id: { $in: root.opts },
+			})
+			return opts
+		},
 	},
 	Mutation: {
 		addGearItem: async (root, args, context) => {
@@ -263,6 +268,52 @@ const resolvers = {
 					: null,
 			})
 			return await listToAdd.save()
+		},
+
+		editListItem: async (root, args, context) => {
+			checkAuth(context)
+			const listToEdit = await GearList.findById(args.list)
+			if (!listToEdit) {
+				throw new UserInputError('List does not exist')
+			}
+			const parentDrop = await Drop.findOne({ lists: listToEdit })
+			await checkDropPermissions(context, parentDrop)
+			const { quantity, prefs, comment } = args
+			try {
+				if (quantity) {
+					listToEdit.items.id(args.id).quantity = quantity
+				}
+				if (comment) {
+					listToEdit.items.id(args.id).comment = comment
+				}
+				if (prefs) {
+					listToEdit.items.id(args.id).prefs = prefs.map((pref) => {
+						return {
+							pref: mongoose.Types.ObjectId(pref.id),
+							opts: pref.opts.map((opt) => mongoose.Types.ObjectId(opt)),
+						}
+					})
+				}
+			} catch {
+				throw new UserInputError('List item does not exist')
+			}
+			return await listToEdit.save()
+		},
+
+		removeListItem: async (root, args, context) => {
+			checkAuth(context)
+			const listToEdit = await GearList.findById(args.list)
+			if (!listToEdit) {
+				throw new UserInputError('List does not exist')
+			}
+			const parentDrop = await Drop.findOne({ lists: listToEdit })
+			await checkDropPermissions(context, parentDrop)
+			try {
+				listToEdit.items.id(args.id).remove()
+			} catch {
+				throw new UserInputError('List item does not exist')
+			}
+			return await listToEdit.save()
 		},
 
 		createUser: async (root, args) => {
