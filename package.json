@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "postinstall": "(cd api && npm install)",
-    "lint": "eslint . --fix",
-    "dev": "(cd api && npm run dev)"
+    "api-lint": "(cd api && eslint .)",
+    "api-dev": "(cd api && npm run dev)",
+    "web-dev": " (cd web && npm run dev)"
   },
   "repository": {
     "type": "git",
@@ -14,11 +15,6 @@
   },
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "eslint": "^8.23.1",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.2.1"
-  },
   "bugs": {
     "url": "https://github.com/TomRadford/shootdrop/issues"
   },
