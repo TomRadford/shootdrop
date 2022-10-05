@@ -316,30 +316,12 @@ const resolvers = {
 			return await listToEdit.save()
 		},
 
-		createUser: async (root, args) => {
-			const existingUser = await User.findOne({ username: args.username })
-			if (existingUser) {
-				return new UserInputError('Username already exists')
-			}
-			const passwordHash = await bcrypt.hash(args.password, 10)
-			const newUser = new User({
-				username: args.username,
-				passwordHash,
-				profilePicture: args.profilePicture,
-			})
-			try {
-				return newUser.save()
-			} catch (e) {
-				throw new UserInputError(e.message, {
-					invalidArgs: args,
-				})
-			}
-		},
-
 		login: async (root, args) => {
 			const user = await User.findOne({ username: args.username })
 			const passwordCorrect =
-				user === null ? false : bcrypt.compare(args.password, user.passwordHash)
+				user === null
+					? false
+					: await bcrypt.compare(args.password, user.passwordHash)
 			if (!passwordCorrect) {
 				throw new UserInputError('Incorrect password')
 			}
@@ -352,6 +334,42 @@ const resolvers = {
 				value: jwt.sign(userForToken, config.SECRET, {
 					expiresIn: 60 * 60 * 3,
 				}),
+			}
+		},
+
+		createUser: async (root, args) => {
+			const existingUser = await User.findOne({ username: args.username })
+			if (existingUser) {
+				return new UserInputError('Username already exists')
+			}
+			const passwordHash = await bcrypt.hash(args.password, 10)
+			const newUser = new User({
+				username: args.username,
+				passwordHash,
+				profilePicture: args.profilePicture,
+				fullName: args.fullName,
+			})
+			try {
+				return newUser.save()
+			} catch (e) {
+				throw new UserInputError(e.message, {
+					invalidArgs: args,
+				})
+			}
+		},
+
+		editMe: async (root, args, context) => {
+			checkAuth(context)
+			const { currentUser } = context
+			currentUser.passwordHash = await bcrypt.hash(args.password, 10)
+			currentUser.profilePicture = args.profilePicture
+			currentUser.fullName = args.fullName
+			try {
+				return currentUser.save()
+			} catch (e) {
+				throw new UserInputError(e.message, {
+					invalidArgs: args,
+				})
 			}
 		},
 	},

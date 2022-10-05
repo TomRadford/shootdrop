@@ -12,7 +12,7 @@ const typeDefs = gql`
 
 	type User {
 		id: ID!
-		fullname: String
+		fullName: String
 		username: String!
 		gearhouse: Boolean!
 		drops: [Drop]
@@ -124,9 +124,10 @@ const typeDefs = gql`
 		createUser(
 			username: String!
 			password: String!
+			fullName: String
 			profilePicture: String
 		): User!
-		editMe(password: String!, profilePicture: String): Boolean!
+		editMe(password: String, profilePicture: String, fullName: String): User!
 		addGearItem(
 			category: GearCategory!
 			manufacturer: String!
