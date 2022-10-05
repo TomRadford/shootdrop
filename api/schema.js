@@ -16,6 +16,7 @@ const typeDefs = gql`
 		username: String!
 		gearhouse: Boolean!
 		drops: [Drop]
+		profilePicture: String
 	}
 
 	type Token {
@@ -120,8 +121,12 @@ const typeDefs = gql`
 
 	type Mutation {
 		login(username: String!, password: String!): Token!
-		createUser(username: String!, password: String!): User!
-		editMe(password: String!): Boolean!
+		createUser(
+			username: String!
+			password: String!
+			profilePicture: String
+		): User!
+		editMe(password: String!, profilePicture: String): Boolean!
 		addGearItem(
 			category: GearCategory!
 			manufacturer: String!

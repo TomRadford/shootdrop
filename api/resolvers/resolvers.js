@@ -325,6 +325,7 @@ const resolvers = {
 			const newUser = new User({
 				username: args.username,
 				passwordHash,
+				profilePicture: args.profilePicture,
 			})
 			try {
 				return newUser.save()

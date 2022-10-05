@@ -12,6 +12,10 @@ const subSchema = mongoose.Schema(
 			type: Number,
 			default: 1,
 		},
+		userThatUpdated: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'User',
+		},
 		prefs: [
 			{
 				pref: {
@@ -31,13 +35,18 @@ const subSchema = mongoose.Schema(
 	{ timestamps: true }
 )
 
-const schema = mongoose.Schema({
-	category: {
-		type: String,
-		required: true,
+const schema = mongoose.Schema(
+	{
+		category: {
+			type: String,
+			required: true,
+		},
+		comment: String,
+		items: [subSchema],
 	},
-	comment: String,
-	items: [subSchema],
-})
+	{
+		timestamps: true,
+	}
+)
 
 module.exports = mongoose.model('GearList', schema)

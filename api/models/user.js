@@ -15,6 +15,10 @@ const schema = mongoose.Schema({
 		default: false,
 	},
 	fullName: String,
+	profilePicture: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Image',
+	},
 })
 
 schema.set('toJSON', {
