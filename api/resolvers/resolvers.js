@@ -258,6 +258,7 @@ const resolvers = {
 				gearItem,
 				quantity,
 				comment,
+				userThatUpdated: context.currentUser,
 				prefs: prefs
 					? prefs.map((pref) => {
 						return {
@@ -280,6 +281,7 @@ const resolvers = {
 			await checkDropPermissions(context, parentDrop)
 			const { quantity, prefs, comment } = args
 			try {
+				listToEdit.items.id(args.id).userThatUpdated = context.currentUser
 				if (quantity) {
 					listToEdit.items.id(args.id).quantity = quantity
 				}

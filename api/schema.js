@@ -52,6 +52,7 @@ const typeDefs = gql`
 		quantity: Int
 		prefs: [GearListGearPref]
 		comment: String
+		userThatUpdated: User
 	}
 
 	type GearListGearPref {
