@@ -33,7 +33,9 @@ const User = () => {
           />
         </>
       ) : (
-        <button className="text-sm font-light">Login</button>
+        <Link href="/login">
+          <button className="text-sm font-light">Login</button>
+        </Link>
       )}
     </div>
   )
