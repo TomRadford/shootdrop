@@ -1,10 +1,10 @@
-import NavBar from "./nav"
+import NavBar from "./NavBar"
 
 const Layout = ({ children }) => {
   return (
-    <div>
+    <div className="bg-gray-main h-screen">
       <NavBar />
-      <main className="bg-gray-main min-h-screen">{children}</main>
+      <main className="text-white md:pt-0 md:pl-64">{children}</main>
     </div>
   )
 }

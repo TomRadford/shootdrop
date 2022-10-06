@@ -1,6 +1,9 @@
 import { useState } from "react"
+import { useQuery } from "@apollo/client"
 import Link from "next/link"
 import Image from "next/image"
+import ClientOnly from "../ClientOnly"
+import { ME } from "../../lib/apollo/queries"
 
 const NavLink = ({ label, link, setShowNav }) => (
   <li className="py-2 font-bold">
@@ -12,27 +15,42 @@ const NavLink = ({ label, link, setShowNav }) => (
   </li>
 )
 
-const User = ({}) => (
-  <div className="mx-auto flex flex-row items-center justify-center gap-4 py-5 md:fixed md:bottom-2 md:left-24">
-    <span className="text-sm font-light">User</span>
-    <Image
-      src="/img/download.jfif"
-      width="30px"
-      height="30px"
-      className="rounded-full bg-white"
-      objectFit="cover"
-    />
-  </div>
-)
+const User = () => {
+  const { loading, data } = useQuery(ME)
+  if (loading) return null
+  const { me } = data
+  return (
+    <div className="mx-auto flex flex-row items-center justify-center gap-4 py-5 md:fixed md:bottom-2 md:left-24">
+      {me ? (
+        <>
+          <span className="text-sm font-light">{me.username}</span>
+          <Image
+            src="/img/download.jfif"
+            width="30px"
+            height="30px"
+            className="rounded-full"
+            objectFit="cover"
+          />
+        </>
+      ) : (
+        <button className="text-sm font-light">Login</button>
+      )}
+    </div>
+  )
+}
 
 const NavBar = () => {
   const [showNav, setShowNav] = useState(false)
   return (
     <nav className="bg-gray-secondary top:0 fixed w-screen py-2 text-center text-white md:left-0 md:h-screen md:w-64 md:py-10">
       <div className="px-3">
-        <h1 className="mx-auto inline-block justify-center text-2xl font-semibold">
-          ShootDrop
-        </h1>
+        <Link href="/">
+          <a>
+            <button className="mx-auto inline-block justify-center text-2xl font-semibold">
+              ShootDrop
+            </button>
+          </a>
+        </Link>
         <button
           className="fixed right-0 pt-1 pr-4 md:hidden"
           onClick={() => setShowNav(!showNav)}
@@ -61,18 +79,24 @@ const NavBar = () => {
         <div className={`pt-6`}>
           <p className="text-md font-light">Drops</p>
           <ul>
-            <NavLink label="Create" link="/drops/create" setShowNav />
-            <NavLink label="Browse" link="/drops" setShowNav />
+            <NavLink
+              label="Create"
+              link="/drops/create"
+              setShowNav={setShowNav}
+            />
+            <NavLink label="Browse" link="/drops" setShowNav={setShowNav} />
           </ul>
         </div>
         <div className={`pt-6`}>
           <p className="text-md font-light">Gear</p>
           <ul>
-            <NavLink label="Add" link="/gear/add" setShowNav />
-            <NavLink label="Browse" link="/gear" setShowNav />
+            <NavLink label="Add" link="/gear/add" setShowNav={setShowNav} />
+            <NavLink label="Browse" link="/gear" setShowNav={setShowNav} />
           </ul>
         </div>
-        <User />
+        <ClientOnly>
+          <User />
+        </ClientOnly>
       </div>
     </nav>
   )
