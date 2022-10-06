@@ -1,21 +1,16 @@
-import Head from 'next/head'
-import Image from 'next/image'
+import Head from "next/head"
+import { useState } from "react"
+import Layout from "../components/layout"
 
 const Home = () => {
+  const [colorChange, setColorChange] = useState(false)
+
   return (
-    <div>
+    <Layout>
       <Head>
-        <title> ShootDrop</title>
+        <title>ShootDrop</title>
       </Head>
-
-      <main>
-        <h1>
-          Shootdrop!
-        </h1>
-      </main >
-
-
-    </div >
+    </Layout>
   )
 }
 

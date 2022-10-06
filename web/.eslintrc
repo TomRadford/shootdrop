@@ -1,22 +1,32 @@
 {
-  "extends": ["prettier", "next/core-web-vitals"],
-  "plugins": ["testing-library"],
-  "settings": {
-    "next": {
-      "rootDir": ["apps/*/", "packages/*/"],
-    },
-  },
-  "rules": {
-    "@next/next/no-html-link-for-pages": "off",
-  },
-  "overrides": [
-    // Only uses Testing Library lint rules in test files
-    {
-      "files": [
-        "**/__tests__/**/*.[jt]s?(x)",
-        "**/?(*.)+(spec|test).[jt]s?(x)"
-      ],
-      "extends": ["plugin:testing-library/react"]
-    }
-  ]
+	"extends": [
+		"prettier",
+		"next/core-web-vitals"
+	],
+	"plugins": [
+		"testing-library"
+	],
+	"settings": {
+		"next": {
+			"rootDir": [
+				"apps/*/",
+				"packages/*/"
+			],
+		},
+	},
+	"rules": {
+		"@next/next/no-html-link-for-pages": "off",
+	},
+	"overrides": [
+		// Only uses Testing Library lint rules in test files
+		{
+			"files": [
+				"**/__tests__/**/*.[jt]s?(x)",
+				"**/?(*.)+(spec|test).[jt]s?(x)"
+			],
+			"extends": [
+				"plugin:testing-library/react"
+			]
+		}
+	]
 }
