@@ -261,11 +261,11 @@ const resolvers = {
 				userThatUpdated: context.currentUser,
 				prefs: prefs
 					? prefs.map((pref) => {
-							return {
-								pref: mongoose.Types.ObjectId(pref.id),
-								opts: pref.opts.map((opt) => mongoose.Types.ObjectId(opt)),
-							}
-					  })
+						return {
+							pref: mongoose.Types.ObjectId(pref.id),
+							opts: pref.opts.map((opt) => mongoose.Types.ObjectId(opt)),
+						}
+					})
 					: null,
 			})
 			return await listToAdd.save()
@@ -363,6 +363,7 @@ const resolvers = {
 		editMe: async (root, args, context) => {
 			checkAuth(context)
 			const { currentUser } = context
+			currentUser.username = args.username
 			currentUser.passwordHash = await bcrypt.hash(args.password, 10)
 			currentUser.profilePicture = args.profilePicture
 			currentUser.fullName = args.fullName

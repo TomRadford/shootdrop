@@ -9,9 +9,26 @@ export const USER_DETAILS = gql`
   }
 `
 
+export const LOGIN = gql`
+  mutation login($username: String!, $password: String!) {
+    login(username:$username, password: $password) {
+      value
+    }
+  }
+`
+
 export const ME = gql`
   query {
     me {
+      ...UserDetails
+    }
+  }
+  ${USER_DETAILS}
+`
+
+export const EDIT_ME = gql`
+  mutation editMe($username:String, $password: String, $profilePicture: String, $fullName: String){
+    editMe(username:$username, password: $password, profilePicture: $profilePicture, fullName: $fullName) {
       ...UserDetails
     }
   }

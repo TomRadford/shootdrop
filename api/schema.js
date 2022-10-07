@@ -128,7 +128,7 @@ const typeDefs = gql`
       fullName: String
       profilePicture: String
     ): User!
-    editMe(password: String, profilePicture: String, fullName: String): User!
+    editMe(username: String, password: String, profilePicture: String, fullName: String): User!
     addGearItem(
       category: GearCategory!
       manufacturer: String!

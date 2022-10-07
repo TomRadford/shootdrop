@@ -23,14 +23,19 @@ const User = () => {
     <div className="mx-auto flex flex-row items-center justify-center gap-4 py-5 md:fixed md:bottom-2 md:left-24">
       {me ? (
         <>
-          <span className="text-sm font-light">{me.username}</span>
+          <Link href="/me">
+            <button>
+              <span className="text-sm font-light">{me.username}</span>
+            </button>
+          </Link>
           <Image
-            src="/img/download.jfif"
+            src={me.profilePicture ? me.profilePicture : `/img/roger.jfif`}
             width="30px"
             height="30px"
             className="rounded-full"
             objectFit="cover"
           />
+
         </>
       ) : (
         <Link href="/login">
@@ -74,9 +79,8 @@ const NavBar = () => {
         </button>
       </div>
       <div
-        className={`${
-          !showNav && "hidden"
-        } md:mx-16 md:block md:pt-3 md:text-left`}
+        className={`${!showNav && "hidden"
+          } md:mx-16 md:block md:pt-3 md:text-left`}
       >
         <div className={`pt-6`}>
           <p className="text-md font-light">Drops</p>
