@@ -19,13 +19,36 @@ const User = () => {
   const { loading, data } = useQuery(ME)
   if (loading) return null
   const { me } = data
+  const handleLogout = () => {
+    localStorage.clear()
+    window.location.reload()
+  }
   return (
-    <div className="mx-auto flex flex-row items-center justify-center gap-4 py-5 md:fixed md:bottom-2 md:left-24">
+    <div className="mx-auto flex flex-1 flex-row items-center justify-center gap-4 py-5">
       {me ? (
         <>
+          <button onClick={handleLogout}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="h-5 w-5"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"
+              />
+            </svg>
+          </button>
+
           <Link href="/me">
             <button>
-              <span className="text-sm font-light">{me.username}</span>
+              <span className="text-sm font-light">
+                {me.fullName ? me.fullName : me.username}
+              </span>
             </button>
           </Link>
           <Image
@@ -35,7 +58,6 @@ const User = () => {
             className="rounded-full"
             objectFit="cover"
           />
-
         </>
       ) : (
         <Link href="/login">
@@ -49,7 +71,7 @@ const User = () => {
 const NavBar = () => {
   const [showNav, setShowNav] = useState(false)
   return (
-    <nav className="bg-gray-secondary top:0 fixed w-screen py-2 text-center text-white md:left-0 md:h-screen md:w-64 md:py-10">
+    <nav className="bg-gray-secondary top:0 fixed z-50 flex w-screen flex-col py-2 text-center text-white md:left-0 md:h-screen md:w-64 md:py-10">
       <div className="px-3">
         <Link href="/">
           <a>
@@ -79,8 +101,9 @@ const NavBar = () => {
         </button>
       </div>
       <div
-        className={`${!showNav && "hidden"
-          } md:mx-16 md:block md:pt-3 md:text-left`}
+        className={`${
+          !showNav && "hidden"
+        } md:mx-16 md:block md:pt-3 md:text-left`}
       >
         <div className={`pt-6`}>
           <p className="text-md font-light">Drops</p>
@@ -100,6 +123,8 @@ const NavBar = () => {
             <NavLink label="Browse" link="/gear" setShowNav={setShowNav} />
           </ul>
         </div>
+      </div>
+      <div className={`${!showNav && "hidden"} mt-auto md:block`}>
         <ClientOnly>
           <User />
         </ClientOnly>

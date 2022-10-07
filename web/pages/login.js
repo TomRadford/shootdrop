@@ -1,27 +1,43 @@
-import Head from 'next/head'
-import { useRouter } from 'next/router'
+import Head from "next/head"
+import { useRouter } from "next/router"
 import Layout from "../components/layout"
+import Notification from "../components/Notification"
 import Card from "../components/Card"
-import { LOGIN, ME } from '../lib/apollo/queries'
-import { useMutation, useQuery } from '@apollo/client'
-import { useEffect, useState } from 'react'
-import Loading from '../components/Loading'
+import { LOGIN, ME } from "../lib/apollo/queries"
+import { useMutation, useQuery, useLazyQuery } from "@apollo/client"
+import { useEffect, useState } from "react"
+import Loading from "../components/Loading"
 const LoginCard = () => {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [errorMessage, setErrorMessage] = useState('')
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const [messageData, setMessageData] = useState({ message: "", type: "" })
   const router = useRouter()
+  const me = useQuery(ME)
+  const [meLazy] = useLazyQuery(ME)
   const [login, result] = useMutation(LOGIN, {
-    onError: (e) => setErrorMessage(e.graphQLErrors[0].message)
+    onError: (e) =>
+      setMessageData({ message: e.graphQLErrors[0].message, type: "error" }),
   })
+  useEffect(() => {
+    if (!me.loading) {
+      if (me.data.me) {
+        router.push("/me")
+      }
+    }
+  }, [me.data])
+  useEffect(() => {
+    if (result.loading) {
+      setMessageData({ message: "Logging in!", type: "info" })
+    }
+  }, [result.loading])
   useEffect(() => {
     if (result.data) {
       const token = result.data.login.value
       localStorage.setItem("shootdrop-user-token", token)
-      setUsername('')
-      setPassword('')
-
-      router.push('/drops')
+      // meLazy() RELOAD CACHE ON LOGIN
+      setUsername("")
+      setPassword("")
+      router.push("/drops")
     }
   }, [result.data])
 
@@ -30,16 +46,22 @@ const LoginCard = () => {
     login({
       variables: {
         username,
-        password
-      }
+        password,
+      },
     })
   }
   return (
     <Card>
       <div className="p-10">
-        <h2 className="text-xl font-bold mb-4">Please login</h2>
+        <h2 className="mb-4 text-xl font-bold">Please login</h2>
         <form onSubmit={handleLogin}>
-          <input className="bg-transparent" placeholder="Email" type="email" value={username} onChange={({ target }) => setUsername(target.value)} />
+          <input
+            className="bg-transparent"
+            placeholder="Email"
+            type="email"
+            value={username}
+            onChange={({ target }) => setUsername(target.value)}
+          />
           <br />
           <input
             className="block bg-transparent"
@@ -49,10 +71,14 @@ const LoginCard = () => {
             value={password}
             required
           />
-          <p className='text-red-600'>{errorMessage}</p>
-          <button type="submit" className='mt-4'>Login</button>
+          <Notification
+            messageData={messageData}
+            setMessageData={setMessageData}
+          />
+          <button type="submit" className="mt-4">
+            Login
+          </button>
         </form>
-
       </div>
     </Card>
   )
@@ -62,9 +88,7 @@ const LoginPage = () => {
   const router = useRouter()
   const { loading, data } = useQuery(ME)
 
-  if (loading) return (
-    <Loading />
-  )
+  if (loading) return <Loading />
 
   return (
     <>

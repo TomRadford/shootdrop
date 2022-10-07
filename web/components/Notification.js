@@ -1,15 +1,26 @@
 import { useEffect, useState } from "react"
 
-const Notification = ({ message }) => {
-  [message, setMessage] = useState('')
-
+const Notification = ({ messageData, setMessageData }) => {
+  const [timeoutId, setTimeoutID] = useState(null)
   useEffect(() => {
-    setTimeout(() => {
-      setMessage('')
-    }, 1000)
-  }, [message])
-  return (
-    <p>{message}</p>
-  )
+    if (timeoutId) {
+      clearTimeout(timeoutId)
+    }
+    setTimeoutID(
+      setTimeout(() => {
+        setMessageData({ message: "", type: "" })
+      }, 2000)
+    )
+  }, [messageData])
 
+  return (
+    <p
+      className={
+        messageData.type === "error" ? "text-red-600" : "text-green-600"
+      }
+    >
+      {messageData.message}
+    </p>
+  )
 }
+export default Notification
