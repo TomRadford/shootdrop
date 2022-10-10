@@ -20,9 +20,7 @@ const MePage = () => {
   const [editUser, editUserResult] = useMutation(EDIT_ME)
   useEffect(() => {
     if (!loading) {
-      console.log(data)
       if (data.me) {
-        console.log("data!")
         setUsername(data.me.username)
         setFullName(data.me.fullName ? data.me.fullName : "")
         setProfilePicture(
@@ -54,23 +52,26 @@ const MePage = () => {
     console.log("loading")
     return <Loading />
   }
+  console.log(profilePicture)
 
   return (
     <>
       <Head>
-        <title>ShootDrop: My account</title>
+        <title>My account | ShootDrop</title>
       </Head>
       <Layout>
         <div className="flex h-screen ">
           <div className="m-auto text-center">
             <form onSubmit={handleSubmit}>
-              <Image
-                src={profilePicture}
-                width="100px"
-                height="100px"
-                className="mb-10 rounded-full"
-                objectFit="cover"
-              />
+              {profilePicture && (
+                <Image
+                  src={profilePicture}
+                  width="100px"
+                  height="100px"
+                  className="mb-10 rounded-full"
+                  objectFit="cover"
+                />
+              )}
               <input
                 className="block bg-transparent text-center text-lg font-bold text-white"
                 value={fullName}

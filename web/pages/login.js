@@ -13,7 +13,6 @@ const LoginCard = () => {
   const [messageData, setMessageData] = useState({ message: "", type: "" })
   const router = useRouter()
   const me = useQuery(ME)
-  const [meLazy] = useLazyQuery(ME)
   const [login, result] = useMutation(LOGIN, {
     onError: (e) =>
       setMessageData({ message: e.graphQLErrors[0].message, type: "error" }),
@@ -34,7 +33,7 @@ const LoginCard = () => {
     if (result.data) {
       const token = result.data.login.value
       localStorage.setItem("shootdrop-user-token", token)
-      // meLazy() RELOAD CACHE ON LOGIN
+      me.refetch() //To invalidate null "me" in cache
       setUsername("")
       setPassword("")
       router.push("/drops")
@@ -85,7 +84,6 @@ const LoginCard = () => {
 }
 
 const LoginPage = () => {
-  const router = useRouter()
   const { loading, data } = useQuery(ME)
 
   if (loading) return <Loading />
@@ -93,7 +91,7 @@ const LoginPage = () => {
   return (
     <>
       <Head>
-        <title>ShootDrop: Login</title>
+        <title>Login | ShootDrop</title>
       </Head>
       <Layout>
         <div className="flex h-screen ">

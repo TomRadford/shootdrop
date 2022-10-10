@@ -108,11 +108,7 @@ const NavBar = () => {
         <div className={`pt-6`}>
           <p className="text-md font-light">Drops</p>
           <ul>
-            <NavLink
-              label="Create"
-              link="/drops/create"
-              setShowNav={setShowNav}
-            />
+            <NavLink label="Add" link="/drops/add" setShowNav={setShowNav} />
             <NavLink label="Browse" link="/drops" setShowNav={setShowNav} />
           </ul>
         </div>

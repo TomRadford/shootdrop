@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client"
 
-export const USER_DETAILS = gql`
+const USER_DETAILS = gql`
   fragment UserDetails on User {
     id
     username
@@ -11,7 +11,7 @@ export const USER_DETAILS = gql`
 
 export const LOGIN = gql`
   mutation login($username: String!, $password: String!) {
-    login(username:$username, password: $password) {
+    login(username: $username, password: $password) {
       value
     }
   }
@@ -27,10 +27,61 @@ export const ME = gql`
 `
 
 export const EDIT_ME = gql`
-  mutation editMe($username:String, $password: String, $profilePicture: String, $fullName: String){
-    editMe(username:$username, password: $password, profilePicture: $profilePicture, fullName: $fullName) {
+  mutation editMe(
+    $username: String
+    $password: String
+    $profilePicture: String
+    $fullName: String
+  ) {
+    editMe(
+      username: $username
+      password: $password
+      profilePicture: $profilePicture
+      fullName: $fullName
+    ) {
       ...UserDetails
     }
   }
   ${USER_DETAILS}
+`
+
+const DROP_DETAILS = gql`
+  fragment DropDetails on Drop {
+    id
+    project
+    client
+    director
+    dop
+    soundie
+    gearCheckDate
+    startDate
+    endDate
+    wrapDate
+    updatedAt
+    users {
+      id
+      profilePicture
+    }
+    lists {
+      id
+    }
+  }
+`
+
+export const ADD_DROP = gql`
+  mutation addDrop($project: String!, $client: String) {
+    addDrop(project: $project, client: $client) {
+      ...DropDetails
+    }
+  }
+
+  ${DROP_DETAILS}
+`
+export const ALL_DROPS = gql`
+  query allDrops($drop: String!) {
+    allDrops(drop: $drop) {
+      ...DropDetails
+    }
+  }
+  ${DROP_DETAILS}
 `
