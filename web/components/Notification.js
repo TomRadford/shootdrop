@@ -14,11 +14,7 @@ const Notification = ({ messageData, setMessageData }) => {
   }, [messageData])
 
   return (
-    <p
-      className={
-        messageData.type === "error" ? "text-red-600" : "text-green-600"
-      }
-    >
+    <p className={messageData.type === "error" ? "text-red-600" : "text-white"}>
       {messageData.message}
     </p>
   )

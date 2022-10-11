@@ -2,7 +2,7 @@ import Image from "next/image"
 import TextareaAutosize from "react-textarea-autosize"
 import { useQuery, useMutation } from "@apollo/client"
 import { useEffect, useState } from "react"
-import { ME, ADD_DROP } from "../../lib/apollo/queries"
+import { ME, ADD_DROP, UPDATE_DROP } from "../../lib/apollo/queries"
 import { useRouter } from "next/router"
 
 const getDateString = (value) => {
@@ -14,6 +14,7 @@ const DropHeader = ({ drop }) => {
   const [dropName, setDropName] = useState(drop ? drop.project : "")
   const [clientName, setClientName] = useState(drop ? drop.client : "")
   const [addDrop, { data, loading, error }] = useMutation(ADD_DROP)
+  const [updateDrop, updateDropResult] = useMutation(UPDATE_DROP)
   const router = useRouter()
   useEffect(() => {
     if (!drop) {
@@ -28,6 +29,20 @@ const DropHeader = ({ drop }) => {
         }
       }, 2000)
       return () => clearTimeout(timeout)
+    } else {
+      if (drop.project !== dropName || drop.client !== clientName) {
+        const timeout = setTimeout(() => {
+          console.log("Updating headers")
+          updateDrop({
+            variables: {
+              id: drop.id,
+              project: dropName,
+              client: clientName,
+            },
+          })
+        }, 2000)
+        return () => clearTimeout(timeout)
+      }
     }
   }, [dropName, clientName])
 
@@ -36,7 +51,7 @@ const DropHeader = ({ drop }) => {
       router.push(`/drops/${data.addDrop.id}`)
     }
   }
-  console.log(drop)
+
   return (
     <header className="mx-auto flex w-screen justify-between gap-1 align-bottom md:w-full">
       <div className="flex min-w-max items-center">
@@ -72,12 +87,8 @@ const DropHeader = ({ drop }) => {
           </div>
         </div>
       </div>
-      <div className="flex items-center text-xs text-gray-300 ">
-        {drop ? (
-          <p>Last edited {getDateString(drop.updatedAt)}</p>
-        ) : (
-          <p>{new Date().toDateString()}</p>
-        )}
+      <div className="mr-1 flex items-center text-xs text-gray-300">
+        {drop && <p>Last edited {getDateString(drop.updatedAt)}</p>}
       </div>
     </header>
   )

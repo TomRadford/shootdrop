@@ -73,19 +73,20 @@ const MePage = () => {
                 />
               )}
               <input
-                className="block bg-transparent text-center text-lg font-bold text-white"
+                className="mb-5 block bg-transparent text-center text-lg font-bold text-white"
                 value={fullName}
                 onChange={({ target }) => setFullName(target.value)}
                 placeholder="Full Name"
               />
               <Card>
-                <div className="mt-10 p-3">
+                <div className="">
                   <span className="mt-1 block text-left text-sm font-light after:ml-0.5 after:text-red-500 after:content-['*']">
                     Email
                   </span>
                   <input
                     className="block bg-transparent"
                     value={username}
+                    autoComplete="email"
                     onChange={({ target }) => setUsername(target.value)}
                   />
                   <span className=" mt-3 block text-left text-sm font-light after:ml-0.5 after:text-red-500 after:content-['*']">
@@ -94,6 +95,7 @@ const MePage = () => {
                   <input
                     className="block bg-transparent"
                     type="password"
+                    autoComplete="new-password"
                     value={newPassword}
                     onChange={({ target }) => setNewPassword(target.value)}
                   />

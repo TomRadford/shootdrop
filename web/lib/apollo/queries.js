@@ -59,13 +59,21 @@ const DROP_DETAILS = gql`
     wrapDate
     updatedAt
     users {
-      id
-      profilePicture
+      ...UserDetails
     }
     lists {
       id
     }
   }
+  ${USER_DETAILS}
+`
+export const ALL_DROPS = gql`
+  query allDrops($drop: String!) {
+    allDrops(drop: $drop) {
+      ...DropDetails
+    }
+  }
+  ${DROP_DETAILS}
 `
 
 export const ADD_DROP = gql`
@@ -77,9 +85,32 @@ export const ADD_DROP = gql`
 
   ${DROP_DETAILS}
 `
-export const ALL_DROPS = gql`
-  query allDrops($drop: String!) {
-    allDrops(drop: $drop) {
+
+export const UPDATE_DROP = gql`
+  mutation updateDrop(
+    $id: String!
+    $project: String
+    $client: String
+    $director: String
+    $dop: String
+    $soundie: String
+    $gearCheckDate: Date
+    $startDate: Date
+    $endDate: Date
+    $wrapDate: Date
+  ) {
+    updateDrop(
+      id: $id
+      project: $project
+      client: $client
+      director: $director
+      dop: $dop
+      soundie: $soundie
+      gearCheckDate: $gearCheckDate
+      startDate: $startDate
+      endDate: $endDate
+      wrapDate: $wrapDate
+    ) {
       ...DropDetails
     }
   }

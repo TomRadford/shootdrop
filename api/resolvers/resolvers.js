@@ -164,6 +164,8 @@ const resolvers = {
         },
         { returnDocument: "after" }
       )
+        .populate("users")
+        .populate("lists")
       return existingDrop
     },
 

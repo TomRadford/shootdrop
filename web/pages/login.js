@@ -34,9 +34,9 @@ const LoginCard = () => {
       const token = result.data.login.value
       localStorage.setItem("shootdrop-user-token", token)
       me.refetch() //To invalidate null "me" in cache
+      router.push("/drops")
       setUsername("")
       setPassword("")
-      router.push("/drops")
     }
   }, [result.data])
 
@@ -50,15 +50,16 @@ const LoginCard = () => {
     })
   }
   return (
-    <Card>
-      <div className="p-10">
-        <h2 className="mb-4 text-xl font-bold">Please login</h2>
+    <div className="">
+      <h2 className="mb-4 text-xl font-bold">Please login</h2>
+      <Card>
         <form onSubmit={handleLogin}>
           <input
             className="bg-transparent"
             placeholder="Email"
             type="email"
             value={username}
+            autoComplete="email"
             onChange={({ target }) => setUsername(target.value)}
           />
           <br />
@@ -68,6 +69,7 @@ const LoginCard = () => {
             type="password"
             onChange={({ target }) => setPassword(target.value)}
             value={password}
+            autoComplete="current-password"
             required
           />
           <Notification
@@ -78,8 +80,8 @@ const LoginCard = () => {
             Login
           </button>
         </form>
-      </div>
-    </Card>
+      </Card>
+    </div>
   )
 }
 

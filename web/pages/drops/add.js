@@ -2,13 +2,13 @@ import Head from "next/head"
 import Layout from "../../components/layout"
 import { ADD_DROP } from "../../lib/apollo/queries"
 import { useMutation } from "@apollo/client"
-import DropEditor from "../../components/drop/editor"
+import DropEditor from "../../components/drop/Editor"
 import useCheckAuth from "../../lib/hooks/checkAuth"
 import ClientOnly from "../../components/ClientOnly"
 
 // Route for DropEditor to mount with no drop
 
-const AddDrop = () => {
+const AddDropPage = () => {
   useCheckAuth()
 
   return (
@@ -32,4 +32,4 @@ const AddDrop = () => {
     </>
   )
 }
-export default AddDrop
+export default AddDropPage

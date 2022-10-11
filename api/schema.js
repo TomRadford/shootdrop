@@ -128,7 +128,12 @@ const typeDefs = gql`
       fullName: String
       profilePicture: String
     ): User!
-    editMe(username: String, password: String, profilePicture: String, fullName: String): User!
+    editMe(
+      username: String
+      password: String
+      profilePicture: String
+      fullName: String
+    ): User!
     addGearItem(
       category: GearCategory!
       manufacturer: String!
@@ -163,7 +168,7 @@ const typeDefs = gql`
     ): Drop!
     updateDrop(
       id: String!
-      project: String!
+      project: String
       client: String
       director: String
       dop: String
