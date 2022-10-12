@@ -8,6 +8,26 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
 import Image from "next/image"
+import useCheckAuth from "../lib/hooks/checkAuth"
+
+const EditButton = ({ className, stroke, onClick }) => (
+  <button>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke={stroke}
+      className={className}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
+      />
+    </svg>
+  </button>
+)
 
 const MePage = () => {
   const [newPassword, setNewPassword] = useState("")
@@ -18,27 +38,18 @@ const MePage = () => {
   const router = useRouter()
   const { data, loading } = useQuery(ME)
   const [editUser, editUserResult] = useMutation(EDIT_ME)
+  useCheckAuth()
   useEffect(() => {
     if (!loading) {
       if (data.me) {
         setUsername(data.me.username)
         setFullName(data.me.fullName ? data.me.fullName : "")
-        setProfilePicture(
-          data.me.profilePicture ? data.me.profilePicture : `/img/roger.jfif`
-        )
-      } else {
-        router.push("/login")
+        setProfilePicture(data.me.profilePicture ? data.me.profilePicture : "")
       }
     }
   }, [data])
   const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log({
-      variables: {
-        username: username,
-        fullName: fullName,
-      },
-    })
     editUser({
       variables: {
         username: username,
@@ -48,11 +59,16 @@ const MePage = () => {
     console.log(editUserResult)
     setMessageData({ message: "Account updated!", type: "info" })
   }
+
+  const handleUpload = async () => {
+    // get secure upload url from api
+    // post image to s3 with url
+    // post image url to server
+  }
+
   if (loading) {
-    console.log("loading")
     return <Loading />
   }
-  console.log(profilePicture)
 
   return (
     <>
@@ -63,17 +79,45 @@ const MePage = () => {
         <div className="flex h-screen ">
           <div className="m-auto text-center">
             <form onSubmit={handleSubmit}>
-              {profilePicture && (
-                <Image
-                  src={profilePicture}
-                  width="100px"
-                  height="100px"
-                  className="mb-10 rounded-full"
-                  objectFit="cover"
-                />
-              )}
+              <div className="group relative mb-10 flex justify-center">
+                {profilePicture ? (
+                  <>
+                    <Image
+                      src={profilePicture}
+                      width="150px"
+                      height="150px"
+                      objectFit="cover"
+                      className="rounded-full"
+                    />
+                    <div className="absolute top-0 flex h-full w-[150px] justify-center rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-50">
+                      <EditButton
+                        className="h-12 w-12"
+                        stroke="black"
+                        onClick={(e) => {
+                          e.preventDefault()
+                        }}
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <div className="group relative mb-10 flex flex-col items-center gap-5">
+                    <p className="text-gray-300">
+                      Click below to add a profile pic!
+                    </p>
+                    <div className="flex h-[150px] w-[150px] justify-center rounded-full  bg-black opacity-80 transition-opacity">
+                      <EditButton
+                        className="h-12 w-12"
+                        stroke="white"
+                        onClick={(e) => {
+                          handleUpload()
+                        }}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
               <input
-                className="mb-5 block bg-transparent text-center text-lg font-bold text-white"
+                className="mb-5 block w-full bg-transparent text-center text-lg font-bold text-white"
                 value={fullName}
                 onChange={({ target }) => setFullName(target.value)}
                 placeholder="Full Name"

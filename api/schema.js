@@ -107,6 +107,7 @@ const typeDefs = gql`
       model: String
       tags: [String]
     ): [GearItem!]
+    getS3Url: String!
   }
 
   input GearPrefInput {

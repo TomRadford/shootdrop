@@ -49,6 +49,7 @@ const resolvers = {
       return gearItemPrefs
     },
   },
+  // TBC if needed to populate this scheme here
   // GearList: {
   // 	items: async (root, args, context) => {
   // 		// await root.populate({
@@ -384,6 +385,10 @@ const resolvers = {
       const { currentUser } = context
       await currentUser
       return currentUser
+    },
+    getS3Url: async (root, args, context) => {
+      checkAuth(context)
+      return "url"
     },
 
     allDrops: async (root, args, context) => {
