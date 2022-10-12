@@ -4,6 +4,7 @@ import Link from "next/link"
 import Image from "next/image"
 import ClientOnly from "../ClientOnly"
 import { ME } from "../../lib/apollo/queries"
+import useCheckAuth from "../../lib/hooks/checkAuth"
 
 const NavLink = ({ label, link, setShowNav }) => (
   <li className="py-2 font-bold">
@@ -19,6 +20,7 @@ const User = () => {
   const { loading, data } = useQuery(ME)
   if (loading) return null
   const { me } = data
+
   const handleLogout = () => {
     localStorage.clear()
     window.location.reload()

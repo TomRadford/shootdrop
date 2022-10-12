@@ -4,6 +4,7 @@ import { useQuery, useMutation } from "@apollo/client"
 import { useEffect, useState } from "react"
 import { ME, ADD_DROP, UPDATE_DROP } from "../../lib/apollo/queries"
 import { useRouter } from "next/router"
+import useGetMe from "../../lib/hooks/getMe"
 
 const getDateString = (value) => {
   const date = new Date(value)
@@ -15,6 +16,7 @@ const DropHeader = ({ drop }) => {
   const [clientName, setClientName] = useState(drop ? drop.client : "")
   const [addDrop, { data, loading, error }] = useMutation(ADD_DROP)
   const [updateDrop, updateDropResult] = useMutation(UPDATE_DROP)
+  const me = useGetMe()
   const router = useRouter()
   useEffect(() => {
     if (!drop) {
@@ -74,6 +76,7 @@ const DropHeader = ({ drop }) => {
           data-enable-grammarly="false"
           value={dropName}
           onChange={({ target }) => setDropName(target.value)}
+          disabled={!me}
         />
         <div className="mr-3 flex flex-col justify-end text-right text-gray-300">
           <div className="flex">
@@ -83,6 +86,7 @@ const DropHeader = ({ drop }) => {
               className="bg-transparent text-right"
               value={clientName}
               onChange={({ target }) => setClientName(target.value)}
+              disabled={!me}
             />
           </div>
         </div>

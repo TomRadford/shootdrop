@@ -13,6 +13,7 @@ const Loading = () => {
                 strokeWidth="1.5"
                 stroke="currentColor"
                 className="h-8 w-8 animate-spin stroke-slate-500"
+                aria-label="Loading content"
               >
                 <path
                   strokeLinecap="round"

@@ -1,32 +1,37 @@
 import { useMutation } from "@apollo/client"
 import { useEffect, useState } from "react"
 import { UPDATE_DROP } from "../../lib/apollo/queries"
+import useGetMe from "../../lib/hooks/getMe"
 import Card from "../Card"
 import DatePickerTailwind from "../elements/DatePicker"
 
-const DateOption = ({ label, date, setDate, dropDate }) => (
-  <div className="flex justify-between">
-    <p className="text-left font-light text-gray-300">{label}</p>
-    <div>
-      {date ? (
-        <DatePickerTailwind
-          date={date}
-          setDate={setDate}
-          startOpen={!dropDate}
-        />
-      ) : (
-        <button
-          onClick={() => {
-            setDate(new Date())
-          }}
-          className="text-lg"
-        >
-          Click to add
-        </button>
-      )}
+const DateOption = ({ label, date, setDate, dropDate }) => {
+  const me = useGetMe()
+  return (
+    <div className="flex justify-between">
+      <p className="text-left font-light text-gray-300">{label}</p>
+      <div>
+        {date ? (
+          <DatePickerTailwind
+            date={date}
+            setDate={setDate}
+            startOpen={!dropDate}
+            disabled={!me}
+          />
+        ) : (
+          <button
+            onClick={(e) => {
+              me ? setDate(new Date()) : e.preventDefault()
+            }}
+            className={`text-lg ${!me && `cursor-default`}`}
+          >
+            {me ? "Click to add" : "Login to add"}
+          </button>
+        )}
+      </div>
     </div>
-  </div>
-)
+  )
+}
 
 const DropDates = ({ drop }) => {
   const [gearCheckDate, setGearCheckDate] = useState(
@@ -73,7 +78,7 @@ const DropDates = ({ drop }) => {
   }, [gearCheckDate, startDate, endDate, wrapDate])
 
   return (
-    <div className="max-w-sm">
+    <div className="w-96">
       <Card>
         <div className="flex flex-col gap-4 py-2 px-4">
           <h3 className="pb-1 text-left text-xl">Dates</h3>
@@ -108,24 +113,3 @@ const DropDates = ({ drop }) => {
   )
 }
 export default DropDates
-
-{
-  /* <div>
-              {gearCheckDate ? (
-                <DatePickerTailwind
-                  date={gearCheckDate}
-                  setDate={setGearCheckDate}
-                  startOpen={drop.gearCheckDate !== gearCheckDate}
-                />
-              ) : (
-                <button
-                  onClick={() => {
-                    setGearCheckDate(new Date())
-                  }}
-                  className="text-lg"
-                >
-                  Click to add
-                </button>
-              )}
-            </div> */
-}

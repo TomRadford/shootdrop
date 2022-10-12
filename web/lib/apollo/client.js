@@ -41,31 +41,32 @@ const handleError = onError(({ graphQLErrors, networkError }) => {
 const wsLink =
   typeof window !== "undefined"
     ? new GraphQLWsLink(
-      createClient({
-        url: "ws://localhost:4000/subscriptions",
-      })
-    )
+        createClient({
+          url: "ws://localhost:4000/subscriptions",
+        })
+      )
     : null
 
 const splitLink =
   typeof window !== "undefined" && wsLink !== null
     ? split(
-      ({ query }) => {
-        const definition = getMainDefinition(query)
-        return (
-          definition.kind === "OperationDefinition" &&
-          definition.operation === "subscription"
-        )
-      },
-      wsLink,
-      ApolloLink.from([handleError, authLink, httpLink])
-    )
+        ({ query }) => {
+          const definition = getMainDefinition(query)
+          return (
+            definition.kind === "OperationDefinition" &&
+            definition.operation === "subscription"
+          )
+        },
+        wsLink,
+        ApolloLink.from([handleError, authLink, httpLink])
+      )
     : httpLink
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
   link: splitLink,
-  connectToDevTools: process.env.NODE_ENV === 'development',
+  connectToDevTools: process.env.NODE_ENV === "development",
+  ssrMode: typeof window === "undefined",
 })
 
 export default client

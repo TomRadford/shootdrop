@@ -4,9 +4,10 @@ import { format } from "date-fns"
 
 // Credit: https://github.com/msnegurski/tailwind-react-datepicker
 
-const DatePickerTailwind = ({ date, setDate, startOpen }) => {
+const DatePickerTailwind = ({ date, setDate, startOpen, disabled }) => {
   return (
     <DatePicker
+      disabled={disabled}
       selected={date}
       onChange={(newDate) => setDate(newDate)}
       selectsStart
@@ -14,7 +15,9 @@ const DatePickerTailwind = ({ date, setDate, startOpen }) => {
       nextMonthButtonLabel=">"
       previousMonthButtonLabel="<"
       popperClassName="react-datepicker-popper"
-      customInput={<ButtonInput />}
+      customInput={
+        <ButtonInput className={disabled && `hover:cursor-default`} />
+      }
       startOpen={startOpen}
       renderCustomHeader={({
         date,
@@ -78,8 +81,8 @@ const DatePickerTailwind = ({ date, setDate, startOpen }) => {
   )
 }
 
-const ButtonInput = forwardRef(({ value, onClick }, ref) => (
-  <button onClick={onClick} ref={ref} type="button">
+const ButtonInput = forwardRef(({ value, onClick, className }, ref) => (
+  <button onClick={onClick} ref={ref} type="button" className={className}>
     {format(new Date(value), "dd MMMM yyyy")}
   </button>
 ))
