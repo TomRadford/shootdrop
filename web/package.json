@@ -12,6 +12,7 @@
   "dependencies": {
     "@apollo/client": "^3.7.0",
     "@tailwindcss/forms": "^0.5.3",
+    "axios": "^1.1.2",
     "date-fns": "^2.29.3",
     "graphql": "^16.6.0",
     "graphql-ws": "^5.11.2",
@@ -19,6 +20,7 @@
     "react": "18.2.0",
     "react-datepicker": "^4.8.0",
     "react-dom": "18.2.0",
+    "react-image-file-resizer": "^0.4.8",
     "react-textarea-autosize": "^8.3.4"
   },
   "devDependencies": {

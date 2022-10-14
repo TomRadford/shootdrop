@@ -14,6 +14,7 @@ const { checkAuth, checkDropPermissions } = require("../utils/auth")
 const { handleTags } = require("../utils/tags")
 const { GearPref, GearPrefOpt } = require("../models/gear/pref")
 const { handlePrefs, handleEditPrefs } = require("../utils/prefs")
+const { generateUploadURL } = require("../utils/s3")
 const dateScalar = new GraphQLScalarType({
   name: "Date",
   description: "Date scalar type",
@@ -386,9 +387,10 @@ const resolvers = {
       await currentUser
       return currentUser
     },
-    getS3Url: async (root, args, context) => {
+    getProfileImageUpload: async (root, args, context) => {
       checkAuth(context)
-      return "url"
+      const { currentUser } = context
+      return await generateUploadURL("users", `${currentUser.id}.webp`)
     },
 
     allDrops: async (root, args, context) => {

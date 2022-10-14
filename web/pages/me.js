@@ -1,17 +1,19 @@
-import { useMutation, useQuery } from "@apollo/client"
+import { useMutation, useQuery, useLazyQuery } from "@apollo/client"
 import Layout from "../components/layout"
 import Loading from "../components/Loading"
 import Notification from "../components/Notification"
-import { ME, EDIT_ME } from "../lib/apollo/queries"
+import { ME, EDIT_ME, GET_PROFILE_IMAGE_UPLOAD } from "../lib/apollo/queries"
 import Card from "../components/Card"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
 import Image from "next/image"
 import useCheckAuth from "../lib/hooks/checkAuth"
+import { makeWEBP } from "../lib/image/resizer"
+import axios from "axios"
 
-const EditButton = ({ className, stroke, onClick }) => (
-  <button>
+const ImageInput = ({ className, stroke, onChange }) => (
+  <label className="flex items-center">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
@@ -26,7 +28,13 @@ const EditButton = ({ className, stroke, onClick }) => (
         d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
       />
     </svg>
-  </button>
+    <input
+      className="hidden"
+      type="file"
+      accept=".png,.jpg,.jpeg,.jfif"
+      onChange={onChange}
+    ></input>
+  </label>
 )
 
 const MePage = () => {
@@ -34,11 +42,15 @@ const MePage = () => {
   const [username, setUsername] = useState("")
   const [fullName, setFullName] = useState("")
   const [profilePicture, setProfilePicture] = useState("")
+  const [profilePictureBase64, setProfilePictureBase64] = useState("")
   const [messageData, setMessageData] = useState({ message: "", type: "" })
-  const router = useRouter()
+  useCheckAuth()
   const { data, loading } = useQuery(ME)
   const [editUser, editUserResult] = useMutation(EDIT_ME)
-  useCheckAuth()
+  const [getProfileImageUploadUrl, profileImageUpload] = useLazyQuery(
+    GET_PROFILE_IMAGE_UPLOAD,
+    { fetchPolicy: "network-only" }
+  )
   useEffect(() => {
     if (!loading) {
       if (data.me) {
@@ -60,10 +72,19 @@ const MePage = () => {
     setMessageData({ message: "Account updated!", type: "info" })
   }
 
-  const handleUpload = async () => {
-    // get secure upload url from api
-    // post image to s3 with url
-    // post image url to server
+  useEffect(() => {
+    if (profileImageUpload.data) {
+      const uploadUrl = profileImageUpload.data.getProfileImageUpload
+      axios.put(uploadUrl, profilePictureBase64).then((res) => {
+        setProfilePicture(profileImageUpload.data)
+      })
+    }
+  }, [profileImageUpload.data])
+
+  const handleImage = async ({ target }) => {
+    const newImage = await makeWEBP(target.files[0], 1024, 786)
+    setProfilePictureBase64(newImage)
+    getProfileImageUploadUrl()
   }
 
   if (loading) {
@@ -90,12 +111,10 @@ const MePage = () => {
                       className="rounded-full"
                     />
                     <div className="absolute top-0 flex h-full w-[150px] justify-center rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-50">
-                      <EditButton
+                      <ImageInput
                         className="h-12 w-12"
                         stroke="black"
-                        onClick={(e) => {
-                          e.preventDefault()
-                        }}
+                        onChange={handleImage}
                       />
                     </div>
                   </>
@@ -105,12 +124,10 @@ const MePage = () => {
                       Click below to add a profile pic!
                     </p>
                     <div className="flex h-[150px] w-[150px] justify-center rounded-full  bg-black opacity-80 transition-opacity">
-                      <EditButton
+                      <ImageInput
                         className="h-12 w-12"
                         stroke="white"
-                        onClick={(e) => {
-                          handleUpload()
-                        }}
+                        onChange={handleImage}
                       />
                     </div>
                   </div>

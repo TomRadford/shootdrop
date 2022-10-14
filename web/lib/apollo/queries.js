@@ -116,3 +116,9 @@ export const UPDATE_DROP = gql`
   }
   ${DROP_DETAILS}
 `
+
+export const GET_PROFILE_IMAGE_UPLOAD = gql`
+  query {
+    getProfileImageUpload
+  }
+`
