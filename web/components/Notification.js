@@ -2,12 +2,13 @@ import { useEffect, useState } from "react"
 
 const Notification = ({ messageData, setMessageData }) => {
   useEffect(() => {
-    //here looping like cray
-    // const timeout = setTimeout(() => {
-    setMessageData({ message: "", type: "" })
-    // }, 2000)
-    // return () => clearTimeout(timeout)
-  }, [messageData])
+    if (messageData.message) {
+      const timeout = setTimeout(() => {
+        setMessageData({ message: "", type: "" })
+      }, 2000)
+      return () => clearTimeout(timeout)
+    }
+  }, [])
 
   return (
     <p className={messageData.type === "error" ? "text-red-600" : "text-white"}>

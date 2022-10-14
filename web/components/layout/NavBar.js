@@ -54,7 +54,9 @@ const User = () => {
             </button>
           </Link>
           <Image
-            src={me.profilePicture ? me.profilePicture : `/img/roger.jfif`}
+            src={
+              me.profilePicture ? me.profilePicture : `/img/default_user.png`
+            }
             width="30px"
             height="30px"
             className="rounded-full"

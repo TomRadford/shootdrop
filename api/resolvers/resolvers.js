@@ -370,6 +370,9 @@ const resolvers = {
       if (args.password) {
         currentUser.passwordHash = await bcrypt.hash(args.password, 10)
       }
+      if (args.profilePicture) {
+        currentUser.profilePicture = args.profilePicture
+      }
       currentUser.profilePicture = args.profilePicture
       currentUser.fullName = args.fullName
       try {
