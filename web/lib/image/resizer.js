@@ -11,7 +11,8 @@ const makeWEBP = (file, maxHeight, maxWidth) =>
       0,
       (uri) => {
         resolve(uri)
-      }
+      },
+      'file'
     )
   })
 

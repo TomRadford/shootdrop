@@ -2,15 +2,15 @@ import { useMutation, useQuery, useLazyQuery } from "@apollo/client"
 import Layout from "../components/layout"
 import Loading from "../components/Loading"
 import Notification from "../components/Notification"
-import { ME, EDIT_ME, GET_PROFILE_IMAGE_UPLOAD } from "../lib/apollo/queries"
+import { ME, EDIT_ME } from "../lib/apollo/queries"
 import Card from "../components/Card"
 import { useEffect, useState } from "react"
-import { useRouter } from "next/router"
 import Head from "next/head"
 import Image from "next/image"
 import useCheckAuth from "../lib/hooks/checkAuth"
 import { makeWEBP } from "../lib/image/resizer"
 import axios from "axios"
+import { getProfileImageUpload } from "../lib/image/upload"
 
 const ImageInput = ({ className, stroke, onChange }) => (
   <label className="flex items-center">
@@ -42,15 +42,10 @@ const MePage = () => {
   const [username, setUsername] = useState("")
   const [fullName, setFullName] = useState("")
   const [profilePicture, setProfilePicture] = useState("")
-  const [profilePictureBase64, setProfilePictureBase64] = useState("")
   const [messageData, setMessageData] = useState({ message: "", type: "" })
   useCheckAuth()
   const { data, loading } = useQuery(ME)
   const [editUser, editUserResult] = useMutation(EDIT_ME)
-  const [getProfileImageUploadUrl, profileImageUpload] = useLazyQuery(
-    GET_PROFILE_IMAGE_UPLOAD,
-    { fetchPolicy: "network-only" }
-  )
   useEffect(() => {
     if (!loading) {
       if (data.me) {
@@ -72,19 +67,19 @@ const MePage = () => {
     setMessageData({ message: "Account updated!", type: "info" })
   }
 
-  useEffect(() => {
-    if (profileImageUpload.data) {
-      const uploadUrl = profileImageUpload.data.getProfileImageUpload
-      axios.put(uploadUrl, profilePictureBase64).then((res) => {
-        setProfilePicture(profileImageUpload.data)
-      })
-    }
-  }, [profileImageUpload.data])
+  console.log(profilePicture)
 
   const handleImage = async ({ target }) => {
     const newImage = await makeWEBP(target.files[0], 1024, 786)
-    setProfilePictureBase64(newImage)
-    getProfileImageUploadUrl()
+    const uploadUrl = await getProfileImageUpload()
+    console.log('uploading')
+    try {
+      await axios.put(uploadUrl, newImage)
+      setProfilePicture(`${uploadUrl.split('?')[0]}?t=${new Date().getTime()}`)
+      console.log('done')
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   if (loading) {
@@ -104,11 +99,12 @@ const MePage = () => {
                 {profilePicture ? (
                   <>
                     <Image
-                      src={profilePicture}
+                      src={`${profilePicture}`}
                       width="150px"
                       height="150px"
                       objectFit="cover"
                       className="rounded-full"
+
                     />
                     <div className="absolute top-0 flex h-full w-[150px] justify-center rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-50">
                       <ImageInput
