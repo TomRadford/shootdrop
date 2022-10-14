@@ -8,7 +8,7 @@ const Notification = ({ messageData, setMessageData }) => {
       }, 2000)
       return () => clearTimeout(timeout)
     }
-  }, [])
+  }, [messageData])
 
   return (
     <p className={messageData.type === "error" ? "text-red-600" : "text-white"}>

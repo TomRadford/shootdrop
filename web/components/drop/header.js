@@ -34,6 +34,7 @@ const DropHeader = ({ drop }) => {
     } else {
       if (drop.project !== dropName || drop.client !== clientName) {
         const timeout = setTimeout(() => {
+          console.log("Updating headers")
           updateDrop({
             variables: {
               id: drop.id,

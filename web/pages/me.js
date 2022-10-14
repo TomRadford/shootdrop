@@ -12,43 +12,45 @@ import { makeWEBP } from "../lib/image/resizer"
 import axios from "axios"
 import { getProfileImageUpload } from "../lib/image/upload"
 
-const ImageInput = ({ className, stroke, onChange, imageLoading }) => (
+const ImageInput = ({ className, stroke, onChange }) => (
   <label className="flex cursor-pointer items-center">
-    {!imageLoading ? (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={1.5}
-        stroke={stroke}
-        className={className}
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
-        />
-      </svg>
-    ) : (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth="1.5"
-        stroke="currentColor"
-        className="h-6 w-6 animate-bounce"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
-        />
-      </svg>
-    )}
+    {/* {imageLoading ? ( */}
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke={stroke}
+      className={className}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
+      />
+    </svg>
+    {
+      /* // ) : (
+      // <svg */
+      //   xmlns="http://www.w3.org/2000/svg"
+      //   fill="none"
+      //   viewBox="0 0 24 24"
+      //   strokeWidth="1.5"
+      //   stroke="currentColor"
+      //   className="h-6 w-6 animate-bounce"
+      // >
+      //   <path
+      //     strokeLinecap="round"
+      //     strokeLinejoin="round"
+      //     d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
+      //   />
+      // </svg>
+      // )}
+    }
     <input
       className="hidden"
       type="file"
-      accept=".png,.jpg,.jpeg,.jfif"
+      accept=".png,.jpg,.jpeg,.jfif,.webp"
       onChange={onChange}
     ></input>
   </label>
@@ -59,7 +61,7 @@ const MePage = () => {
   const [username, setUsername] = useState("")
   const [fullName, setFullName] = useState("")
   const [profilePicture, setProfilePicture] = useState("")
-  const [imageLoading, setImageLoading] = useState(false)
+  const [imageLoading, setImageLoading] = useState(true)
   const [messageData, setMessageData] = useState({ message: "", type: "" })
   useCheckAuth()
   const { data, loading } = useQuery(ME)
@@ -76,6 +78,7 @@ const MePage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setMessageData({ message: "Profile updated!", type: "info" })
     editMe({
       variables: {
         username: username,
@@ -83,8 +86,6 @@ const MePage = () => {
         profilePicture,
       },
     })
-    console.log(editUserResult)
-    setMessageData({ message: "Account updated!", type: "info" })
   }
 
   const handleImage = async ({ target }) => {
@@ -94,7 +95,6 @@ const MePage = () => {
     try {
       await axios.put(uploadUrl, newImage)
       setProfilePicture(`${uploadUrl.split("?")[0]}?t=${new Date().getTime()}`) //cache breaker
-      setImageLoading(false)
     } catch (e) {
       console.error(e)
     }
@@ -115,23 +115,24 @@ const MePage = () => {
             <form onSubmit={handleSubmit}>
               <div className="group relative mb-10 flex justify-center">
                 {profilePicture ? (
-                  <>
+                  <div className={`${imageLoading && `hidden`}`}>
                     <Image
                       src={profilePicture}
                       width="150px"
                       height="150px"
                       objectFit="cover"
-                      className="rounded-full"
+                      className={`rounded-full`}
+                      onLoadStart={() => setImageLoading(true)}
+                      onLoad={() => setImageLoading(false)}
                     />
-                    <div className="absolute top-0 flex h-full w-[150px] justify-center rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-50">
+                    <div className="absolute top-0 flex  h-[150px] w-[150px] justify-center rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-50">
                       <ImageInput
                         className="h-12 w-12"
                         stroke="black"
                         onChange={handleImage}
-                        imageLoading={imageLoading}
                       />
                     </div>
-                  </>
+                  </div>
                 ) : (
                   <div className="group relative mb-10 flex flex-col items-center gap-5">
                     <p className="text-gray-300">
@@ -142,12 +143,17 @@ const MePage = () => {
                         className="h-12 w-12"
                         stroke="white"
                         onChange={handleImage}
-                        imageLoading={imageLoading}
                       />
                     </div>
                   </div>
                 )}
+                {imageLoading && (
+                  <div className="h-[150px] w-[150px] animate-pulse rounded-full bg-white">
+                    dfds
+                  </div>
+                )}
               </div>
+
               <input
                 className="mb-5 block w-full bg-transparent text-center text-lg font-bold text-white"
                 value={fullName}
