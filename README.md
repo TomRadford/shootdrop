@@ -15,3 +15,6 @@
 <div/>
 
 <h3>Watch this space!</h3>
+
+<h1>The rough pitch</h1>
+<img src="https://user-images.githubusercontent.com/7515754/196217011-7838b709-fe64-4d91-91c0-848ec7c60f44.png" />
