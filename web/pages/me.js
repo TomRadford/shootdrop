@@ -89,6 +89,9 @@ const MePage = () => {
   }
 
   const handleImage = async ({ target }) => {
+    if (target.files.length === 0) {
+      return
+    }
     setImageLoading(true)
     const newImage = await makeWEBP(target.files[0], 1024, 786)
     const uploadUrl = await getProfileImageUpload()

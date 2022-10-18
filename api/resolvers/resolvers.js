@@ -202,6 +202,7 @@ const resolvers = {
       const newGearList = new GearList({
         category,
         comment,
+        drop: existingDrop, //List page
       })
 
       existingDrop.lists = existingDrop.lists.concat(newGearList)
@@ -238,7 +239,10 @@ const resolvers = {
       const parentDrop = await Drop.findOne({ lists: listToDelete })
       await checkDropPermissions(context, parentDrop)
       try {
-        parentDrop.lists.filter((list) => list !== listToDelete)
+        parentDrop.lists = parentDrop.lists.filter(
+          (list) => list !== listToDelete
+        )
+        await parentDrop.save()
         await listToDelete.delete()
         return true
       } catch (e) {
@@ -450,7 +454,7 @@ const resolvers = {
           searchTerms.model = { $regex: args.model, $options: "i" }
         }
         if (args.category) {
-          searchTerms.category = { $regex: args.category }
+          searchTerms.category = { $in: [args.category] }
         }
         if (args.tags) {
           searchTerms.tags = { $in: args.tags }

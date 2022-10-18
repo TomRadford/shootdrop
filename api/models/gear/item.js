@@ -1,10 +1,7 @@
 const mongoose = require("mongoose")
 
 const schema = mongoose.Schema({
-  category: {
-    type: String,
-    required: true,
-  },
+  category: [String],
   manufacturer: {
     type: String,
     required: true,

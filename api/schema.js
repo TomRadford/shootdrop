@@ -43,6 +43,7 @@ const typeDefs = gql`
     id: ID!
     category: String
     comment: String
+    drop: String!
     items: [GearListItem]
   }
 
@@ -62,13 +63,13 @@ const typeDefs = gql`
 
   type Tag {
     name: String!
-    category: String
+    category: [String]
     id: ID!
   }
 
   type GearItem {
     id: ID!
-    category: String!
+    category: [String!]
     manufacturer: String!
     model: String!
     description: String
@@ -136,7 +137,7 @@ const typeDefs = gql`
       fullName: String
     ): User!
     addGearItem(
-      category: GearCategory!
+      category: [GearCategory!]
       manufacturer: String!
       model: String!
       description: String
@@ -147,7 +148,7 @@ const typeDefs = gql`
     ): GearItem!
     editGearItem(
       id: String!
-      category: GearCategory
+      category: [GearCategory]
       manufacturer: String
       model: String
       description: String
