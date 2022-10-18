@@ -159,6 +159,8 @@ const resolvers = {
 
     updateDrop: async (root, args, context) => {
       checkAuth(context)
+      const drop = await Drop.findById(args.id)
+      checkDropPermissions(context, drop)
       const existingDrop = await Drop.findByIdAndUpdate(
         args.id,
         {
@@ -196,7 +198,7 @@ const resolvers = {
     addList: async (root, args, context) => {
       checkAuth(context)
       const existingDrop = await Drop.findById(args.drop)
-      await checkDropPermissions(context, existingDrop)
+      checkDropPermissions(context, existingDrop)
       const { category, comment } = args
 
       const newGearList = new GearList({
@@ -237,7 +239,7 @@ const resolvers = {
         throw new UserInputError("List does not exist")
       }
       const parentDrop = await Drop.findOne({ lists: listToDelete })
-      await checkDropPermissions(context, parentDrop)
+      checkDropPermissions(context, parentDrop)
       try {
         parentDrop.lists = parentDrop.lists.filter(
           (list) => list !== listToDelete
@@ -260,7 +262,7 @@ const resolvers = {
         throw new UserInputError("List does not exist")
       }
       const parentDrop = await Drop.findOne({ lists: listToAdd })
-      await checkDropPermissions(context, parentDrop)
+      checkDropPermissions(context, parentDrop)
       const { gearItem, quantity, prefs, comment } = args
       listToAdd.items.push({
         gearItem,
@@ -286,7 +288,7 @@ const resolvers = {
         throw new UserInputError("List does not exist")
       }
       const parentDrop = await Drop.findOne({ lists: listToEdit })
-      await checkDropPermissions(context, parentDrop)
+      checkDropPermissions(context, parentDrop)
       const { quantity, prefs, comment } = args
       try {
         listToEdit.items.id(args.id).userThatUpdated = context.currentUser
@@ -317,7 +319,7 @@ const resolvers = {
         throw new UserInputError("List does not exist")
       }
       const parentDrop = await Drop.findOne({ lists: listToEdit })
-      await checkDropPermissions(context, parentDrop)
+      checkDropPermissions(context, parentDrop)
       try {
         listToEdit.items.id(args.id).remove()
       } catch {

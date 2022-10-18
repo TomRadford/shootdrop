@@ -61,7 +61,7 @@ const MePage = () => {
   const [username, setUsername] = useState("")
   const [fullName, setFullName] = useState("")
   const [profilePicture, setProfilePicture] = useState("")
-  const [imageLoading, setImageLoading] = useState(true)
+  const [imageLoading, setImageLoading] = useState(false)
   const [messageData, setMessageData] = useState({ message: "", type: "" })
   useCheckAuth()
   const { data, loading } = useQuery(ME)
@@ -148,11 +148,9 @@ const MePage = () => {
                         onChange={handleImage}
                       />
                     </div>
-                  </div>
-                )}
-                {imageLoading && (
-                  <div className="h-[150px] w-[150px] animate-pulse rounded-full bg-white">
-                    dfds
+                    {/* {!imageLoading && (
+                      <div className="absolute flex h-[150px] w-[150px] animate-pulse rounded-full bg-white"></div>
+                    )} */}
                   </div>
                 )}
               </div>

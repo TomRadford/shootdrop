@@ -170,6 +170,7 @@ const typeDefs = gql`
     ): Drop!
     updateDrop(
       id: String!
+      users: [String]
       project: String
       client: String
       director: String

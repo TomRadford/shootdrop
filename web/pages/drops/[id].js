@@ -11,7 +11,6 @@ import client from "../../lib/apollo/client"
 import { gql } from "@apollo/client"
 // Route for DropEditor to mount with a queried drop
 const DropPage = ({ drop }) => {
-  // useCheckAuth() TO DO: Disable editing for no auth
   const router = useRouter()
   const dropId = router.query.id
   const dropResult = useQuery(ALL_DROPS, {
@@ -27,7 +26,7 @@ const DropPage = ({ drop }) => {
           <title>Project not found | ShootDrop</title>
         </Head>
         <Layout>
-          <div className="flex h-screen">
+          <div className="flex h-full">
             <div className="m-auto text-center">
               <h1 className="m-5 text-5xl font-bold">404</h1>
               <p className="">Project was not found.</p>
@@ -51,7 +50,7 @@ const DropPage = ({ drop }) => {
         <Loading />
       ) : (
         <Layout>
-          <div className="h-screen">
+          <div className="h-full">
             <div className="m-auto text-center">
               <ClientOnly>
                 <DropEditor

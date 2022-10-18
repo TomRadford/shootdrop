@@ -98,6 +98,7 @@ export const UPDATE_DROP = gql`
     $startDate: Date
     $endDate: Date
     $wrapDate: Date
+    $users: [String]
   ) {
     updateDrop(
       id: $id
@@ -110,6 +111,7 @@ export const UPDATE_DROP = gql`
       startDate: $startDate
       endDate: $endDate
       wrapDate: $wrapDate
+      users: $users
     ) {
       ...DropDetails
     }

@@ -5,7 +5,7 @@ import useGetMe from "../../lib/hooks/getMe"
 import Card from "../Card"
 import DatePickerTailwind from "../elements/DatePicker"
 
-const DateOption = ({ label, date, setDate, dropDate }) => {
+const DateOption = ({ label, date, setDate, dropDate, userInDrop }) => {
   const me = useGetMe()
   return (
     <div className="flex justify-between">
@@ -16,7 +16,7 @@ const DateOption = ({ label, date, setDate, dropDate }) => {
             date={date}
             setDate={setDate}
             startOpen={!dropDate}
-            disabled={!me}
+            disabled={!me || !userInDrop}
           />
         ) : (
           <button
@@ -25,7 +25,7 @@ const DateOption = ({ label, date, setDate, dropDate }) => {
             }}
             className={`text-lg ${!me && `cursor-default`}`}
           >
-            {me ? "Click to add" : "Login to add"}
+            {!me || !userInDrop ? "Click to add" : "Login to add"}
           </button>
         )}
       </div>
@@ -33,7 +33,7 @@ const DateOption = ({ label, date, setDate, dropDate }) => {
   )
 }
 
-const DropDates = ({ drop }) => {
+const DropDates = ({ drop, userInDrop }) => {
   const [gearCheckDate, setGearCheckDate] = useState(
     drop.gearCheckDate ? new Date(drop.gearCheckDate) : null
   )
@@ -88,24 +88,28 @@ const DropDates = ({ drop }) => {
             date={gearCheckDate}
             setDate={setGearCheckDate}
             dropDate={drop.gearCheckDate}
+            userInDrop={userInDrop}
           />
           <DateOption
             label="Shoot Start"
             date={startDate}
             setDate={setStartDate}
             dropDate={drop.startDate}
+            userInDrop={userInDrop}
           />
           <DateOption
             label="Shoot End"
             date={endDate}
             setDate={setEndDate}
             dropDate={drop.endDate}
+            userInDrop={userInDrop}
           />
           <DateOption
             label="Gear Wrap"
             date={wrapDate}
             setDate={setWrapDate}
             dropDate={drop.wrapDate}
+            userInDrop={userInDrop}
           />
         </div>
       </Card>

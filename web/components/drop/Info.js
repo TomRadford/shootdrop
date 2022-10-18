@@ -4,7 +4,7 @@ import { UPDATE_DROP } from "../../lib/apollo/queries"
 import useGetMe from "../../lib/hooks/getMe"
 import Card from "../Card"
 
-const DropOption = ({ label, value, setValue }) => {
+const DropOption = ({ label, value, setValue, userInDrop }) => {
   const me = useGetMe()
   return (
     <div className="flex justify-between">
@@ -14,13 +14,13 @@ const DropOption = ({ label, value, setValue }) => {
         className="bg-transparent text-right font-semibold"
         value={value}
         onChange={({ target }) => setValue(target.value)}
-        disabled={!me}
+        disabled={!me || !userInDrop}
       />
     </div>
   )
 }
 
-const DropInfo = ({ drop }) => {
+const DropInfo = ({ drop, userInDrop }) => {
   const [director, setDirector] = useState(drop.director ? drop.director : "")
   const [dop, setDop] = useState(drop.dop ? drop.dop : "")
   const [soundie, setSoundie] = useState(drop.soundie ? drop.soundie : "")
@@ -56,9 +56,20 @@ const DropInfo = ({ drop }) => {
             label="Director"
             value={director}
             setValue={setDirector}
+            userInDrop={userInDrop}
           />
-          <DropOption label="DP" value={dop} setValue={setDop} />
-          <DropOption label="Soundie" value={soundie} setValue={setSoundie} />
+          <DropOption
+            label="DP"
+            value={dop}
+            setValue={setDop}
+            userInDrop={userInDrop}
+          />
+          <DropOption
+            label="Soundie"
+            value={soundie}
+            setValue={setSoundie}
+            userInDrop={userInDrop}
+          />
         </div>
       </Card>
     </div>

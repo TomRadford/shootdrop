@@ -5,19 +5,23 @@ import { useEffect, useState } from "react"
 import { ME, ADD_DROP, UPDATE_DROP } from "../../lib/apollo/queries"
 import { useRouter } from "next/router"
 import useGetMe from "../../lib/hooks/getMe"
+import UserModal from "./UserModal"
 
 const getDateString = (value) => {
   const date = new Date(value)
   return `${date.getHours()}:${date.getMinutes()} ${date.toLocaleDateString()}`
 }
 
-const DropHeader = ({ drop }) => {
+const DropHeader = ({ drop, userInDrop }) => {
+  const [modalOpen, setModalOpen] = useState(false)
   const [dropName, setDropName] = useState(drop ? drop.project : "")
   const [clientName, setClientName] = useState(drop ? drop.client : "")
+
   const [addDrop, { data, loading, error }] = useMutation(ADD_DROP)
   const [updateDrop, updateDropResult] = useMutation(UPDATE_DROP)
   const me = useGetMe()
   const router = useRouter()
+
   useEffect(() => {
     if (!drop) {
       const timeout = setTimeout(() => {
@@ -55,46 +59,71 @@ const DropHeader = ({ drop }) => {
   }
 
   return (
-    <header className="mx-auto flex w-screen justify-between gap-1 align-bottom md:w-full">
-      <div className="flex min-w-max items-center">
-        {/* <Image
-          src={`/img/roger.jfif`}
-          width="30px"
-          height="30px"
-          className="rounded-full"
-          objectFit="cover"
-        /> */}
-      </div>
-      <div>
-        <TextareaAutosize
-          name="name"
-          className="mx-2 resize-none whitespace-pre-wrap bg-transparent text-right text-xl font-bold md:text-3xl"
-          placeholder="Project name"
-          autoComplete="off"
-          data-gramm="false"
-          data-gramm_editor="false"
-          data-enable-grammarly="false"
-          value={dropName}
-          onChange={({ target }) => setDropName(target.value)}
-          disabled={!me}
-        />
-        <div className="mr-3 flex flex-col justify-end text-right text-gray-300">
-          <div className="flex">
-            <p className="flex-1"></p>
-            <input
-              placeholder="Client name"
-              className="bg-transparent text-right"
-              value={clientName}
-              onChange={({ target }) => setClientName(target.value)}
-              disabled={!me}
-            />
+    <>
+      <header className="mx-auto flex w-screen justify-between gap-1 align-bottom md:w-full">
+        <div className="flex min-w-max items-center pl-3 md:pl-0">
+          <button
+            className={!me ? "cursor-default" : ""}
+            onClick={(e) => {
+              e.preventDefault()
+              setModalOpen(true)
+            }}
+          >
+            <div className="mb-5 flex -space-x-2">
+              {drop &&
+                drop.users.map((user) => (
+                  <div key={user.id}>
+                    <Image
+                      src={user.profilePicture}
+                      key={user.id}
+                      width="30px"
+                      height="30px"
+                      className={`rounded-full`}
+                      objectFit="cover"
+                    />
+                  </div>
+                ))}
+            </div>
+          </button>
+        </div>
+
+        <div>
+          <TextareaAutosize
+            name="name"
+            className="mx-2 resize-none whitespace-pre-wrap bg-transparent text-right text-xl font-bold md:text-3xl"
+            placeholder="Project name"
+            autoComplete="off"
+            data-gramm="false"
+            data-gramm_editor="false"
+            data-enable-grammarly="false"
+            value={dropName}
+            onChange={({ target }) => setDropName(target.value)}
+            disabled={!me || !userInDrop}
+          />
+          <div className="mr-3 flex flex-col justify-end text-right text-gray-300">
+            <div className="flex">
+              <p className="flex-1"></p>
+              <input
+                placeholder="Client name"
+                className="bg-transparent text-right"
+                value={clientName}
+                onChange={({ target }) => setClientName(target.value)}
+                disabled={!me || !userInDrop}
+              />
+            </div>
           </div>
         </div>
-      </div>
-      <div className="mr-1 flex items-center text-xs text-gray-300">
-        {drop && <p>Last edited {getDateString(drop.updatedAt)}</p>}
-      </div>
-    </header>
+        <div className="mr-1 flex items-center text-xs text-gray-300">
+          {drop && <p>Last edited {getDateString(drop.updatedAt)}</p>}
+        </div>
+      </header>
+      <UserModal
+        modalOpen={modalOpen}
+        setModalOpen={setModalOpen}
+        drop={drop}
+        userInDrop={userInDrop}
+      />
+    </>
   )
 }
 
