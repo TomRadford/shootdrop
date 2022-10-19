@@ -76,6 +76,15 @@ export const ALL_DROPS = gql`
   ${DROP_DETAILS}
 `
 
+export const ALL_USERS = gql`
+  query allUsers($fullName: String) {
+    allUsers(fullName: $fullName) {
+      ...UserDetails
+    }
+  }
+  ${USER_DETAILS}
+`
+
 export const ADD_DROP = gql`
   mutation addDrop($project: String!, $client: String) {
     addDrop(project: $project, client: $client) {

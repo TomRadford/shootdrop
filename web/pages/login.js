@@ -20,7 +20,7 @@ const LoginCard = () => {
   useEffect(() => {
     if (!me.loading) {
       if (me.data.me) {
-        router.push("/me")
+        router.push("/drops")
       }
     }
   }, [me.data])
@@ -34,7 +34,6 @@ const LoginCard = () => {
       const token = result.data.login.value
       localStorage.setItem("shootdrop-user-token", token)
       me.refetch() //To invalidate null "me" in cache
-      router.push("/drops")
       setUsername("")
       setPassword("")
     }

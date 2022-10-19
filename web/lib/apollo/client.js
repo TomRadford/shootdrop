@@ -62,8 +62,10 @@ const splitLink =
       )
     : httpLink
 
+const cache = new InMemoryCache()
+
 const client = new ApolloClient({
-  cache: new InMemoryCache(),
+  cache,
   link: splitLink,
   connectToDevTools: process.env.NODE_ENV === "development",
   ssrMode: typeof window === "undefined",

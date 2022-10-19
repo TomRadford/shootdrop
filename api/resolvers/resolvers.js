@@ -466,6 +466,16 @@ const resolvers = {
         throw new UserInputError(`Error searching: ${e}`)
       }
     },
+
+    allUsers: async (root, args, context) => {
+      checkAuth(context)
+      if (args.fullName) {
+        return await User.find({
+          fullName: { $regex: args.fullName, $options: "i" },
+        })
+      } // Implement $search later on if we stick to Atlas
+      return User.find({})
+    },
   },
 }
 

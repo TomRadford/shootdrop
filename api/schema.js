@@ -109,6 +109,7 @@ const typeDefs = gql`
       tags: [String]
     ): [GearItem!]
     getProfileImageUpload: String!
+    allUsers(fullName: String): [User]
   }
 
   input GearPrefInput {
