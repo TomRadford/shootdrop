@@ -7,11 +7,11 @@ import Card from "../Card"
 const DropOption = ({ label, value, setValue, userInDrop }) => {
   const me = useGetMe()
   return (
-    <div className="flex justify-between">
+    <div className="flex flex-row justify-between">
       <p className="text-left font-light text-gray-300">{label}</p>
       <input
-        placeholder={me ? "Click to add" : "Login to add"}
-        className="bg-transparent text-right font-semibold"
+        placeholder={me && userInDrop ? "Click to add" : "Login to add"}
+        className="w-[10rem] bg-transparent text-right font-semibold sm:w-[14rem]"
         value={value}
         onChange={({ target }) => setValue(target.value)}
         disabled={!me || !userInDrop}
@@ -48,7 +48,7 @@ const DropInfo = ({ drop, userInDrop }) => {
   }, [director, dop, soundie])
 
   return (
-    <div className="w-96">
+    <div className="mx-auto w-80 sm:w-96">
       <Card>
         <div className="pb-13 flex flex-col gap-4 px-4 py-2 pb-[3.2rem]">
           <h3 className="pb-1 text-left text-xl">Info</h3>

@@ -7,6 +7,7 @@ import DatePickerTailwind from "../elements/DatePicker"
 
 const DateOption = ({ label, date, setDate, dropDate, userInDrop }) => {
   const me = useGetMe()
+  console.log(userInDrop)
   return (
     <div className="flex justify-between">
       <p className="text-left font-light text-gray-300">{label}</p>
@@ -25,7 +26,7 @@ const DateOption = ({ label, date, setDate, dropDate, userInDrop }) => {
             }}
             className={`text-lg ${!me && `cursor-default`}`}
           >
-            {!me || !userInDrop ? "Click to add" : "Login to add"}
+            {me && userInDrop ? "Click to add" : "Join to add"}
           </button>
         )}
       </div>
@@ -78,7 +79,7 @@ const DropDates = ({ drop, userInDrop }) => {
   }, [gearCheckDate, startDate, endDate, wrapDate])
 
   return (
-    <div className="w-96">
+    <div className="mx-auto w-80 sm:w-96">
       <Card>
         <div className="flex flex-col gap-4 py-2 px-4">
           <h3 className="pb-1 text-left text-xl">Dates</h3>

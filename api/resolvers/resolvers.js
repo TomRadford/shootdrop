@@ -37,7 +37,9 @@ const resolvers = {
   User: {
     drops: async (root, args, context, info) => {
       const { currentUser } = context
-      const userDrops = await Drop.find({ users: currentUser })
+      const userDrops = await Drop.find({ users: currentUser }).populate(
+        "users"
+      ) // ToDo: revisit popluating users in drop rather?
       return userDrops
     },
   },
@@ -393,7 +395,6 @@ const resolvers = {
   Query: {
     me: async (root, args, context) => {
       const { currentUser } = context
-      await currentUser
       return currentUser
     },
     getProfileImageUpload: async (root, args, context) => {

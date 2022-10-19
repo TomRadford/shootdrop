@@ -6,11 +6,7 @@ import { ME, ADD_DROP, UPDATE_DROP } from "../../lib/apollo/queries"
 import { useRouter } from "next/router"
 import useGetMe from "../../lib/hooks/getMe"
 import UserModal from "./UserModal"
-
-const getDateString = (value) => {
-  const date = new Date(value)
-  return `${date.getHours()}:${date.getMinutes()} ${date.toLocaleDateString()}`
-}
+import { format } from "date-fns"
 
 const DropHeader = ({ drop, userInDrop }) => {
   const [modalOpen, setModalOpen] = useState(false)
@@ -114,7 +110,11 @@ const DropHeader = ({ drop, userInDrop }) => {
           </div>
         </div>
         <div className="mr-1 flex items-center text-xs text-gray-300">
-          {drop && <p>Last edited {getDateString(drop.updatedAt)}</p>}
+          {drop && (
+            <p>
+              Last edited {format(new Date(drop.updatedAt), "HH:mm d/M/yy")}
+            </p>
+          )}
         </div>
       </header>
       <UserModal
