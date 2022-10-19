@@ -5,6 +5,7 @@ import Image from "next/image"
 import ClientOnly from "../ClientOnly"
 import { ME } from "../../lib/apollo/queries"
 import useCheckAuth from "../../lib/hooks/checkAuth"
+import useGetMe from "../../lib/hooks/getMe"
 
 const NavLink = ({ label, link, setShowNav }) => (
   <li className="py-2 font-bold">
@@ -17,10 +18,10 @@ const NavLink = ({ label, link, setShowNav }) => (
 )
 
 const User = () => {
-  const { loading, data } = useQuery(ME)
-  if (loading) return null
-  const { me } = data
-
+  // const { loading, data } = useQuery(ME)
+  // if (loading) return null
+  // const { me } = data
+  const me = useGetMe()
   const handleLogout = () => {
     localStorage.clear()
     window.location.reload()
@@ -75,7 +76,7 @@ const User = () => {
 const NavBar = () => {
   const [showNav, setShowNav] = useState(false)
   return (
-    <nav className="bg-gray-secondary top:0 fixed z-50 flex w-screen flex-col py-2 text-center text-white md:left-0 md:h-screen md:w-64 md:py-10">
+    <nav className="bg-gray-secondary top:0 fixed z-50 flex w-full flex-col py-2 text-center text-white md:left-0 md:h-screen md:w-64 md:py-10">
       <div className="px-3">
         <Link href="/">
           <a>

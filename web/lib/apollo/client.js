@@ -62,7 +62,21 @@ const splitLink =
       )
     : httpLink
 
-const cache = new InMemoryCache()
+const cache = new InMemoryCache({
+  typePolicies: {
+    Drop: {
+      fields: {
+        users: {
+          // To solve Cannot automatically merge arrays error
+          // https://github.com/apollographql/apollo-client/issues/6868
+          merge(existing, incoming) {
+            return incoming
+          },
+        },
+      },
+    },
+  },
+})
 
 const client = new ApolloClient({
   cache,

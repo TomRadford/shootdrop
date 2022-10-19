@@ -83,6 +83,16 @@ const UserModal = ({ modalOpen, setModalOpen, drop, userInDrop }) => {
       },
     })
   }
+  const userIds = drop ? drop.users.map((user) => user.id) : []
+
+  const handleAdd = (userIDtoAdd) => {
+    updateDrop({
+      variables: {
+        id: drop.id,
+        users: userIds.concat(userIDtoAdd),
+      },
+    })
+  }
   if (me && drop) {
     return (
       <>
@@ -121,55 +131,68 @@ const UserModal = ({ modalOpen, setModalOpen, drop, userInDrop }) => {
                     <div className="mt-2 flex flex-col gap-3">
                       {drop.users.map((user) => (
                         <User
-                          onClick={handleRemove}
+                          onClick={() => handleRemove(user.id)}
                           user={user}
                           key={user.id}
                           userInDrop={userInDrop}
                         />
                       ))}
                     </div>
-
-                    <div className="mt-4 ">
-                      <input
-                        className="w-full bg-transparent text-white"
-                        placeholder="Search"
-                        value={searchTerm}
-                        onChange={({ target }) => setSearchTerm(target.value)}
-                      />
-                    </div>
-                    <div>
-                      {searchTerm.length > 0 && (
-                        <div className="mt-2 flex flex-col gap-3">
-                          {loading ? (
-                            <div className="mx-auto">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={1.5}
-                                stroke="#616060"
-                                className="h-4 w-4 animate-spin"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
-                                />
-                              </svg>
+                    {userInDrop && (
+                      <>
+                        <div className="mt-4 ">
+                          <input
+                            className="w-full bg-transparent text-white"
+                            placeholder="Search"
+                            value={searchTerm}
+                            onChange={({ target }) =>
+                              setSearchTerm(target.value)
+                            }
+                          />
+                        </div>
+                        <div>
+                          {searchTerm.length > 0 && (
+                            <div className="mt-2 flex flex-col gap-3">
+                              {loading ? (
+                                <div className="mx-auto">
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="#616060"
+                                    className="h-4 w-4 animate-spin"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
+                                    />
+                                  </svg>
+                                </div>
+                              ) : (
+                                userResults.data &&
+                                userResults.data.allUsers.map((user) => {
+                                  if (!userIds.includes(user.id)) {
+                                    return (
+                                      <button
+                                        onClick={() => handleAdd(user.id)}
+                                        key={user.id}
+                                      >
+                                        <User
+                                          user={user}
+                                          onClick={(e) => e.preventDefault()}
+                                        />
+                                      </button>
+                                    )
+                                  }
+                                })
+                              )}
                             </div>
-                          ) : (
-                            userResults.data &&
-                            userResults.data.allUsers.map((user) => (
-                              <User
-                                user={user}
-                                onClick={(e) => e.preventDefault()}
-                                key={user.id}
-                              />
-                            ))
                           )}
                         </div>
-                      )}
-                    </div>
+                      </>
+                    )}
                   </Dialog.Panel>
                 </Transition.Child>
               </div>

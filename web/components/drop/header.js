@@ -60,7 +60,7 @@ const DropHeader = ({ drop, userInDrop }) => {
 
   return (
     <>
-      <header className="mx-auto flex w-screen justify-between gap-1 align-bottom md:w-full">
+      <header className="mx-auto flex justify-between gap-1 align-bottom md:w-full">
         <div className="flex min-w-max items-center pl-3 md:pl-0">
           <button
             className={!me ? "cursor-default" : ""}
@@ -69,7 +69,7 @@ const DropHeader = ({ drop, userInDrop }) => {
               setModalOpen(true)
             }}
           >
-            <div className="mb-5 flex -space-x-2">
+            <div className="mb-5 flex -space-x-4 md:-space-x-2">
               {drop &&
                 drop.users.map((user) => (
                   <div key={user.id}>
@@ -87,10 +87,10 @@ const DropHeader = ({ drop, userInDrop }) => {
           </button>
         </div>
 
-        <div>
+        <div className=" flex flex-col items-end">
           <TextareaAutosize
             name="name"
-            className="mx-2 resize-none whitespace-pre-wrap bg-transparent text-right text-xl font-bold md:text-3xl"
+            className="mx-2 w-2/3 resize-none whitespace-pre-wrap bg-transparent text-right text-xl font-bold sm:w-full md:w-full md:text-3xl"
             placeholder="Project name"
             autoComplete="off"
             data-gramm="false"
@@ -100,12 +100,12 @@ const DropHeader = ({ drop, userInDrop }) => {
             onChange={({ target }) => setDropName(target.value)}
             disabled={!me || !userInDrop}
           />
-          <div className="mr-3 flex flex-col justify-end text-right text-gray-300">
+          <div className="mr-3 flex flex-col justify-end text-right text-gray-300 md:w-full">
             <div className="flex">
               <p className="flex-1"></p>
               <input
                 placeholder="Client name"
-                className="bg-transparent text-right"
+                className="w-2/3 bg-transparent text-right"
                 value={clientName}
                 onChange={({ target }) => setClientName(target.value)}
                 disabled={!me || !userInDrop}
