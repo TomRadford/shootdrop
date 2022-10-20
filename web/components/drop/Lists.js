@@ -1,5 +1,5 @@
 import Card from "../Card"
-const DropListInfo = ({ label, listEntry }) => {
+const DropListsInfo = ({ label, listEntry }) => {
   return (
     <div className="mx-auto w-80 sm:w-96">
       <Card>
@@ -11,4 +11,4 @@ const DropListInfo = ({ label, listEntry }) => {
   )
 }
 
-export default DropListInfo
+export default DropListsInfo

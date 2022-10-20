@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { useMutation } from "@apollo/client"
 import DropDates from "./Dates"
 import DropInfo from "./Info"
-import DropListInfo from "./DropList"
+import DropListsInfo from "./Lists"
 import useGetMe from "../../lib/hooks/getMe"
 
 const DropEditor = ({ children, drop }) => {
@@ -32,7 +32,7 @@ const DropEditor = ({ children, drop }) => {
                   </section>
                   <h2 className="py-5 text-xl font-semibold">Lists</h2>
                   <section className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-16">
-                    <DropListInfo />
+                    <DropListsInfo />
                   </section>
                 </div>
               </div>

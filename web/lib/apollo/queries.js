@@ -26,6 +26,33 @@ export const ME = gql`
   ${USER_DETAILS}
 `
 
+export const ME_DROPS = gql`
+  query {
+    me {
+      fullName
+      id
+      profilePicture
+      drops {
+        id
+        project
+        client
+        director
+        dop
+        soundie
+        gearCheckDate
+        startDate
+        endDate
+        wrapDate
+        updatedAt
+        users {
+          id
+          profilePicture
+        }
+      }
+    }
+  }
+`
+
 export const EDIT_ME = gql`
   mutation editMe(
     $username: String

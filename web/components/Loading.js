@@ -1,31 +1,37 @@
+import Head from "next/head"
 import Layout from "./layout"
-const Loading = () => {
+const Loading = ({ title }) => {
   return (
-    <Layout>
-      <div className="flex h-screen ">
-        <div className="m-auto text-center">
-          <div className="flex h-screen ">
-            <div className="m-auto text-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                className="h-8 w-8 animate-spin stroke-slate-500"
-                aria-label="Loading content"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
-                />
-              </svg>
+    <>
+      <Head>
+        <title>{title ? title : "ShootDrop"}</title>
+      </Head>
+      <Layout>
+        <div className="flex h-screen ">
+          <div className="m-auto text-center">
+            <div className="flex h-screen ">
+              <div className="m-auto text-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className="h-8 w-8 animate-spin stroke-slate-500"
+                  aria-label="Loading content"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
+                  />
+                </svg>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </Layout>
+      </Layout>
+    </>
   )
 }
 

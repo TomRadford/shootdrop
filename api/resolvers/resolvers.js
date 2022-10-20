@@ -191,6 +191,7 @@ const resolvers = {
       }
       try {
         await Drop.findByIdAndDelete(args.drop)
+        //ToDo: delete attached lists
       } catch (e) {
         throw new UserInputError("Delete error:", e)
       }

@@ -2,7 +2,7 @@ import Image from "next/image"
 import TextareaAutosize from "react-textarea-autosize"
 import { useQuery, useMutation } from "@apollo/client"
 import { useEffect, useState } from "react"
-import { ME, ADD_DROP, UPDATE_DROP } from "../../lib/apollo/queries"
+import { ME, ADD_DROP, UPDATE_DROP, ME_DROPS } from "../../lib/apollo/queries"
 import { useRouter } from "next/router"
 import useGetMe from "../../lib/hooks/getMe"
 import UserModal from "./UserModal"
@@ -13,7 +13,16 @@ const DropHeader = ({ drop, userInDrop }) => {
   const [dropName, setDropName] = useState(drop ? drop.project : "")
   const [clientName, setClientName] = useState(drop ? drop.client : "")
 
-  const [addDrop, { data, loading, error }] = useMutation(ADD_DROP)
+  const [addDrop, { data, loading, error }] = useMutation(ADD_DROP, {
+    // refetchQueries: [{ query: ME_DROPS }],
+    update: (cache, response) => {
+      cache.updateQuery({ query: ME_DROPS }, ({ me }) => {
+        return {
+          me: { ...me, drops: me.drops.concat(response.data.addDrop) },
+        }
+      })
+    },
+  })
   const [updateDrop, updateDropResult] = useMutation(UPDATE_DROP)
   const me = useGetMe()
   const router = useRouter()

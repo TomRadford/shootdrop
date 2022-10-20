@@ -7,7 +7,6 @@ import DatePickerTailwind from "../elements/DatePicker"
 
 const DateOption = ({ label, date, setDate, dropDate, userInDrop }) => {
   const me = useGetMe()
-  console.log(userInDrop)
   return (
     <div className="flex justify-between">
       <p className="text-left font-light text-gray-300">{label}</p>
