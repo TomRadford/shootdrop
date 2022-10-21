@@ -5,16 +5,17 @@ import Head from "next/head"
 import useCheckAuth from "../../lib/hooks/checkAuth"
 import DropSummaryCard from "../../components/drop/SummaryCard"
 import { ME_DROPS } from "../../lib/apollo/queries"
+import AddCard from "../../components/AddCard"
+import { useState } from "react"
 
 const DropsPage = () => {
   const { data, loading } = useQuery(ME_DROPS)
+  const [pastDrops, setPastDrops] = useState([])
   useCheckAuth()
 
   if (loading) {
     return <Loading title="My Drops | ShootDrop" />
   }
-
-  console.log(data.me.drops)
 
   return (
     <>
@@ -23,18 +24,41 @@ const DropsPage = () => {
       </Head>
       <Layout>
         <div className="flex h-full min-h-screen">
-          <div className="mb-10 w-full pt-16 text-center md:mx-3 md:pt-6">
-            <div className="flex">
+          <div className="mb-10 w-full pt-0 text-center md:mx-0 md:pt-0">
+            <div className="flex flex-col">
+              <div className="w-full bg-gradient-to-b from-[#121212] to-transparent pb-8 pt-16 md:pt-8">
+                <h1 className="text-lg font-semibold">Incoming Drops</h1>
+              </div>
               <div className="m-auto text-center">
-                <div className="mx-4 mt-10 max-w-[60rem] md:mx-0">
+                <div className="mx-4 mt-0 max-w-[60rem] md:mx-0">
                   <section className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-16">
                     {data.me &&
                       [...data.me.drops]
+                        // .sort((a, b) => {
+                        //   if (a.wrapDate) {
+                        //     if (a.wrapDate < b.wrapDate) {
+                        //       return 1
+                        //     }
+                        //     if (a.wrapDate > b.wrapDate) {
+                        //       return -1
+                        //     }
+                        //   }
+
+                        //   if (!a.endDate) {
+                        //     return 0
+                        //   }
+                        //   if (a.endDate < b.endDate) {
+                        //     return 1
+                        //   }
+                        //   if (a.endDate > b.endDate) {
+                        //     return -1
+                        //   }
+                        //   return 0
+                        // })
                         .sort((a, b) => {
                           if (!a.startDate) {
-                            return -1
+                            return 1
                           }
-
                           if (a.startDate < b.startDate) {
                             return -1
                           }
@@ -43,9 +67,18 @@ const DropsPage = () => {
                           }
                           return 0
                         })
-                        .map((drop) => (
-                          <DropSummaryCard drop={drop} key={drop.id} />
-                        ))}
+                        .map((drop) => {
+                          if (drop.endDate) {
+                            // setPastDrops([drop, ...pastDrops])
+                            //Here trying to get old drops at bottom
+                          } else {
+                            return <DropSummaryCard drop={drop} key={drop.id} />
+                          }
+                        })}
+                    <AddCard href="/drops/add" />
+                    <div className="w-full  pb-8 pt-16">
+                      <h1 className="text-lg font-semibold">Past Drops</h1>
+                    </div>
                   </section>
                 </div>
               </div>

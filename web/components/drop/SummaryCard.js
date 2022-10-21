@@ -49,10 +49,10 @@ const DropSummaryCard = ({ drop }) => {
                   )}
                 </div>
                 <div className="text-left text-xs">
-                  <p className="font-light text-gray-300">Gear Check</p>
-                  {drop.gearCheckDate ? (
+                  <p className="font-light text-gray-300">End Date</p>
+                  {drop.endDate ? (
                     <p className="font-bold">
-                      {format(new Date(drop.gearCheckDate), "d MMM yyyy")}
+                      {format(new Date(drop.endDate), "d MMM yyyy")}
                     </p>
                   ) : (
                     <p>No date</p>
