@@ -1,7 +1,5 @@
 import Head from "next/head"
 import Layout from "../../components/layout"
-import { ADD_DROP } from "../../lib/apollo/queries"
-import { useMutation } from "@apollo/client"
 import DropEditor from "../../components/drop/Editor"
 import useCheckAuth from "../../lib/hooks/checkAuth"
 import ClientOnly from "../../components/ClientOnly"

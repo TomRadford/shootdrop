@@ -32,54 +32,53 @@ const DropsPage = () => {
               <div className="m-auto text-center">
                 <div className="mx-4 mt-0 max-w-[60rem] md:mx-0">
                   <section className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-16">
+                    {/* ToDo: Abstract this ordering function to not be repeated for previous drops */}
                     {data.me &&
                       [...data.me.drops]
-                        // .sort((a, b) => {
-                        //   if (a.wrapDate) {
-                        //     if (a.wrapDate < b.wrapDate) {
-                        //       return 1
-                        //     }
-                        //     if (a.wrapDate > b.wrapDate) {
-                        //       return -1
-                        //     }
-                        //   }
-
-                        //   if (!a.endDate) {
-                        //     return 0
-                        //   }
-                        //   if (a.endDate < b.endDate) {
-                        //     return 1
-                        //   }
-                        //   if (a.endDate > b.endDate) {
-                        //     return -1
-                        //   }
-                        //   return 0
-                        // })
                         .sort((a, b) => {
-                          if (!a.startDate) {
-                            return 1
-                          }
-                          if (a.startDate < b.startDate) {
+                          if (!a.endDate) {
                             return -1
                           }
-                          if (a.startDate > b.startDate) {
+                          if (a.endDate < b.endDate) {
+                            return -1
+                          }
+                          if (a.endDate > b.endDate) {
                             return 1
                           }
                           return 0
                         })
                         .map((drop) => {
-                          if (drop.endDate) {
-                            // setPastDrops([drop, ...pastDrops])
-                            //Here trying to get old drops at bottom
-                          } else {
+                          if (drop.endDate > new Date().getTime() || !drop.endDate)
                             return <DropSummaryCard drop={drop} key={drop.id} />
-                          }
+
                         })}
                     <AddCard href="/drops/add" />
-                    <div className="w-full  pb-8 pt-16">
-                      <h1 className="text-lg font-semibold">Past Drops</h1>
-                    </div>
+
                   </section>
+                  <div className="w-full  pb-8 pt-16">
+                    <h1 className="text-lg font-semibold mb-10">Past Drops</h1>
+                    <section className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-16">
+                      {data.me &&
+                        [...data.me.drops]
+                          .sort((a, b) => {
+                            if (!a.endDate) {
+                              return -1
+                            }
+                            if (a.endDate < b.endDate) {
+                              return 1
+                            }
+                            if (a.endDate > b.endDate) {
+                              return -1
+                            }
+                            return 0
+                          })
+                          .map((drop) => {
+                            if (drop.endDate && drop.endDate < new Date().getTime())
+                              return <DropSummaryCard drop={drop} key={drop.id} />
+
+                          })}
+                    </section>
+                  </div>
                 </div>
               </div>
             </div>
