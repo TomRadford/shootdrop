@@ -154,3 +154,40 @@ export const UPDATE_DROP = gql`
   }
   ${DROP_DETAILS}
 `
+const GEAR_ITEM_DETAILS = gql`
+  fragment GearItemDetails on GearItem {
+    id
+    category
+    manufacturer
+    model
+    description
+    productURL
+    allPrefs {
+      name 
+      allOpts {
+        name
+      }
+    }
+    tags {
+      id
+      name
+    }
+  }
+`
+
+export const ADD_GEAR_ITEM = gql`
+  mutation addGearItem(
+    $category: [GearCategory!]
+    $manufacturer: String!
+    $model: String!
+  ){
+    addGearItem(
+      category: $category
+      manufacturer: $manufacturer
+      model: $model
+    ) {
+      ...GearItemDetails
+    }
+  }
+  ${GEAR_ITEM_DETAILS}
+`
