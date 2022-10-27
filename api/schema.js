@@ -107,7 +107,7 @@ const typeDefs = gql`
       manufacturer: String
       model: String
       tags: [String]
-    ): [GearItem!]
+    ): [GearItem]
     getProfileImageUpload: String!
     allUsers(fullName: String): [User]
   }

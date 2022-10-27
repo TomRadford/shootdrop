@@ -163,7 +163,7 @@ const GEAR_ITEM_DETAILS = gql`
     description
     productURL
     allPrefs {
-      name 
+      name
       allOpts {
         name
       }
@@ -175,16 +175,66 @@ const GEAR_ITEM_DETAILS = gql`
   }
 `
 
+export const ALL_GEAR_ITEMS = gql`
+  query allGearItems(
+    $id: String
+    $category: GearCategory
+    $manufacturer: String
+    $model: String
+    $tags: [String]
+  ) {
+    allGearItems(
+      id: $id
+      category: $category
+      manufacturer: $manufacturer
+      model: $model
+      tags: $tags
+    ) {
+      ...GearItemDetails
+    }
+  }
+  ${GEAR_ITEM_DETAILS}
+`
+
 export const ADD_GEAR_ITEM = gql`
   mutation addGearItem(
     $category: [GearCategory!]
     $manufacturer: String!
     $model: String!
-  ){
+  ) {
     addGearItem(
       category: $category
       manufacturer: $manufacturer
       model: $model
+    ) {
+      ...GearItemDetails
+    }
+  }
+  ${GEAR_ITEM_DETAILS}
+`
+
+export const EDIT_GEAR_ITEM = gql`
+  mutation editGearItem(
+    $id: String!
+    $category: [GearCategory]
+    $manufacturer: String
+    $model: String
+    $description: String
+    $images: [String]
+    $productURL: String
+    $tags: [String]
+    $prefs: [GearPrefInput]
+  ) {
+    editGearItem(
+      id: $id
+      category: $category
+      manufacturer: $manufacturer
+      model: $model
+      description: $description
+      images: $images
+      productURL: $productURL
+      tags: $tags
+      prefs: $prefs
     ) {
       ...GearItemDetails
     }

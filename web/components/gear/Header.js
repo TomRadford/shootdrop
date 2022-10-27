@@ -1,55 +1,120 @@
 import useGetMe from "../../lib/hooks/getMe"
 import { useRouter } from "next/router"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import TextareaAutosize from "react-textarea-autosize"
 import { Dialog, Transition } from "@headlessui/react"
 import { Fragment } from "react"
+import { useMutation, useQuery } from "@apollo/client"
+import { ADD_GEAR_ITEM, EDIT_GEAR_ITEM } from "../../lib/apollo/queries"
 
-const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' })
+const formatter = new Intl.ListFormat("en", {
+  style: "long",
+  type: "conjunction",
+})
 
-const GearHeader = ({ GearItem }) => {
-  const [category, setCategory] = useState([])
-  const [model, setModel] = useState('')
-  const [manufacturer, setManufacturer] = useState('')
+const GearHeader = ({ gearItem }) => {
+  const [category, setCategory] = useState(gearItem ? gearItem.category : [])
+  const [model, setModel] = useState(gearItem ? gearItem.model : "")
+  const [manufacturer, setManufacturer] = useState(
+    gearItem ? gearItem.manufacturer : ""
+  )
   const [modalOpen, setModalOpen] = useState(false)
+  const [addGearItem, { data: addData, loading: addLoading, error: addError }] =
+    useMutation(ADD_GEAR_ITEM, {})
+  const [editGearItem, editGearItemResult] = useMutation(EDIT_GEAR_ITEM)
   const me = useGetMe()
   const router = useRouter()
+
+  useEffect(() => {
+    if (!gearItem) {
+      if (category.length > 0 && manufacturer.length > 1 && model.length > 3) {
+        const timeout = setTimeout(() => {
+          console.log("updating headers")
+          addGearItem({
+            variables: {
+              category,
+              manufacturer,
+              model,
+            },
+          })
+        }, 2000)
+        return () => clearTimeout(timeout)
+      }
+    } else {
+      if (
+        gearItem.category !== category ||
+        gearItem.model !== model ||
+        gearItem.manufacturer !== manufacturer
+      ) {
+        const timeout = setTimeout(() => {
+          console.log("updating headers")
+          editGearItem({
+            variables: {
+              id: gearItem.id,
+              category,
+              manufacturer,
+              model,
+            },
+          })
+        }, 2000)
+        return () => clearTimeout(timeout)
+      }
+    }
+  }, [category, model, manufacturer])
+
+  if (!gearItem) {
+    if (!addLoading && addData) {
+      router.push(`/gear/${addData.addGearItem.id}`)
+    }
+  }
 
   return (
     <>
       <header className="mx-auto flex justify-between gap-1 align-bottom">
-        <div className=" flex flex-col items-center w-full">
+        <div className=" flex w-full flex-col items-center">
           <div>
-            <button className="flex text-xs text-gray-400" onClick={(e) => {
-              e.preventDefault()
-              setModalOpen(true)
-            }}>{category.length > 0 ? formatter.format(category) : 'Select a category'}</button>
+            <button
+              className="flex text-xs text-gray-400"
+              onClick={(e) => {
+                e.preventDefault()
+                setModalOpen(true)
+              }}
+              disabled={!me}
+            >
+              {category.length > 0
+                ? formatter.format(category)
+                : "Select a category"}
+            </button>
 
             <input
               placeholder="Manufacturer"
-              className="bg-transparent text-left flex"
-              value={model}
-              onChange={({ target }) => setModel(target.value)}
+              className="flex bg-transparent text-left"
+              value={manufacturer}
+              onChange={({ target }) => setManufacturer(target.value)}
               disabled={!me}
             />
 
             <TextareaAutosize
-              name="name"
+              name="Model"
               className="resize-none whitespace-pre-wrap bg-transparent text-left text-xl font-bold md:text-3xl"
               placeholder="Model"
               autoComplete="off"
               data-gramm="false"
               data-gramm_editor="false"
               data-enable-grammarly="false"
-              value={manufacturer}
-              onChange={({ target }) => setManufacturer(target.value)}
+              value={model}
+              onChange={({ target }) => setModel(target.value)}
               disabled={!me}
             />
           </div>
         </div>
       </header>
       <Transition appear show={modalOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={() => setModalOpen(false)}>
+        <Dialog
+          as="div"
+          className="relative z-10"
+          onClose={() => setModalOpen(false)}
+        >
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -80,25 +145,28 @@ const GearHeader = ({ GearItem }) => {
                   >
                     Select categories
                   </Dialog.Title>
-                  <div className="mt-2 grid grid-cols-2 sm:grid-cols-4 gap-2">
-                    {['CAMERA', 'LIGHTING', 'GRIPS', 'SOUND'].map(cat =>
-                      <div className="flex flex-col items-center">
-                        <button key={cat}
+                  <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4">
+                    {["CAMERA", "LIGHTING", "GRIPS", "SOUND"].map((cat) => (
+                      <div className="flex flex-col items-center" key={cat}>
+                        <button
+                          key={cat}
                           onClick={() => {
                             if (category.includes(cat)) {
-                              setCategory(category.filter(item =>
-                                item !== cat && item
-                              ))
+                              setCategory(
+                                category.filter((item) => item !== cat && item)
+                              )
                             } else {
                               setCategory([...category, cat])
                             }
                           }}
-                          className={`font-sm bg-slate-900 w-fit py-1 px-2 rounded-lg ${!category.includes(cat) && 'opacity-60'}`}
-                        >{`${cat.charAt(0)}${cat.slice(1).toLowerCase()}`}</button>
+                          className={`font-sm w-fit rounded-lg bg-slate-900 py-1 px-2 ${
+                            !category.includes(cat) && "opacity-60"
+                          }`}
+                        >{`${cat.charAt(0)}${cat
+                          .slice(1)
+                          .toLowerCase()}`}</button>
                       </div>
-                    )
-
-                    }
+                    ))}
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

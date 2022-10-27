@@ -67,9 +67,18 @@ const cache = new InMemoryCache({
     Drop: {
       fields: {
         users: {
-          // To solve Cannot automatically merge arrays error
+          // To solve 'Cannot automatically merge arrays' error
           // https://github.com/apollographql/apollo-client/issues/6868
           merge(existing, incoming) {
+            return incoming
+          },
+        },
+      },
+    },
+    GearItem: {
+      fields: {
+        tags: {
+          mergs(existing, incoming) {
             return incoming
           },
         },
