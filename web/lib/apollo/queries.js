@@ -243,10 +243,11 @@ export const EDIT_GEAR_ITEM = gql`
 `
 
 export const ALL_TAGS = gql`
-  query allTags($tag: String) {
-    allTags(tag: $tag) {
+  query allTags($tag: String, $category: GearCategory) {
+    allTags(tag: $tag, category: $category) {
       id
       name
+      category
     }
   }
 `

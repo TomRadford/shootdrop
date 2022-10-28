@@ -429,17 +429,28 @@ const resolvers = {
     },
 
     allTags: async (root, args, context) => {
-      if (args.tag) {
-        try {
-          const tagSearch = await Tag.find({
+      try {
+        let findParams = {}
+        if (args.tag) {
+          findParams = {
+            ...findParams,
             name: { $regex: args.tag, $options: "i" },
-          })
-          return tagSearch
-        } catch {
-          throw new UserInputError(`Error searching for tag: ${args.tag}`)
+          }
         }
+        if (args.category) {
+          findParams = {
+            ...findParams,
+            $or: [
+              { category: { $in: args.category } },
+              { category: { $size: 0 } },
+            ],
+          }
+        }
+        const tagSearch = await Tag.find(findParams).sort("name").limit(7)
+        return tagSearch
+      } catch {
+        throw new UserInputError(`Error searching for tag: ${args.tag}`)
       }
-      return await Tag.find({})
     },
 
     allGearItems: async (root, args, context) => {

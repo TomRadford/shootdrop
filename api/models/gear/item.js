@@ -21,4 +21,6 @@ const schema = mongoose.Schema({
   ],
 })
 
+//add https://www.npmjs.com/package/mongoose-paginate-v2 plugin
+
 module.exports = mongoose.model("GearItem", schema)

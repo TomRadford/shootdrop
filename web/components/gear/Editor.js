@@ -17,6 +17,7 @@ const GearEditor = ({ children, gearItem }) => {
           <TagsModal
             tagsModalOpen={tagsModalOpen}
             setTagsModalOpen={setTagsModalOpen}
+            category={gearItem.category}
           />
           {gearItem && (
             <div className="">

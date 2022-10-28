@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@apollo/client"
 import { ALL_TAGS, EDIT_GEAR_ITEM } from "../../lib/apollo/queries"
-import { useState, Fragment } from "react"
+import { useState, Fragment, useEffect } from "react"
 import useGetMe from "../../lib/hooks/getMe"
 import { Transition, Dialog } from "@headlessui/react"
 
@@ -14,6 +14,13 @@ const TagsModal = ({ setTagsModalOpen, tagsModalOpen }) => {
     },
   })
   console.log(allTags)
+  useEffect(() => {
+    //prevent all tags flashing upon modal close
+    const timeout = setTimeout(() => {
+      setSearchTerm("")
+    }, 500)
+    return () => clearTimeout(timeout)
+  }, [tagsModalOpen])
 
   const [editGearItem, editGearItemResult] = useMutation(EDIT_GEAR_ITEM)
   return (
@@ -45,7 +52,7 @@ const TagsModal = ({ setTagsModalOpen, tagsModalOpen }) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-black px-10 py-5 text-left align-middle text-white shadow-xl transition-all">
+              <Dialog.Panel className="w-full max-w-xs transform overflow-hidden rounded-2xl bg-black px-10 py-5 text-left align-middle text-white shadow-xl transition-all sm:max-w-md">
                 <Dialog.Title
                   as="h3"
                   className="text-lg font-medium leading-6 text-white"
@@ -80,22 +87,36 @@ const TagsModal = ({ setTagsModalOpen, tagsModalOpen }) => {
                       </svg>
                     </div>
                   ) : (
+                    //Note: API limits to 7 list items
                     allTags.data && (
-                      <div className="inline-grid grid-flow-col-dense gap-2 ">
-                        {allTags.data.allTags.map((tag) => {
-                          return (
+                      <div className="flex justify-center">
+                        <div className="inline-grid grid-cols-2 gap-2 sm:grid-cols-4">
+                          {allTags.data.allTags.map((tag) => {
+                            return (
+                              <button
+                                onClick={(e) => {
+                                  e.preventDefault()
+                                  setTagsModalOpen(false)
+                                }}
+                                key={tag.id}
+                                className="flex items-center rounded bg-teal-600 px-2 py-1 text-sm "
+                              >
+                                {tag.name}
+                              </button>
+                            )
+                          })}
+                          {searchTerm && (
                             <button
                               onClick={(e) => {
                                 e.preventDefault()
-                                setTagsModalOpen(true)
+                                setTagsModalOpen(false)
                               }}
-                              key={tag.id}
                               className="flex items-center rounded bg-teal-600 px-2 py-1 text-sm "
                             >
-                              {tag.name}
+                              {searchTerm}
                             </button>
-                          )
-                        })}
+                          )}
+                        </div>
                       </div>
                     )
                   )}
