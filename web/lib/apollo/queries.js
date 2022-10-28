@@ -241,3 +241,12 @@ export const EDIT_GEAR_ITEM = gql`
   }
   ${GEAR_ITEM_DETAILS}
 `
+
+export const ALL_TAGS = gql`
+  query allTags($tag: String) {
+    allTags(tag: $tag) {
+      id
+      name
+    }
+  }
+`

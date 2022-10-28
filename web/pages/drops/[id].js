@@ -50,7 +50,7 @@ const DropPage = ({ drop }) => {
         <Loading />
       ) : (
         <Layout>
-          <div className="h-full">
+          <div className="h-full ">
             <div className="m-auto text-center">
               <ClientOnly>
                 <DropEditor

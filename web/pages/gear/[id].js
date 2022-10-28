@@ -73,7 +73,6 @@ const GEAR_ITEM_MANU_MODEL = gql`
 `
 
 export const getServerSideProps = async ({ params }) => {
-  console.log(params)
   try {
     const { data } = await client.query({
       query: GEAR_ITEM_MANU_MODEL,
@@ -82,7 +81,6 @@ export const getServerSideProps = async ({ params }) => {
       },
       fetchPolicy: "no-cache",
     })
-    console.log(data)
     return {
       props: {
         gearItem: data.allGearItems[0],

@@ -124,7 +124,7 @@ const resolvers = {
           tags,
           prefs,
         } = args
-        const tagObjects = tags ? await handleTags(tags, category) : []
+        const tagObjects = tags ? await handleTags(tags, category) : undefined
         if (prefs) {
           await handleEditPrefs(prefs, mongoose.Types.ObjectId(args.id))
         }
@@ -444,7 +444,8 @@ const resolvers = {
 
     allGearItems: async (root, args, context) => {
       if (args.id) {
-        return [await GearItem.findById(args.id).populate("tags")]
+        const gearItem = await GearItem.findById(args.id).populate("tags")
+        return [gearItem]
       }
       try {
         const searchTerms = {}
