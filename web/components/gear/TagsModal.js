@@ -1,30 +1,57 @@
-import { useMutation, useQuery } from "@apollo/client"
-import { ALL_TAGS, EDIT_GEAR_ITEM } from "../../lib/apollo/queries"
+import { useMutation, useLazyQuery } from "@apollo/client"
+import { ADD_TAG, ALL_TAGS, EDIT_GEAR_ITEM } from "../../lib/apollo/queries"
 import { useState, Fragment, useEffect } from "react"
 import useGetMe from "../../lib/hooks/getMe"
 import { Transition, Dialog } from "@headlessui/react"
+import { andFormatter } from "../../lib/text/formatter"
 
-const TagsModal = ({ setTagsModalOpen, tagsModalOpen }) => {
+const TagsModal = ({ setTagsModalOpen, tagsModalOpen, gearItem }) => {
   const [searchTerm, setSearchTerm] = useState("")
   const [loading, setLoading] = useState(false)
   const me = useGetMe()
-  const allTags = useQuery(ALL_TAGS, {
-    variables: {
-      tag: searchTerm,
-    },
-  })
-  console.log(allTags)
+  const [getTags, tagsResults] = useLazyQuery(ALL_TAGS)
+
   useEffect(() => {
-    //prevent all tags flashing upon modal close
-    const timeout = setTimeout(() => {
-      setSearchTerm("")
-    }, 500)
-    return () => clearTimeout(timeout)
-  }, [tagsModalOpen])
+    getTags()
+  }, [])
+
+  useEffect(() => {
+    if (searchTerm.length === 0) {
+      setLoading(true)
+      getTags({
+        variables: {
+          category: gearItem.category,
+        },
+      })
+      setLoading(false)
+    }
+    if (searchTerm.length > 0) {
+      setLoading(true)
+      const timeout = setTimeout(() => {
+        getTags({
+          variables: {
+            category: gearItem.category, //array of categories
+            tag: searchTerm,
+          },
+        })
+        setLoading(false)
+      }, 500)
+      return () => clearTimeout(timeout)
+    }
+  }, [searchTerm])
+
+  const tagIds = gearItem.tags.map((tag) => tag.id)
 
   const [editGearItem, editGearItemResult] = useMutation(EDIT_GEAR_ITEM)
+  const [addTag, addTagResult] = useMutation(ADD_TAG)
+
   return (
-    <Transition appear show={tagsModalOpen} as={Fragment}>
+    <Transition
+      appear
+      show={tagsModalOpen}
+      as={Fragment}
+      afterLeave={() => setSearchTerm("")}
+    >
       <Dialog
         as="div"
         className="relative z-10"
@@ -60,7 +87,7 @@ const TagsModal = ({ setTagsModalOpen, tagsModalOpen }) => {
                   Add a tag
                 </Dialog.Title>
                 <div>
-                  <div className="mx-2 my-2">
+                  <div className="mx-2 mt-2 mb-2">
                     <input
                       className="w-full bg-transparent text-white"
                       placeholder="Search"
@@ -69,8 +96,8 @@ const TagsModal = ({ setTagsModalOpen, tagsModalOpen }) => {
                     />
                   </div>
 
-                  {allTags.loading ? (
-                    <div className="mx-auto">
+                  {loading ? (
+                    <div className="mt-5 flex justify-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -87,36 +114,108 @@ const TagsModal = ({ setTagsModalOpen, tagsModalOpen }) => {
                       </svg>
                     </div>
                   ) : (
-                    //Note: API limits to 7 list items
-                    allTags.data && (
-                      <div className="flex justify-center">
-                        <div className="inline-grid grid-cols-2 gap-2 sm:grid-cols-4">
-                          {allTags.data.allTags.map((tag) => {
-                            return (
-                              <button
-                                onClick={(e) => {
-                                  e.preventDefault()
-                                  setTagsModalOpen(false)
-                                }}
-                                key={tag.id}
-                                className="flex items-center rounded bg-teal-600 px-2 py-1 text-sm "
-                              >
-                                {tag.name}
-                              </button>
-                            )
-                          })}
-                          {searchTerm && (
-                            <button
-                              onClick={(e) => {
-                                e.preventDefault()
-                                setTagsModalOpen(false)
-                              }}
-                              className="flex items-center rounded bg-teal-600 px-2 py-1 text-sm "
-                            >
-                              {searchTerm}
-                            </button>
-                          )}
+                    //Note: API limits to 10 list items
+                    tagsResults.data && (
+                      <div>
+                        <div className="mb-2 flex justify-center">
+                          <div className="flex flex-wrap gap-2">
+                            {tagsResults.data.allTags.map((tag) => {
+                              if (!tagIds.includes(tag.id)) {
+                                return (
+                                  <button
+                                    onClick={(e) => {
+                                      e.preventDefault()
+                                      setTagsModalOpen(false)
+                                      editGearItem({
+                                        variables: {
+                                          id: gearItem.id,
+                                          tags: [
+                                            ...gearItem.tags.map(
+                                              (tag) => tag.name
+                                            ),
+                                            tag.name,
+                                          ],
+                                        },
+                                      })
+                                    }}
+                                    key={tag.id}
+                                    className="flex items-center rounded bg-teal-600 px-2 py-1 text-sm "
+                                  >
+                                    {tag.name}
+                                  </button>
+                                )
+                              }
+                            })}
+                          </div>
                         </div>
+
+                        {searchTerm && (
+                          <div className="mt-0">
+                            <p className="mb-2 text-center text-xs text-gray-500">
+                              Add a new tag
+                            </p>
+                            <div className="items-left flex w-full flex-col justify-center gap-2 text-sm">
+                              <div className="flex  gap-3">
+                                <button
+                                  onClick={(e) => {
+                                    e.preventDefault()
+                                    setTagsModalOpen(false)
+                                    editGearItem({
+                                      variables: {
+                                        id: gearItem.id,
+                                        tags: [
+                                          ...gearItem.tags.map(
+                                            (tag) => tag.name
+                                          ),
+                                          searchTerm,
+                                        ],
+                                      },
+                                    })
+                                  }}
+                                  className="flex items-center rounded bg-teal-600 px-2 py-1 align-middle text-sm "
+                                >
+                                  {searchTerm}
+                                </button>
+                                <p className="flex items-center">
+                                  for {andFormatter.format(gearItem.category)}
+                                </p>
+                              </div>
+                              <div className="flex  gap-3 ">
+                                <button
+                                  onClick={(e) => {
+                                    e.preventDefault()
+                                    setTagsModalOpen(false)
+                                    addTag({
+                                      variables: {
+                                        name: searchTerm,
+                                      },
+                                    }).then(() => {
+                                      //above query needs to complete before executing editGearItem
+                                      //ToDo: refactor into useEffect with addTagResult.data
+                                      editGearItem({
+                                        variables: {
+                                          id: gearItem.id,
+                                          tags: [
+                                            ...gearItem.tags.map(
+                                              (tag) => tag.name
+                                            ),
+                                            searchTerm,
+                                          ],
+                                        },
+                                      })
+                                    })
+                                  }}
+                                  className="flex items-center rounded bg-teal-600 px-2 py-1 align-middle text-sm "
+                                >
+                                  {searchTerm}
+                                </button>
+                                <p className="flex items-center">
+                                  for all items
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     )
                   )}

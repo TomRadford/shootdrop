@@ -243,8 +243,18 @@ export const EDIT_GEAR_ITEM = gql`
 `
 
 export const ALL_TAGS = gql`
-  query allTags($tag: String, $category: GearCategory) {
+  query allTags($tag: String, $category: [GearCategory]) {
     allTags(tag: $tag, category: $category) {
+      id
+      name
+      category
+    }
+  }
+`
+
+export const ADD_TAG = gql`
+  mutation addTag($name: String!) {
+    addTag(name: $name) {
       id
       name
       category

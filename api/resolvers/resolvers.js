@@ -84,6 +84,20 @@ const resolvers = {
     },
   },
   Mutation: {
+    addTag: async (root, args, context) => {
+      //specifically for generic tags (ie !category), otherwise tags
+      // are generated via the handleTags helper
+      checkAuth(context)
+      const { name } = args
+      const existingTag = await Tag.findOne({ name: name.toLowerCase() })
+      if (existingTag) {
+        throw new UserInputError("Tag already exists")
+      }
+      const newTag = new Tag({
+        name: name.toLowerCase(),
+      })
+      return await newTag.save()
+    },
     addGearItem: async (root, args, context) => {
       checkAuth(context)
       const {
@@ -440,13 +454,17 @@ const resolvers = {
         if (args.category) {
           findParams = {
             ...findParams,
+            //look for any tags in category array
+            //as well as empty tag.category and !tag.category
             $or: [
               { category: { $in: args.category } },
               { category: { $size: 0 } },
+              { category: null },
             ],
           }
         }
-        const tagSearch = await Tag.find(findParams).sort("name").limit(7)
+        console.log(findParams.$or)
+        const tagSearch = await Tag.find(findParams).sort("name").limit(10)
         return tagSearch
       } catch {
         throw new UserInputError(`Error searching for tag: ${args.tag}`)

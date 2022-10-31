@@ -9,7 +9,7 @@ const handleTags = async (tags, category) => {
     if (!existingTag) {
       const newTag = new Tag({
         name: tag.toLowerCase(),
-        category,
+        category: category ? [category] : null,
       })
       outputTags = [...outputTags, newTag]
       await newTag.save()

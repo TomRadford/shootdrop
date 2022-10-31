@@ -69,7 +69,7 @@ const typeDefs = gql`
 
   type GearItem {
     id: ID!
-    category: [String!]
+    category: [GearCategory]
     manufacturer: String!
     model: String!
     description: String
@@ -100,7 +100,7 @@ const typeDefs = gql`
   type Query {
     me: User
     allDrops(drop: String): [Drop!]
-    allTags(tag: String, category: GearCategory): [Tag!]
+    allTags(tag: String, category: [GearCategory]): [Tag!]
     allGearItems(
       id: String
       category: GearCategory
@@ -137,8 +137,9 @@ const typeDefs = gql`
       profilePicture: String
       fullName: String
     ): User!
+    addTag(name: String): Tag!
     addGearItem(
-      category: [GearCategory!]
+      category: [GearCategory]
       manufacturer: String!
       model: String!
       description: String

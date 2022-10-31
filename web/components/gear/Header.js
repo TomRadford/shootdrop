@@ -6,11 +6,7 @@ import { Dialog, Transition } from "@headlessui/react"
 import { Fragment } from "react"
 import { useMutation, useQuery } from "@apollo/client"
 import { ADD_GEAR_ITEM, EDIT_GEAR_ITEM } from "../../lib/apollo/queries"
-
-const formatter = new Intl.ListFormat("en", {
-  style: "long",
-  type: "conjunction",
-})
+import { andFormatter } from "../../lib/text/formatter"
 
 const GearHeader = ({ gearItem }) => {
   const [category, setCategory] = useState(gearItem ? gearItem.category : [])
@@ -82,7 +78,7 @@ const GearHeader = ({ gearItem }) => {
               disabled={!me}
             >
               {category.length > 0
-                ? formatter.format(category)
+                ? andFormatter.format(category)
                 : "Select a category"}
             </button>
 

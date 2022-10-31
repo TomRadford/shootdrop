@@ -78,7 +78,7 @@ const cache = new InMemoryCache({
     GearItem: {
       fields: {
         tags: {
-          mergs(existing, incoming) {
+          merge(existing, incoming) {
             return incoming
           },
         },
