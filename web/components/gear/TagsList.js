@@ -14,7 +14,9 @@ const GearTags = ({ gearItem, setTagsModalOpen }) => {
         <div className="flex flex-col gap-1 px-4 pb-4">
           <span className="mb-2 flex items-end gap-2">
             <h3 className="text-left text-base">Tags</h3>
-            <p className="text-xs font-light text-gray-300">tap to remove</p>
+            {me && (
+              <p className="text-xs font-light text-gray-300">tap to remove</p>
+            )}
           </span>
           <div className="flex flex-wrap gap-2">
             {tags.map((tag) => (
@@ -32,7 +34,9 @@ const GearTags = ({ gearItem, setTagsModalOpen }) => {
                     })
                   }}
                   disabled={!me}
-                  className="flex items-center rounded bg-teal-600 px-2 py-1 text-sm transition-colors duration-300 hover:bg-red-500"
+                  className={`flex items-center rounded bg-teal-600 px-2 py-1 text-sm transition-colors duration-300 ${
+                    me && `hover:bg-red-500`
+                  }`}
                   key={tag.id}
                 >
                   <div>{tag.name}</div>

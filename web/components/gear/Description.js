@@ -31,7 +31,7 @@ const GearDescription = ({ gearItem }) => {
       <TextareaAutosize
         name="Model"
         className="w-full resize-none whitespace-pre-wrap bg-transparent text-left text-sm font-light text-gray-200 md:text-sm"
-        placeholder="Short description of this gear item, ideally from the manufacturer or reputable website."
+        placeholder="Short description of this gear item, ideally from the manufacturer or a reputable website."
         autoComplete="off"
         data-gramm="false"
         data-gramm_editor="false"

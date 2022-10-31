@@ -37,6 +37,22 @@ const handleError = onError(({ graphQLErrors, networkError }) => {
     })
 })
 
+//__typename cleanup middleware to prevent failed mutations
+// https://stackoverflow.com/questions/47211778/cleaning-unwanted-fields-from-graphql-responses/51380645#51380645
+const cleanupTypeName = new ApolloLink((operation, forward) => {
+  if (operation.variables) {
+    const omitTypename = (key, value) =>
+      key === "__typename" ? undefined : value
+    operation.variables = JSON.parse(
+      JSON.stringify(operation.variables),
+      omitTypename
+    )
+  }
+  return forward(operation).map((data) => {
+    return data
+  })
+})
+
 // Prevent Subscriptions/AuthLink on NextJS server with typeof check
 const wsLink =
   typeof window !== "undefined"
@@ -58,7 +74,7 @@ const splitLink =
           )
         },
         wsLink,
-        ApolloLink.from([handleError, authLink, httpLink])
+        ApolloLink.from([cleanupTypeName, handleError, authLink, httpLink])
       )
     : httpLink
 

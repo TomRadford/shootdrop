@@ -163,8 +163,10 @@ const GEAR_ITEM_DETAILS = gql`
     description
     productURL
     allPrefs {
+      id
       name
       allOpts {
+        id
         name
       }
     }
@@ -240,6 +242,15 @@ export const EDIT_GEAR_ITEM = gql`
     }
   }
   ${GEAR_ITEM_DETAILS}
+`
+
+export const EDIT_GEAR_PREF_OPT = gql`
+  mutation editGearPrefOpt($id: String!, $name: String!) {
+    editGearPrefOpt(id: $id, name: $name) {
+      id
+      name
+    }
+  }
 `
 
 export const ALL_TAGS = gql`

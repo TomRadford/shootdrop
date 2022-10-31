@@ -161,6 +161,26 @@ const resolvers = {
         throw new UserInputError("Editing Gear Item failed with error: " + e)
       }
     },
+    editGearPrefOpt: async (root, args, context) => {
+      checkAuth(context)
+      try {
+        //names have been made not unique
+        // to prevent collision here and prevent
+        // weird issues with other gearPref's with
+        // the same opts changing opts names
+        //ToDo: rethink the sharing of gear pref opt name values
+        // or just drop this comment and allow for duplicates
+        return await GearPrefOpt.findByIdAndUpdate(
+          args.id,
+          {
+            name: args.name,
+          },
+          { returnDocument: "after" }
+        )
+      } catch (e) {
+        throw new UserInputError(e)
+      }
+    },
     addDrop: async (root, args, context) => {
       checkAuth(context)
       const { currentUser } = context
@@ -463,7 +483,6 @@ const resolvers = {
             ],
           }
         }
-        console.log(findParams.$or)
         const tagSearch = await Tag.find(findParams).sort("name").limit(10)
         return tagSearch
       } catch {
