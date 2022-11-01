@@ -4,9 +4,7 @@ const mongoose = require("mongoose")
 //to selectable get _id to use in gearlist
 // to be able to select opts
 const prefOptSchema = mongoose.Schema({
-  name: {
-    type: String,
-  },
+  name: String,
 })
 
 //eg: "Power Solution"

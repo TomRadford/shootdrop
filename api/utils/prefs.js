@@ -15,19 +15,24 @@ const createNewPref = async (pref, gearItem) => {
 const optHelper = async (pref) => {
   let allOpts = []
   for await (const opt of pref.allOpts) {
-    //prevent duplicate gearPrefOpts
-    const existingOpt = await GearPrefOpt.findOne({
+    //Note: redundant and not used in frontend
+    //ToDo: remove/repurpose/keep for directly
+    // interacting with api
+
+    //This was used to prevent duplicate gearPrefOpts
+    //ToDo: remove
+    // const existingOpt = await GearPrefOpt.findOne({
+    //   name: opt,
+    // })
+    // if (existingOpt) {
+    //   allOpts = [...allOpts, existingOpt]
+    // } else {
+    const newOpt = new GearPrefOpt({
       name: opt,
     })
-    if (existingOpt) {
-      allOpts = [...allOpts, existingOpt]
-    } else {
-      const newOpt = new GearPrefOpt({
-        name: opt,
-      })
-      allOpts = [...allOpts, newOpt]
-      await newOpt.save()
-    }
+    allOpts = [...allOpts, newOpt]
+    await newOpt.save()
+    // }
   }
   return allOpts
 }

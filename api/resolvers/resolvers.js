@@ -161,10 +161,48 @@ const resolvers = {
         throw new UserInputError("Editing Gear Item failed with error: " + e)
       }
     },
+    editGearPref: async (root, args, context) => {
+      checkAuth(context)
+      try {
+        return await GearPref.findByIdAndUpdate(
+          args.id,
+          {
+            name: args.name,
+          },
+          { returnDocument: "after" }
+        )
+      } catch (e) {
+        throw new UserInputError(e)
+      }
+      //To edit gear pref name only, use addGearPrefOpt to add new opts
+    },
+    addGearPrefOpt: async (root, args, context) => {
+      checkAuth(context)
+      try {
+        //Create a new gearPrefOpt
+        //append it to allOpts in pref
+        //returns new pref to update UI
+        const newGearPrefOpt = new GearPrefOpt({
+          name: "",
+        })
+        await newGearPrefOpt.save()
+        return await GearPref.findByIdAndUpdate(
+          args.gearPref,
+          {
+            $push: {
+              allOpts: newGearPrefOpt,
+            },
+          },
+          { returnDocument: "after" }
+        ).populate("allOpts")
+      } catch (e) {
+        throw new UserInputError(e)
+      }
+    },
     editGearPrefOpt: async (root, args, context) => {
       checkAuth(context)
       try {
-        //names have been made not unique
+        // names have been made not unique
         // to prevent collision here and prevent
         // weird issues with other gearPref's with
         // the same opts changing opts names
@@ -177,6 +215,25 @@ const resolvers = {
           },
           { returnDocument: "after" }
         )
+      } catch (e) {
+        throw new UserInputError(e)
+      }
+    },
+    removeGearPrefOpt: async (root, args, context) => {
+      checkAuth(context)
+      try {
+        //removes opt and reutrns new GearPref
+        //ToDo: handle issue with
+        await GearPrefOpt.findByIdAndRemove(args.id)
+        return await GearPref.findByIdAndUpdate(
+          args.gearPref,
+          {
+            $pull: {
+              allOpts: args.id,
+            },
+          },
+          { returnDocument: "after" }
+        ).populate("allOpts")
       } catch (e) {
         throw new UserInputError(e)
       }

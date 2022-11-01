@@ -244,6 +244,41 @@ export const EDIT_GEAR_ITEM = gql`
   ${GEAR_ITEM_DETAILS}
 `
 
+export const EDIT_GEAR_PREF = gql`
+  mutation editGearPref($id: String!, $name: String!) {
+    editGearPref(id: $id, name: $name) {
+      id
+      name
+    }
+  }
+`
+
+export const ADD_GEAR_PREF_OPT = gql`
+  mutation addGearPrefOpt($gearPref: String!) {
+    addGearPrefOpt(gearPref: $gearPref) {
+      id
+      name
+      allOpts {
+        id
+        name
+      }
+    }
+  }
+`
+
+export const REMOVE_GEAR_PREF_OPT = gql`
+  mutation removeGearPrefOpt($gearPref: String!, $id: String!) {
+    removeGearPrefOpt(gearPref: $gearPref, id: $id) {
+      id
+      name
+      allOpts {
+        id
+        name
+      }
+    }
+  }
+`
+
 export const EDIT_GEAR_PREF_OPT = gql`
   mutation editGearPrefOpt($id: String!, $name: String!) {
     editGearPrefOpt(id: $id, name: $name) {
