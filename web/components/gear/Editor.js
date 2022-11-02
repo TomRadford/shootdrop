@@ -35,7 +35,7 @@ const GearEditor = ({ children, gearItem }) => {
                 </div>
               </div>
               <div className="mx-6 2xl:mx-48">
-                <h3 className="my-4 text-left text-base text-gray-200">
+                <h3 className="my-4 text-center text-base text-gray-200">
                   Preferences
                 </h3>
                 <div className="flex flex-wrap justify-center gap-5">

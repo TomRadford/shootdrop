@@ -491,17 +491,20 @@ const resolvers = {
     editMe: async (root, args, context) => {
       checkAuth(context)
       const { currentUser } = context
-      currentUser.username = args.username
+      if (args.username) {
+        currentUser.username = args.username
+      }
       if (args.password) {
         currentUser.passwordHash = await bcrypt.hash(args.password, 10)
       }
       if (args.profilePicture) {
         currentUser.profilePicture = args.profilePicture
       }
-      currentUser.profilePicture = args.profilePicture
-      currentUser.fullName = args.fullName
+      if (args.fullName) {
+        currentUser.fullName = args.fullName
+      }
       try {
-        return currentUser.save()
+        return await currentUser.save()
       } catch (e) {
         throw new UserInputError(e.message, {
           invalidArgs: args,

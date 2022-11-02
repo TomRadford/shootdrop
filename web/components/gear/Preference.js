@@ -131,20 +131,6 @@ const GearPreference = ({ gearPref, gearItem }) => {
               name: gearPrefName,
             },
           })
-
-          // editGearItem({
-          //   variables: {
-          //     id: gearItem.id,
-          //     prefs: [
-          //       ...gearItem.allPrefs.filter((pref) => pref.id !== gearPref.id),
-          //       {
-          //         id: gearPref.id,
-          //         name: gearPrefName,
-          //         allOpts: gearPref.allOpts.map((opt) => opt.name),
-          //       },
-          //     ],
-          //   },
-          // })
         }, UPDATE_TIMEOUT)
         return () => clearTimeout(timeout)
       }
@@ -226,26 +212,25 @@ const GearPreference = ({ gearPref, gearItem }) => {
           </Card>
         </div>
       ) : (
-        <button className={`w-80`}>
+        <button className={`w-80`} onClick={handleAddPref}>
           <Card>
-            <div
-              className="flex h-36 items-center justify-center"
-              onClick={handleAddPref}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={4}
-                stroke="currentColor"
-                className="h-8 w-8"
-              >
-                <path
-                  strokeLinecap="square"
-                  strokeLinejoin="square"
-                  d="M12 4.5v15m7.5-7.5h-15"
-                />
-              </svg>
+            <div className="flex h-36 items-center justify-center">
+              <div className="">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={4}
+                  stroke="currentColor"
+                  className="h-8 w-8"
+                >
+                  <path
+                    strokeLinecap="square"
+                    strokeLinejoin="square"
+                    d="M12 4.5v15m7.5-7.5h-15"
+                  />
+                </svg>
+              </div>
             </div>
           </Card>
         </button>

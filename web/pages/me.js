@@ -97,8 +97,18 @@ const MePage = () => {
     const uploadUrl = await getProfileImageUpload()
     try {
       await axios.put(uploadUrl, newImage)
-      setProfilePicture(`${uploadUrl.split("?")[0]}?t=${new Date().getTime()}`) //cache breaker
+      const newProfilePicUrl = `${
+        uploadUrl.split("?")[0]
+      }?t=${new Date().getTime()}`
+      setProfilePicture(newProfilePicUrl) //cache breaker
+      //no need to save on profile picture change
+      editMe({
+        variables: {
+          profilePicture: newProfilePicUrl,
+        },
+      })
     } catch (e) {
+      setProfilePicture("")
       console.error(e)
     }
   }
