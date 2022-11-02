@@ -98,6 +98,20 @@ const cache = new InMemoryCache({
             return incoming
           },
         },
+        allPrefs: {
+          merge(existing, incoming) {
+            return incoming
+          },
+        },
+      },
+    },
+    GearPref: {
+      fields: {
+        allOpts: {
+          merge(existing, incoming) {
+            return incoming
+          },
+        },
       },
     },
   },

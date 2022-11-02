@@ -38,7 +38,7 @@ const GearEditor = ({ children, gearItem }) => {
                 <h3 className="my-4 text-left text-base text-gray-200">
                   Preferences
                 </h3>
-                <div className="flex gap-5">
+                <div className="flex flex-wrap justify-center gap-5">
                   {gearItem.allPrefs.map((gearPref) => (
                     <GearPreference
                       key={gearPref.id}
@@ -46,7 +46,7 @@ const GearEditor = ({ children, gearItem }) => {
                       gearPref={gearPref}
                     />
                   ))}
-                  <GearPreference />
+                  {me && <GearPreference gearItem={gearItem} />}
                 </div>
               </div>
             </>

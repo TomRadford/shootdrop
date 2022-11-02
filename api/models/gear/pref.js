@@ -16,7 +16,7 @@ const prefSchema = mongoose.Schema({
   },
   name: {
     type: String,
-    required: true,
+    default: "",
   },
   allOpts: [
     {

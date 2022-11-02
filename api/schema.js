@@ -159,7 +159,9 @@ const typeDefs = gql`
       tags: [String]
       prefs: [GearPrefInput]
     ): GearItem!
+    addGearPref(gearItem: String!): GearItem!
     editGearPref(id: String, name: String): GearPref!
+    removeGearPref(id: String!, gearItem: String!): String!
     addGearPrefOpt(gearPref: String): GearPref!
     editGearPrefOpt(id: String!, name: String): GearPrefOpt!
     removeGearPrefOpt(id: String!, gearPref: String!): GearPref!

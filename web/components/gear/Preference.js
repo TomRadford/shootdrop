@@ -1,14 +1,18 @@
-import { useMutation } from "@apollo/client"
+import { useMutation, useApolloClient } from "@apollo/client"
 import { useState, useEffect } from "react"
 import {
   ADD_GEAR_PREF_OPT,
-  EDIT_GEAR_ITEM,
+  ADD_GEAR_PREF,
   EDIT_GEAR_PREF,
+  REMOVE_GEAR_PREF,
   EDIT_GEAR_PREF_OPT,
   REMOVE_GEAR_PREF_OPT,
+  ALL_DROPS,
+  ALL_GEAR_ITEMS,
 } from "../../lib/apollo/queries"
 import { UPDATE_TIMEOUT } from "../../lib/config"
 import useGetMe from "../../lib/hooks/getMe"
+import AddCard from "../AddCard"
 import Card from "../Card"
 
 const Opt = ({ opt, gearPrefId }) => {
@@ -88,9 +92,30 @@ const Opt = ({ opt, gearPrefId }) => {
 
 const GearPreference = ({ gearPref, gearItem }) => {
   const me = useGetMe()
-  // const [editGearItem, editGearItemResult] = useMutation(EDIT_GEAR_ITEM)
+  const [addGearPref, addGearPrefResult] = useMutation(ADD_GEAR_PREF)
   const [addGearPrefOpt, addGearPrefOptResult] = useMutation(ADD_GEAR_PREF_OPT)
   const [editGearPref, editGearPrefResult] = useMutation(EDIT_GEAR_PREF)
+  const [removeGearPref, removeGearPrefResult] = useMutation(REMOVE_GEAR_PREF, {
+    update: (cache, response) => {
+      cache.updateQuery(
+        { query: ALL_GEAR_ITEMS, variables: { id: gearItem.id } },
+        ({ allGearItems }) => {
+          return {
+            allGearItems: [
+              {
+                ...allGearItems[0],
+                allPrefs: allGearItems[0].allPrefs.filter(
+                  (pref) => pref.id !== response.data.removeGearPref
+                ),
+              },
+            ],
+          }
+        }
+      )
+      //Remove GearPref & any GearPrefOpt's from cache
+      cache.gc()
+    },
+  })
   const [gearPrefName, setGearPrefName] = useState(
     gearPref ? gearPref.name : ""
   )
@@ -135,15 +160,53 @@ const GearPreference = ({ gearPref, gearItem }) => {
     })
   }
 
+  const handleAddPref = (e) => {
+    e.preventDefault()
+    addGearPref({
+      variables: {
+        gearItem: gearItem.id,
+      },
+    })
+  }
+
+  const handleRemovePref = (e) => {
+    e.preventDefault()
+    removeGearPref({
+      variables: {
+        gearItem: gearItem.id,
+        id: gearPref.id,
+      },
+    })
+  }
+
   return (
     <>
       {gearPref ? (
-        <div className="w-80 sm:w-96">
+        <div className=" w-80">
           <Card>
             <div className="flex flex-col gap-1 px-4 pb-4">
+              {me && (
+                <button onClick={handleRemovePref} className="relative">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="absolute -right-4 h-4 w-4 text-gray-500"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                </button>
+              )}
               <input
                 className="bg-transparent text-left text-base"
                 value={gearPrefName}
+                placeholder="Name of preference"
                 disabled={!me}
                 onChange={({ target }) => {
                   setGearPrefName(target.value)
@@ -163,7 +226,29 @@ const GearPreference = ({ gearPref, gearItem }) => {
           </Card>
         </div>
       ) : (
-        <>add</>
+        <button className={`w-80`}>
+          <Card>
+            <div
+              className="flex h-36 items-center justify-center"
+              onClick={handleAddPref}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={4}
+                stroke="currentColor"
+                className="h-8 w-8"
+              >
+                <path
+                  strokeLinecap="square"
+                  strokeLinejoin="square"
+                  d="M12 4.5v15m7.5-7.5h-15"
+                />
+              </svg>
+            </div>
+          </Card>
+        </button>
       )}
     </>
   )

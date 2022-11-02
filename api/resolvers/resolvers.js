@@ -13,7 +13,11 @@ const logger = require("../utils/logger")
 const { checkAuth, checkDropPermissions } = require("../utils/auth")
 const { handleTags } = require("../utils/tags")
 const { GearPref, GearPrefOpt } = require("../models/gear/pref")
-const { handlePrefs, handleEditPrefs } = require("../utils/prefs")
+const {
+  handlePrefs,
+  handleEditPrefs,
+  createNewPref,
+} = require("../utils/prefs")
 const { generateUploadURL } = require("../utils/s3")
 const dateScalar = new GraphQLScalarType({
   name: "Date",
@@ -161,8 +165,18 @@ const resolvers = {
         throw new UserInputError("Editing Gear Item failed with error: " + e)
       }
     },
+    addGearPref: async (root, args, context) => {
+      checkAuth(context)
+      const newPref = new GearPref({
+        gearItem: args.gearItem,
+      })
+      await newPref.save()
+      return await GearItem.findById(args.gearItem).populate("tags")
+    },
     editGearPref: async (root, args, context) => {
       checkAuth(context)
+      //To edit gear pref name only.
+      //use addGearPrefOpt to add new opts
       try {
         return await GearPref.findByIdAndUpdate(
           args.id,
@@ -174,8 +188,19 @@ const resolvers = {
       } catch (e) {
         throw new UserInputError(e)
       }
-      //To edit gear pref name only, use addGearPrefOpt to add new opts
     },
+    removeGearPref: async (root, args, context) => {
+      checkAuth(context)
+      try {
+        const prefToDelete = await GearPref.findById(args.id)
+        await GearPrefOpt.deleteMany({ _id: { $in: prefToDelete.opts } })
+        await prefToDelete.delete()
+        return prefToDelete.id
+      } catch (e) {
+        throw new UserInputError(e)
+      }
+    },
+
     addGearPrefOpt: async (root, args, context) => {
       checkAuth(context)
       try {

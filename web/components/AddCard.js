@@ -2,7 +2,7 @@ import Link from "next/link"
 import Card from "./Card"
 
 const AddButton = ({ onClick }) => (
-  <button className="mx-auto w-80 sm:w-96">
+  <button className={`mx-auto w-80 sm:w-96`}>
     <Card>
       <div className="flex h-44 items-center justify-center" onClick={onClick}>
         <svg
