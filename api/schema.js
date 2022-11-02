@@ -73,7 +73,7 @@ const typeDefs = gql`
     manufacturer: String!
     model: String!
     description: String
-    images: [Image]
+    images: [GearImage]
     productURL: String
     allPrefs: [GearPref]
     tags: [Tag]
@@ -91,7 +91,7 @@ const typeDefs = gql`
     name: String!
   }
 
-  type Image {
+  type GearImage {
     url: String
     width: Int
     height: Int
@@ -143,7 +143,6 @@ const typeDefs = gql`
       manufacturer: String!
       model: String!
       description: String
-      images: [String]
       productURL: String
       tags: [String]
       prefs: [GearPrefInput]
@@ -154,7 +153,6 @@ const typeDefs = gql`
       manufacturer: String
       model: String
       description: String
-      images: [String]
       productURL: String
       tags: [String]
       prefs: [GearPrefInput]
@@ -165,6 +163,8 @@ const typeDefs = gql`
     addGearPrefOpt(gearPref: String): GearPref!
     editGearPrefOpt(id: String!, name: String): GearPrefOpt!
     removeGearPrefOpt(id: String!, gearPref: String!): GearPref!
+
+    addGearImage(id: String!, gearItem: String!): GearImage
     addDrop(
       project: String!
       client: String

@@ -6,6 +6,7 @@ import GearHeader from "./Header"
 import GearPreference from "./Preference"
 import GearTags from "./TagsList"
 import TagsModal from "./TagsModal"
+import Image from "next/image"
 
 const GearEditor = ({ children, gearItem }) => {
   const [tagsModalOpen, setTagsModalOpen] = useState(false)
@@ -35,7 +36,7 @@ const GearEditor = ({ children, gearItem }) => {
                 </div>
               </div>
               <div className="mx-6 2xl:mx-48">
-                <h3 className="my-4 text-center text-base text-gray-200">
+                <h3 className="my-4 text-center  text-lg text-gray-200">
                   Preferences
                 </h3>
                 <div className="flex flex-wrap justify-center gap-5">
@@ -47,6 +48,18 @@ const GearEditor = ({ children, gearItem }) => {
                     />
                   ))}
                   {me && <GearPreference gearItem={gearItem} />}
+                </div>
+                <div>
+                  <h3 className="my-4 text-center text-lg text-gray-200">
+                    Photos
+                  </h3>
+                  <div className="flex flex-wrap justify-center gap-5">
+                    <Image
+                      height="200px"
+                      width="200px"
+                      src="https://shootdrop-images.s3.eu-west-1.amazonaws.com/users/632b155343f3b4a5367f4711.webp"
+                    />
+                  </div>
                 </div>
               </div>
             </>

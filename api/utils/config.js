@@ -12,6 +12,8 @@ const AWS_SECRET_ACCESS_KEY =
   NODE_ENV === "production"
     ? process.env.AWS_SECRET_ACCESS_KEY
     : process.env.DEV_AWS_SECRET_ACCESS_KEY
+const S3_BUCKET =
+  NODE_ENV === "production" ? process.env.S3_BUCKET : process.env.DEV_S3_BUCKET
 
 module.exports = {
   SECRET,
@@ -20,4 +22,5 @@ module.exports = {
   NODE_ENV,
   AWS_ACCESS_KEY_ID,
   AWS_SECRET_ACCESS_KEY,
+  S3_BUCKET,
 }

@@ -69,6 +69,7 @@ const Opt = ({ opt, gearPrefId }) => {
           onClick={handleRemove}
           className={`absolute right-0 ${!selected && `opacity-0`}`}
           onMouseEnter={() => setSelected(true)}
+          onMouseLeave={() => setSelected(false)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -184,7 +185,7 @@ const GearPreference = ({ gearPref, gearItem }) => {
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                      d="M6 18L18 6M6 6l12 12"
                     />
                   </svg>
                 </button>
