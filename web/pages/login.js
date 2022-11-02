@@ -20,7 +20,10 @@ const LoginCard = () => {
   useEffect(() => {
     if (!me.loading) {
       if (me.data.me) {
-        router.push("/drops")
+        //replace used instead of push
+        //to prevent /login from being
+        //added to history stack
+        router.replace("/drops")
       }
     }
   }, [me.data])
