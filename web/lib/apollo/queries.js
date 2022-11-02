@@ -222,7 +222,6 @@ export const EDIT_GEAR_ITEM = gql`
     $manufacturer: String
     $model: String
     $description: String
-    $images: [String]
     $productURL: String
     $tags: [String]
     $prefs: [GearPrefInput]
@@ -233,7 +232,6 @@ export const EDIT_GEAR_ITEM = gql`
       manufacturer: $manufacturer
       model: $model
       description: $description
-      images: $images
       productURL: $productURL
       tags: $tags
       prefs: $prefs
