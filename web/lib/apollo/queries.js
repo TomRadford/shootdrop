@@ -331,6 +331,12 @@ export const ADD_GEAR_IMAGE = gql`
   }
 `
 
+export const REMOVE_GEAR_IMAGE = gql`
+  mutation removeGearImage($id: String!, $gearItem: String!) {
+    removeGearImage(id: $id, gearItem: $gearItem)
+  }
+`
+
 export const ALL_TAGS = gql`
   query allTags($tag: String, $category: [GearCategory]) {
     allTags(tag: $tag, category: $category) {

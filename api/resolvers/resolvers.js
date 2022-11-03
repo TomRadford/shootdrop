@@ -20,7 +20,7 @@ const {
   handleEditPrefs,
   createNewPref,
 } = require("../utils/prefs")
-const { generateUploadURL } = require("../utils/s3")
+const { generateUploadURL, deleteS3Object } = require("../utils/s3")
 const dateScalar = new GraphQLScalarType({
   name: "Date",
   description: "Date scalar type",
@@ -250,7 +250,7 @@ const resolvers = {
       try {
         //removes opt and reutrns new GearPref
         //ToDo: handle issue with
-        await GearPrefOpt.findByIdAndRemove(args.id)
+        await GearPrefOpt.findByIdAndDelete(args.id)
         return await GearPref.findByIdAndUpdate(
           args.gearPref,
           {
@@ -271,7 +271,7 @@ const resolvers = {
         url: args.url,
         // ToDo: relook fetching w/h from DOM
         // for now just using 2MP/1080p size
-        // as per makeWEBP args
+        // as per makeWEBP args on fe
         width: args.width ? args.width : null,
         height: args.height ? args.width : null,
       })
@@ -281,6 +281,25 @@ const resolvers = {
         },
       })
       return await newGearImage.save()
+    },
+    removeGearImage: async (root, args, context) => {
+      checkAuth(context)
+      const gearImage = await GearImage.findById(args.id)
+      if (!gearImage) {
+        throw new UserInputError("Gear image does not exist")
+      }
+      await deleteS3Object(
+        `gear/${args.gearItem}`,
+        gearImage.url.split("/").at(-1)
+      )
+      await GearItem.findByIdAndUpdate(args.gearItem, {
+        $pull: {
+          images: args.id,
+        },
+      })
+      await gearImage.delete()
+
+      return gearImage.id
     },
     addDrop: async (root, args, context) => {
       checkAuth(context)

@@ -23,17 +23,31 @@ const client = new S3Client({
   },
 })
 
-const generateUploadURL = async (dir, filname) => {
+const generateUploadURL = async (dir, filename) => {
   const command = new PutObjectCommand({
     Bucket: bucketName,
-    Key: `${dir}/${filname}`,
+    Key: `${dir}/${filename}`,
   })
   return await getSignedUrl(client, command, {
     expiresIn: 20,
   })
 }
 
-module.exports = { generateUploadURL }
+const deleteS3Object = async (dir, filename) => {
+  const key = `${dir}/${filename}`
+  try {
+    await client.send(
+      new DeleteObjectCommand({
+        Bucket: bucketName,
+        Key: key,
+      })
+    )
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+module.exports = { generateUploadURL, deleteS3Object }
 
 // V2 SDK
 

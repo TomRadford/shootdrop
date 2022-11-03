@@ -119,6 +119,7 @@ const GearEditor = ({ children, gearItem }) => {
                         key={gearImage.id}
                         gearImage={gearImage}
                         alt={`Image ${i + 1} of the ${gearItem.model} `}
+                        gearItemId={gearItem.id}
                       />
                     ))}
                     {me && (

@@ -171,6 +171,7 @@ const typeDefs = gql`
       height: Int
       url: String!
     ): GearImage!
+    removeGearImage(gearItem: String!, id: String): String!
     addDrop(
       project: String!
       client: String
