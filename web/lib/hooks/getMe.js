@@ -3,13 +3,9 @@ import { useEffect, useState } from "react"
 import { ME } from "../apollo/queries"
 
 const useGetMe = () => {
-  const { data, loading } = useQuery(ME)
-  const [me, setMe] = useState(null)
-  useEffect(() => {
-    if (!loading) {
-      setMe(data.me)
-    }
-  }, [data])
+  const { loading, data } = useQuery(ME)
+  if (loading) return null
+  const { me } = data
   return me
 }
 
