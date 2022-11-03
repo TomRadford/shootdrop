@@ -56,7 +56,7 @@ const GearEditor = ({ children, gearItem }) => {
         },
       })
       setUploading(false)
-      // console.log(addGearImageResult.data)
+      target.value = null
     } catch (e) {
       console.error(e)
       window.alert(e.message)
@@ -110,7 +110,7 @@ const GearEditor = ({ children, gearItem }) => {
                 <div className="flex justify-center">
                   <div
                     // hack to get regular scroll working on 2xl viewport
-                    // ToDo: relook this hack, only changes on render
+                    // ToDo: relook this hack, currently only changes on render
                     ref={window.innerWidth < 1536 ? scrollRef : undefined}
                     className="scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900 whitespace-wrap mx-2 flex  items-center gap-3 overflow-x-scroll py-2 md:gap-6 2xl:flex-wrap 2xl:justify-center"
                   >
@@ -123,7 +123,7 @@ const GearEditor = ({ children, gearItem }) => {
                       />
                     ))}
                     {me && (
-                      <div className="mr-10 rounded-lg">
+                      <div className="rounded-lg last:mr-4 only:mr-0">
                         <ImageInput onChange={handleImageChange}>
                           <Card>
                             <div className="flex h-[16rem] w-[16rem] items-center justify-center md:h-[18rem] md:w-[18rem] xl:h-[22rem] xl:w-[22rem]">

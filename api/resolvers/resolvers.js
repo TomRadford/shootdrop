@@ -162,7 +162,9 @@ const resolvers = {
           {
             returnDocument: "after",
           }
-        ).populate("tags")
+        )
+          .populate("tags")
+          .populate("images")
       } catch (e) {
         throw new UserInputError("Editing Gear Item failed with error: " + e)
       }

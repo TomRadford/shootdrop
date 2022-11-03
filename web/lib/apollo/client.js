@@ -103,6 +103,11 @@ const cache = new InMemoryCache({
             return incoming
           },
         },
+        images: {
+          merge(existing, incoming) {
+            return incoming
+          },
+        },
       },
     },
     GearPref: {
