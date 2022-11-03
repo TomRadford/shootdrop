@@ -162,6 +162,12 @@ const GEAR_ITEM_DETAILS = gql`
     model
     description
     productURL
+    images {
+      id
+      url
+      width
+      height
+    }
     allPrefs {
       id
       name
@@ -244,10 +250,14 @@ export const EDIT_GEAR_ITEM = gql`
 export const ADD_GEAR_PREF = gql`
   mutation addGearPref($gearItem: String!) {
     addGearPref(gearItem: $gearItem) {
-      ...GearItemDetails
+      id
+      name
+      allOpts {
+        id
+        name
+      }
     }
   }
-  ${GEAR_ITEM_DETAILS}
 `
 
 export const EDIT_GEAR_PREF = gql`
@@ -296,6 +306,27 @@ export const EDIT_GEAR_PREF_OPT = gql`
     editGearPrefOpt(id: $id, name: $name) {
       id
       name
+    }
+  }
+`
+
+export const ADD_GEAR_IMAGE = gql`
+  mutation addGearImage(
+    $gearItem: String!
+    $url: String!
+    $width: Int
+    $height: Int
+  ) {
+    addGearImage(
+      gearItem: $gearItem
+      url: $url
+      width: $width
+      height: $height
+    ) {
+      id
+      url
+      width
+      height
     }
   }
 `

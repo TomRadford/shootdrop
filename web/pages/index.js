@@ -15,7 +15,9 @@ const Home = () => {
       </Head>
       <div className="flex h-screen bg-gradient-to-t from-gray-900 to-gray-800">
         <div className="m-auto text-center">
-          <h1 className="text-5xl font-bold">Got a shoot?</h1>
+          <h1 className="mx-12 text-5xl font-bold">
+            Your next shoot starts here.
+          </h1>
           <p className="mt-3">
             Make an asset list with a{" "}
             <Link href="/drops/add">

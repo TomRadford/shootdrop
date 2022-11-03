@@ -79,6 +79,13 @@ const typeDefs = gql`
     tags: [Tag]
   }
 
+  type GearImage {
+    id: ID
+    url: String
+    width: Int
+    height: Int
+  }
+
   type GearPref {
     id: ID
     gearItem: GearItem!
@@ -89,12 +96,6 @@ const typeDefs = gql`
   type GearPrefOpt {
     id: ID!
     name: String!
-  }
-
-  type GearImage {
-    url: String
-    width: Int
-    height: Int
   }
 
   type Query {
@@ -109,6 +110,7 @@ const typeDefs = gql`
       tags: [String]
     ): [GearItem]
     getProfileImageUpload: String!
+    getGearImageUpload(gearItem: String!): String!
     allUsers(fullName: String): [User]
   }
 
@@ -157,14 +159,18 @@ const typeDefs = gql`
       tags: [String]
       prefs: [GearPrefInput]
     ): GearItem!
-    addGearPref(gearItem: String!): GearItem!
+    addGearPref(gearItem: String!): GearPref!
     editGearPref(id: String, name: String): GearPref!
     removeGearPref(id: String!, gearItem: String!): String!
     addGearPrefOpt(gearPref: String): GearPref!
     editGearPrefOpt(id: String!, name: String): GearPrefOpt!
     removeGearPrefOpt(id: String!, gearPref: String!): GearPref!
-
-    addGearImage(id: String!, gearItem: String!): GearImage
+    addGearImage(
+      gearItem: String!
+      width: Int
+      height: Int
+      url: String!
+    ): GearImage!
     addDrop(
       project: String!
       client: String

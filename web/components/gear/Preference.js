@@ -93,7 +93,27 @@ const Opt = ({ opt, gearPrefId }) => {
 
 const GearPreference = ({ gearPref, gearItem }) => {
   const me = useGetMe()
-  const [addGearPref, addGearPrefResult] = useMutation(ADD_GEAR_PREF)
+  const [addGearPref, addGearPrefResult] = useMutation(ADD_GEAR_PREF, {
+    update: (cache, response) => {
+      cache.updateQuery(
+        { query: ALL_GEAR_ITEMS, variables: { id: gearItem.id } },
+        ({ allGearItems }) => {
+          return {
+            allGearItems: [
+              {
+                ...allGearItems[0],
+                allPrefs: [
+                  ...allGearItems[0].allPrefs,
+                  response.data.addGearPref,
+                ],
+              },
+            ],
+          }
+        }
+      )
+    },
+  })
+
   const [addGearPrefOpt, addGearPrefOptResult] = useMutation(ADD_GEAR_PREF_OPT)
   const [editGearPref, editGearPrefResult] = useMutation(EDIT_GEAR_PREF)
   const [removeGearPref, removeGearPrefResult] = useMutation(REMOVE_GEAR_PREF, {

@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+/* For scrollbar hide */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* For IE, Edge and Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
 /* For custom DatePickerTailwind component */
 .react-datepicker__input-container input {
   @apply form-input block w-full rounded border;

@@ -3,11 +3,13 @@ const { GraphQLScalarType, Kind } = require("graphql")
 const mongoose = require("mongoose")
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
+const { nanoid } = require("nanoid/async")
 const User = require("../models/user")
 const Drop = require("../models/drop")
 const Tag = require("../models/gear/tag")
 const GearList = require("../models/gear/list")
 const GearItem = require("../models/gear/item")
+const GearImage = require("../models/gear/image")
 const config = require("../utils/config")
 const logger = require("../utils/logger")
 const { checkAuth, checkDropPermissions } = require("../utils/auth")
@@ -170,8 +172,7 @@ const resolvers = {
       const newPref = new GearPref({
         gearItem: args.gearItem,
       })
-      await newPref.save()
-      return await GearItem.findById(args.gearItem).populate("tags")
+      return await newPref.save()
     },
     editGearPref: async (root, args, context) => {
       checkAuth(context)
@@ -262,6 +263,24 @@ const resolvers = {
       } catch (e) {
         throw new UserInputError(e)
       }
+    },
+    addGearImage: async (root, args, context) => {
+      checkAuth(context)
+      //ToDo: potential thmb url
+      const newGearImage = new GearImage({
+        url: args.url,
+        // ToDo: relook fetching w/h from DOM
+        // for now just using 2MP/1080p size
+        // as per makeWEBP args
+        width: args.width ? args.width : null,
+        height: args.height ? args.width : null,
+      })
+      await GearItem.findByIdAndUpdate(args.gearItem, {
+        $push: {
+          images: newGearImage,
+        },
+      })
+      return await newGearImage.save()
     },
     addDrop: async (root, args, context) => {
       checkAuth(context)
@@ -522,6 +541,14 @@ const resolvers = {
       const { currentUser } = context
       return await generateUploadURL("users", `${currentUser.id}.webp`)
     },
+    getGearImageUpload: async (root, args, context) => {
+      checkAuth(context)
+      const gearImgUrlId = await nanoid(10)
+      return await generateUploadURL(
+        `gear/${args.gearItem}`,
+        `${gearImgUrlId}.webp`
+      )
+    },
 
     allDrops: async (root, args, context) => {
       if (args.drop) {
@@ -577,7 +604,9 @@ const resolvers = {
 
     allGearItems: async (root, args, context) => {
       if (args.id) {
-        const gearItem = await GearItem.findById(args.id).populate("tags")
+        const gearItem = await GearItem.findById(args.id)
+          .populate("tags")
+          .populate("images")
         return [gearItem]
       }
       try {
@@ -597,7 +626,9 @@ const resolvers = {
         if (args.tags) {
           searchTerms.tags = { $in: args.tags }
         }
-        return await GearItem.find(searchTerms).populate("tags")
+        return await GearItem.find(searchTerms)
+          .populate("tags")
+          .populate("images")
       } catch (e) {
         throw new UserInputError(`Error searching: ${e}`)
       }

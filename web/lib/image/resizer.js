@@ -1,6 +1,6 @@
 import Resizer from "react-image-file-resizer"
 
-const makeWEBP = (file, maxHeight, maxWidth) =>
+const makeWEBP = (file, maxWidth, maxHeight) =>
   new Promise((resolve) => {
     Resizer.imageFileResizer(
       file,
@@ -12,8 +12,16 @@ const makeWEBP = (file, maxHeight, maxWidth) =>
       (uri) => {
         resolve(uri)
       },
-      'file'
+      "file"
     )
   })
 
-export { makeWEBP }
+const toBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = (error) => reject(error)
+  })
+
+export { makeWEBP, toBase64 }

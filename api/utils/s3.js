@@ -11,6 +11,10 @@ const config = require("./config")
 
 const bucketName = config.S3_BUCKET
 
+// TODO: PROD set CORS allowed origin to be limted to
+// images.shootdrop.com
+// https://docs.aws.amazon.com/AmazonS3/latest/userguide/ManageCorsUsing.html
+
 const client = new S3Client({
   region: "eu-west-1",
   credentials: {

@@ -22,7 +22,7 @@ const GearPage = ({ gearItem }) => {
           <title>Gear item not found | ShootDrop</title>
         </Head>
         <Layout>
-          <div className="flex h-full">
+          <div className="flex h-screen ">
             <div className="m-auto text-center">
               <h1 className="m-5 text-5xl font-bold">404</h1>
               <p className="">Gear item was not found.</p>
