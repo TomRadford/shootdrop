@@ -11,9 +11,13 @@ const Notification = ({ messageData, setMessageData }) => {
   }, [messageData])
 
   return (
-    <p className={messageData.type === "error" ? "text-red-600" : "text-white"}>
-      {messageData.message}
-    </p>
+    <div className="mt-5">
+      <p
+        className={messageData.type === "error" ? "text-red-600" : "text-white"}
+      >
+        {messageData.message}
+      </p>
+    </div>
   )
 }
 export default Notification
