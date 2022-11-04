@@ -18,9 +18,6 @@ const NavLink = ({ label, link, setShowNav }) => (
 )
 
 const User = () => {
-  // const { loading, data } = useQuery(ME)
-  // if (loading) return null
-  // const { me } = data
   const me = useGetMe()
   const handleLogout = () => {
     localStorage.clear()
@@ -48,21 +45,24 @@ const User = () => {
           </button>
 
           <Link href="/me">
-            <button>
+            <button className="flex items-center gap-3">
               <span className="text-sm font-light">
                 {me.fullName ? me.fullName : me.username}
               </span>
+
+              <Image
+                src={
+                  me.profilePicture
+                    ? me.profilePicture
+                    : `/img/default_user.png`
+                }
+                width="30px"
+                height="30px"
+                className="rounded-full"
+                objectFit="cover"
+              />
             </button>
           </Link>
-          <Image
-            src={
-              me.profilePicture ? me.profilePicture : `/img/default_user.png`
-            }
-            width="30px"
-            height="30px"
-            className="rounded-full"
-            objectFit="cover"
-          />
         </>
       ) : (
         <Link href="/login">
@@ -76,7 +76,10 @@ const User = () => {
 const NavBar = () => {
   const [showNav, setShowNav] = useState(false)
   return (
-    <nav className="bg-gray-secondary top:0 fixed z-50 flex w-full flex-col py-2 text-center text-white md:left-0 md:h-screen md:w-64 md:py-10">
+    <nav
+      className="bg-gray-secondary top:0 fixed z-50 flex w-full flex-col py-2 text-center text-white md:left-0 md:h-screen md:w-64 md:py-10"
+      onMouseLeave={() => setShowNav(false)}
+    >
       <div className="px-3">
         <Link href="/">
           <a>
