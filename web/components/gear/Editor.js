@@ -90,7 +90,11 @@ const GearEditor = ({ children, gearItem }) => {
               </div>
               <div className="mx-6 2xl:mx-48">
                 <h3 className="my-4 text-center  text-lg text-gray-200">
-                  Preferences
+                  {gearItem.allPrefs.length > 0 ? (
+                    <>Preferences</>
+                  ) : (
+                    me && <>Preferences</>
+                  )}
                 </h3>
                 <div className="flex flex-wrap justify-center gap-5">
                   {gearItem.allPrefs.map((gearPref) => (
@@ -105,7 +109,7 @@ const GearEditor = ({ children, gearItem }) => {
               </div>
               <div>
                 <h3 className="my-4 text-center text-lg text-gray-200">
-                  Photos
+                  {gearItem.images.length > 0 ? <>Photos</> : me && <>Photos</>}
                 </h3>
                 <div className="flex justify-center">
                   <div
