@@ -7,7 +7,7 @@ const App = ({ Component, pageProps }) => {
   return (
     <ApolloProvider client={client}>
       <NextProgress
-        delay={100}
+        // delay={0} setting higher than 0 triggers endless loader indication on Router.push
         color="#364667"
         customGlobalCss={`
 				#nprogress {
