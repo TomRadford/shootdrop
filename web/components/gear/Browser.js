@@ -8,7 +8,11 @@ const whitePixel =
 
 //GearBrowser to be used on /gear and /list/[id]/add routes
 const GearBrowser = ({ list }) => {
-  const { data: allGearData, loading: allGearLoading } = useQuery(
+  const {
+    data: allGearData,
+    loading: allGearLoading,
+    fetchMore: fetchMoreGear,
+  } = useQuery(
     ALL_GEAR_ITEMS,
     //ToDo: update cache on local add / subscriptions
     { fetchPolicy: "network-only" }

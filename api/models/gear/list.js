@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 
 //GearListItem
-const subSchema = mongoose.Schema(
+const subSchema = new mongoose.Schema(
   {
     gearItem: {
       type: mongoose.Schema.Types.ObjectId,
@@ -35,7 +35,7 @@ const subSchema = mongoose.Schema(
   { timestamps: true }
 )
 
-const schema = mongoose.Schema(
+const schema = new mongoose.Schema(
   {
     category: {
       type: String,

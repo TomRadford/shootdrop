@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
+const mongoosePaginate = require("mongoose-paginate-v2")
 
-const schema = mongoose.Schema({
+const schema = new mongoose.Schema({
   category: [String],
   manufacturer: {
     type: String,
@@ -21,6 +22,6 @@ const schema = mongoose.Schema({
   ],
 })
 
-//add https://www.npmjs.com/package/mongoose-paginate-v2 plugin
+schema.plugin(mongoosePaginate)
 
 module.exports = mongoose.model("GearItem", schema)

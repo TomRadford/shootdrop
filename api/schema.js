@@ -109,6 +109,8 @@ const typeDefs = gql`
       manufacturer: String
       model: String
       tags: [String]
+      limit: Int
+      offset: Int
     ): [GearItem]
     getProfileImageUpload: String!
     getGearImageUpload(gearItem: String!): String!

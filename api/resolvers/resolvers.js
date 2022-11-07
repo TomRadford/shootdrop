@@ -647,9 +647,20 @@ const resolvers = {
         if (args.tags) {
           searchTerms.tags = { $in: args.tags }
         }
-        return await GearItem.find(searchTerms)
-          .populate("tags")
-          .populate("images")
+        let options = {
+          populate: ["tags", "images"],
+        }
+        if (args.limit) {
+          options.limit = args.limit
+        } else {
+          options.limit = 16
+        }
+        if (args.offset) {
+          options.offset = args.offset
+        }
+        const gearItems = await GearItem.paginate(searchTerms, options)
+        console.log(gearItems)
+        return gearItems.docs
       } catch (e) {
         throw new UserInputError(`Error searching: ${e}`)
       }

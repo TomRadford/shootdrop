@@ -3,12 +3,12 @@ const mongoose = require("mongoose")
 //['v-mount', 'b-mount', 'gold-mount']
 //to selectable get _id to use in gearlist
 // to be able to select opts
-const prefOptSchema = mongoose.Schema({
+const prefOptSchema = new mongoose.Schema({
   name: String,
 })
 
 //eg: "Power Solution"
-const prefSchema = mongoose.Schema({
+const prefSchema = new mongoose.Schema({
   gearItem: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "GearItem",
