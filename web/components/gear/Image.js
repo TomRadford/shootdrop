@@ -43,9 +43,15 @@ const GearImage = ({ gearImage, alt, gearItemId }) => {
           <div className="flex h-72 w-72 items-center justify-center md:h-80 md:w-80 xl:h-96 xl:w-96"></div>
         </div>
       )}
-      <div style={loaded ? { display: "block" } : { display: "none" }}>
+      <div
+        style={loaded ? { display: "block" } : { display: "none" }}
+        className="min-w-[300px]"
+      >
         {me && (
-          <button onClick={handleRemove} className="absolute right-1 top-1">
+          <button
+            onClick={handleRemove}
+            className="absolute right-4 top-1 md:right-1"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -63,7 +69,7 @@ const GearImage = ({ gearImage, alt, gearItemId }) => {
           </button>
         )}
         <img
-          className="h-72 max-w-min rounded-lg md:h-80 xl:h-96"
+          className="h-72 rounded-lg object-cover md:h-80 xl:h-96"
           alt={alt}
           onLoad={() => setLoaded(true)}
           src={gearImage.url}

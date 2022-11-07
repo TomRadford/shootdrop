@@ -8,7 +8,7 @@ import client from "../../lib/apollo/client"
 import { ALL_GEAR_ITEMS } from "../../lib/apollo/queries"
 import GearEditor from "../../components/gear/Editor"
 
-const GearPage = ({ gearItem }) => {
+const GearItemPage = ({ gearItem }) => {
   const router = useRouter()
   const gearItemId = router.query.id
   const gearItemResult = useQuery(ALL_GEAR_ITEMS, {
@@ -95,4 +95,4 @@ export const getServerSideProps = async ({ params }) => {
   }
 }
 
-export default GearPage
+export default GearItemPage

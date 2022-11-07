@@ -45,6 +45,7 @@ const typeDefs = gql`
     comment: String
     drop: String!
     items: [GearListItem]
+    updatedAt: Date
   }
 
   type GearListItem {
