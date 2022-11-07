@@ -80,6 +80,23 @@ const splitLink =
 
 const cache = new InMemoryCache({
   typePolicies: {
+    Query: {
+      fields: {
+        // To merge fetchMore queries in cache:
+        allGearItems: {
+          keyArgs: ["id"],
+          // Prevent concatenation of existing entries
+          merge(existing = [], incoming, { args: { offset = 0 } }) {
+            //slide used to immutable existing
+            const merged = existing ? existing.slice(0) : []
+            for (let i = 0; i < incoming.length; ++i) {
+              merged[offset + i] = incoming[i]
+            }
+            return merged
+          },
+        },
+      },
+    },
     Drop: {
       fields: {
         users: {

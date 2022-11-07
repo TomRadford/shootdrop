@@ -190,6 +190,8 @@ export const ALL_GEAR_ITEMS = gql`
     $manufacturer: String
     $model: String
     $tags: [String]
+    $offset: Int
+    $limit: Int
   ) {
     allGearItems(
       id: $id
@@ -197,6 +199,8 @@ export const ALL_GEAR_ITEMS = gql`
       manufacturer: $manufacturer
       model: $model
       tags: $tags
+      offset: $offset
+      limit: $limit
     ) {
       ...GearItemDetails
     }

@@ -2,9 +2,22 @@ import { useQuery } from "@apollo/client"
 import { ALL_GEAR_ITEMS } from "../../lib/apollo/queries"
 import Image from "next/image"
 import Link from "next/link"
+import { useInView } from "react-intersection-observer"
+import { useEffect, useState } from "react"
 
 const whitePixel =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII="
+
+const GearListSkeleton = () => (
+  <>
+    {[...Array(20)].map((a, i) => (
+      <div
+        key={i}
+        className="h-[330px] w-[300px] animate-pulse overflow-hidden rounded-xl bg-gray-500 shadow-lg"
+      ></div>
+    ))}
+  </>
+)
 
 //GearBrowser to be used on /gear and /list/[id]/add routes
 const GearBrowser = ({ list }) => {
@@ -14,9 +27,31 @@ const GearBrowser = ({ list }) => {
     fetchMore: fetchMoreGear,
   } = useQuery(
     ALL_GEAR_ITEMS,
-    //ToDo: update cache on local add / subscriptions
-    { fetchPolicy: "network-only" }
+    //ToDo: update cache on local/subscription-based gearItem add
+    {
+      fetchPolicy: "network-only",
+    }
   )
+  const { ref, inView, entry } = useInView({
+    threshold: 0,
+  })
+  const [fetchingMore, setFetchingMore] = useState(false)
+
+  useEffect(() => {
+    if (inView) {
+      setFetchingMore(true)
+      fetchMoreGear({
+        variables: {
+          offset: allGearData.allGearItems.length,
+        },
+      })
+    } else {
+      //ToDo: use tips on https://trevorblades.com/lab/infinite-scroll-ac3
+      //as well as add pagination data to query by nesting allGearItems in docs
+      setFetchingMore(false)
+    }
+  }, [inView])
+
   return (
     <div className="flex h-full min-h-screen">
       <div className="mb-10 w-full pt-0 text-center md:mx-0 md:pt-0">
@@ -26,12 +61,7 @@ const GearBrowser = ({ list }) => {
         {allGearLoading ? (
           <div className="mx-2 ">
             <div className="mx-auto flex max-w-7xl flex-wrap justify-center gap-4">
-              {[...Array(20)].map((a, i) => (
-                <div
-                  key={i}
-                  className="h-[330px] w-[300px] animate-pulse overflow-hidden rounded-xl bg-gray-500 shadow-lg"
-                ></div>
-              ))}
+              <GearListSkeleton />
             </div>
           </div>
         ) : (
@@ -71,12 +101,13 @@ const GearBrowser = ({ list }) => {
                       </div>
                     </Link>
                     {list && (
-                      <button className="my-3 font-bold">Add Item +</button>
+                      <button className="my-3 font-bold">Add Item</button>
                     )}
                   </div>
                 )
               })}
             </div>
+            <div ref={ref}></div>
           </div>
         )}
       </div>

@@ -658,8 +658,8 @@ const resolvers = {
         if (args.offset) {
           options.offset = args.offset
         }
+        // ToDo: relook at returning pagition data in this query
         const gearItems = await GearItem.paginate(searchTerms, options)
-        console.log(gearItems)
         return gearItems.docs
       } catch (e) {
         throw new UserInputError(`Error searching: ${e}`)

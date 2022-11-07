@@ -112,6 +112,7 @@ const typeDefs = gql`
       limit: Int
       offset: Int
     ): [GearItem]
+    gearCount: Int!
     getProfileImageUpload: String!
     getGearImageUpload(gearItem: String!): String!
     allUsers(fullName: String): [User]
