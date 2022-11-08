@@ -19,7 +19,7 @@ const GearListSkeleton = ({ length = 20 }) => (
   </>
 )
 
-const GearFilter = ({ manufacturer, setManufacturer }) => {
+const GearFilter = ({ manufacturer, setManufacturer, refetch }) => {
 
   // const [loadNewGearItems, gearResults] = useLazyQuery(ALL_GEAR_ITEMS, {
   //   fetchPolicy: 'network-only', variables: {
@@ -27,11 +27,11 @@ const GearFilter = ({ manufacturer, setManufacturer }) => {
   //   }
   // })
 
-  // useEffect(() => {
-  //   if (manufacturer.length > 0) {
-  //     loadNewGearItems()
-  //   }
-  // }, [manufacturer])
+  useEffect(() => {
+    if (manufacturer.length > 0) {
+      refetch({ manufacturer })
+    }
+  }, [manufacturer])
 
   return (
     <div className="flex flex-col">
@@ -50,15 +50,13 @@ const GearBrowser = ({ list }) => {
   const {
     data: allGearData,
     loading: allGearLoading,
+    refetch,
     fetchMore: fetchMoreGear,
   } = useQuery(
     ALL_GEAR_ITEMS,
     //ToDo: update cache on local/subscription-based gearItem add
     {
       fetchPolicy: "network-only",
-      variables: {
-        manufacturer
-      },
       onCompleted: () => setFetchingMore(false)
     }
   )
@@ -85,7 +83,7 @@ const GearBrowser = ({ list }) => {
     <div className="flex h-full min-h-screen">
       <div className="mb-10 w-full pt-0 text-center md:mx-0 md:pt-0">
         <div className="flex flex-wrap w-full bg-gradient-to-b from-[#121212] to-transparent pb-8 pt-16 md:pt-8">
-          <GearFilter setManufacturer={setManufacturer} />
+          <GearFilter manufacturer={manufacturer} setManufacturer={setManufacturer} refetch={refetch} />
         </div>
         {allGearLoading ? (
           <div className="mx-2 ">
