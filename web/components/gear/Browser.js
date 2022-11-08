@@ -75,6 +75,9 @@ const GearBrowser = ({ list }) => {
                     key={gearItem.id}
                   >
                     <Link href={`/gear/${gearItem.id}`}>
+                      {/* ToDo: Consider target blank to open new tab
+															Disadvantage would be reloading app in new tab
+											*/}
                       <div className="relative -mb-1 hover:cursor-pointer">
                         {gearItem.images.length > 0 ? (
                           <Image
