@@ -8,9 +8,9 @@ import { useEffect, useState } from "react"
 const whitePixel =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII="
 
-const GearListSkeleton = () => (
+const GearListSkeleton = ({ length = 20 }) => (
   <>
-    {[...Array(20)].map((a, i) => (
+    {[...Array(length)].map((a, i) => (
       <div
         key={i}
         className="h-[330px] w-[300px] animate-pulse overflow-hidden rounded-xl bg-gray-500 shadow-lg"
@@ -21,6 +21,7 @@ const GearListSkeleton = () => (
 
 //GearBrowser to be used on /gear and /list/[id]/add routes
 const GearBrowser = ({ list }) => {
+  const [fetchingMore, setFetchingMore] = useState(false)
   const {
     data: allGearData,
     loading: allGearLoading,
@@ -30,28 +31,28 @@ const GearBrowser = ({ list }) => {
     //ToDo: update cache on local/subscription-based gearItem add
     {
       fetchPolicy: "network-only",
+      onCompleted: () => setFetchingMore(false),
     }
   )
   const { ref, inView, entry } = useInView({
     threshold: 0,
   })
-  const [fetchingMore, setFetchingMore] = useState(false)
 
   useEffect(() => {
-    if (inView) {
+    if (
+      inView &&
+      allGearData.allGearItems.gearItems.length <
+        allGearData.allGearItems.totalDocs
+    ) {
       setFetchingMore(true)
       fetchMoreGear({
         variables: {
           offset: allGearData.allGearItems.gearItems.length,
         },
       })
-    } else {
-      //ToDo: use tips on https://trevorblades.com/lab/infinite-scroll-ac3
-      //as well as add pagination data to query by nesting allGearItems in docs
-      setFetchingMore(false)
     }
   }, [inView])
-  allGearData && console.log(allGearData.allGearItems)
+
   return (
     <div className="flex h-full min-h-screen">
       <div className="mb-10 w-full pt-0 text-center md:mx-0 md:pt-0">
@@ -106,7 +107,9 @@ const GearBrowser = ({ list }) => {
                   </div>
                 )
               })}
+              {fetchingMore && <GearListSkeleton length={4} />}
             </div>
+
             <div ref={ref}></div>
           </div>
         )}

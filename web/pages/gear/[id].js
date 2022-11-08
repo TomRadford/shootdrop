@@ -85,7 +85,6 @@ export const getServerSideProps = async ({ params }) => {
       },
       fetchPolicy: "no-cache",
     })
-    console.log(data)
     return {
       props: {
         gearItem: data.allGearItems.gearItems[0],
