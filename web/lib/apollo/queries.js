@@ -202,7 +202,9 @@ export const ALL_GEAR_ITEMS = gql`
       offset: $offset
       limit: $limit
     ) {
-      ...GearItemDetails
+      gearItems {
+        ...GearItemDetails
+      }
     }
   }
   ${GEAR_ITEM_DETAILS}

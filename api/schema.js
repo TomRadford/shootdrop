@@ -99,6 +99,15 @@ const typeDefs = gql`
     name: String!
   }
 
+  type GearItemResults {
+    gearItems: [GearItem]
+    totalDocs: Int
+    totalPages: Int
+    page: Int
+    prevPage: Int
+    nextPage: Int
+  }
+
   type Query {
     me: User
     allDrops(drop: String): [Drop!]
@@ -111,7 +120,7 @@ const typeDefs = gql`
       tags: [String]
       limit: Int
       offset: Int
-    ): [GearItem]
+    ): GearItemResults
     gearCount: Int!
     getProfileImageUpload: String!
     getGearImageUpload(gearItem: String!): String!
