@@ -84,15 +84,22 @@ const cache = new InMemoryCache({
       fields: {
         // To merge fetchMore queries in cache:
         allGearItems: {
-          keyArgs: ["id"],
-          // Prevent concatenation of existing entries
-          merge(existing = [], incoming, { args: { offset = 0 } }) {
-            //slide used to immutable existing
-            const merged = existing ? existing.slice(0) : []
-            for (let i = 0; i < incoming.length; ++i) {
-              merged[offset + i] = incoming[i]
+          keyArgs: ["id"], //ToDo: add keys based on filters
+          // Prevents concatenation of existing entries in gearItems
+          // and rather concats new values to existing while returning
+          //new total docs
+          merge(
+            existing = { gearItems: [], totalDocs: null },
+            incoming,
+            { args: { offset = 0 } }
+          ) {
+            const mergedGearItems = existing.gearItems
+              ? existing.gearItems.slice(0) //slice used to immutable existing
+              : []
+            for (let i = 0; i < incoming.gearItems.length; ++i) {
+              mergedGearItems[offset + i] = incoming.gearItems[i]
             }
-            return merged
+            return { totalDocs: incoming.totalDocs, gearItems: mergedGearItems }
           },
         },
       },

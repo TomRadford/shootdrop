@@ -24,12 +24,18 @@ const GearEditor = ({ children, gearItem }) => {
         { query: ALL_GEAR_ITEMS, variables: { id: gearItem.id } },
         ({ allGearItems }) => {
           return {
-            allGearItems: [
-              {
-                ...allGearItems[0],
-                images: [...allGearItems[0].images, response.data.addGearImage],
-              },
-            ],
+            allGearItems: {
+              gearItems: [
+                {
+                  ...allGearItems.gearItems[0],
+                  images: [
+                    ...allGearItems.gearItems[0].images,
+                    response.data.addGearImage,
+                  ],
+                },
+              ],
+              totalDocs: null,
+            },
           }
         }
       )

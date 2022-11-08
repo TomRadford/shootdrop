@@ -38,7 +38,7 @@ const GearItemPage = ({ gearItem }) => {
       <Head>
         <title>
           {gearItemResult.data
-            ? `${gearItemResult.data.allGearItems[0].manufacturer} ${gearItemResult.data.allGearItems[0].model} | ShootDrop`
+            ? `${gearItemResult.data.allGearItems.gearItems[0].manufacturer} ${gearItemResult.data.allGearItems.gearItems[0].model} | ShootDrop`
             : `${gearItem.manufacturer} ${gearItem.model} | ShootDrop`}
         </title>
       </Head>
@@ -51,7 +51,8 @@ const GearItemPage = ({ gearItem }) => {
               <ClientOnly>
                 <GearEditor
                   gearItem={
-                    gearItemResult.data && gearItemResult.data.allGearItems[0]
+                    gearItemResult.data &&
+                    gearItemResult.data.allGearItems.gearItems[0]
                   }
                 ></GearEditor>
               </ClientOnly>
@@ -66,8 +67,11 @@ const GearItemPage = ({ gearItem }) => {
 const GEAR_ITEM_MANU_MODEL = gql`
   query allGearItems($id: String!) {
     allGearItems(id: $id) {
-      manufacturer
-      model
+      totalDocs
+      gearItems {
+        manufacturer
+        model
+      }
     }
   }
 `
@@ -81,9 +85,10 @@ export const getServerSideProps = async ({ params }) => {
       },
       fetchPolicy: "no-cache",
     })
+    console.log(data)
     return {
       props: {
-        gearItem: data.allGearItems[0],
+        gearItem: data.allGearItems.gearItems[0],
       },
     }
   } catch {

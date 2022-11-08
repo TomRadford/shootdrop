@@ -625,10 +625,12 @@ const resolvers = {
 
     allGearItems: async (root, args, context) => {
       if (args.id) {
+        //skip pagination if single item
+        //pagination values will return null
         const gearItem = await GearItem.findById(args.id)
           .populate("tags")
           .populate("images")
-        return [gearItem]
+        return { gearItems: [gearItem] }
       }
       try {
         const searchTerms = {}

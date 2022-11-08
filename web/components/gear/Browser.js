@@ -42,7 +42,7 @@ const GearBrowser = ({ list }) => {
       setFetchingMore(true)
       fetchMoreGear({
         variables: {
-          offset: allGearData.allGearItems.length,
+          offset: allGearData.allGearItems.gearItems.length,
         },
       })
     } else {
@@ -51,7 +51,7 @@ const GearBrowser = ({ list }) => {
       setFetchingMore(false)
     }
   }, [inView])
-
+  allGearData && console.log(allGearData.allGearItems)
   return (
     <div className="flex h-full min-h-screen">
       <div className="mb-10 w-full pt-0 text-center md:mx-0 md:pt-0">
@@ -67,7 +67,7 @@ const GearBrowser = ({ list }) => {
         ) : (
           <div className="mx-2 ">
             <div className="mx-auto flex max-w-7xl flex-wrap justify-center gap-4">
-              {allGearData.allGearItems.map((gearItem) => {
+              {allGearData.allGearItems.gearItems.map((gearItem) => {
                 return (
                   <div
                     className="overflow-hidden rounded-xl shadow-lg"

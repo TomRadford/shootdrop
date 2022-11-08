@@ -12,14 +12,17 @@ const GearImage = ({ gearImage, alt, gearItemId }) => {
           { query: ALL_GEAR_ITEMS, variables: { id: gearItemId } },
           ({ allGearItems }) => {
             return {
-              allGearItems: [
-                {
-                  ...allGearItems[0],
-                  images: allGearItems[0].images.filter(
-                    (image) => image.id !== response.data.removeGearImage
-                  ),
-                },
-              ],
+              allGearItems: {
+                gearItems: [
+                  {
+                    ...allGearItems.gearItems[0],
+                    images: allGearItems.gearItems[0].images.filter(
+                      (image) => image.id !== response.data.removeGearImage
+                    ),
+                  },
+                ],
+                totalDocs: null,
+              },
             }
           }
         )

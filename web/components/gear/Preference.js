@@ -99,15 +99,18 @@ const GearPreference = ({ gearPref, gearItem }) => {
         { query: ALL_GEAR_ITEMS, variables: { id: gearItem.id } },
         ({ allGearItems }) => {
           return {
-            allGearItems: [
-              {
-                ...allGearItems[0],
-                allPrefs: [
-                  ...allGearItems[0].allPrefs,
-                  response.data.addGearPref,
-                ],
-              },
-            ],
+            allGearItems: {
+              gearItems: [
+                {
+                  ...allGearItems.gearItems[0],
+                  allPrefs: [
+                    ...allGearItems.gearItems[0].allPrefs,
+                    response.data.addGearPref,
+                  ],
+                },
+              ],
+              totalDocs: null,
+            },
           }
         }
       )
@@ -122,14 +125,17 @@ const GearPreference = ({ gearPref, gearItem }) => {
         { query: ALL_GEAR_ITEMS, variables: { id: gearItem.id } },
         ({ allGearItems }) => {
           return {
-            allGearItems: [
-              {
-                ...allGearItems[0],
-                allPrefs: allGearItems[0].allPrefs.filter(
-                  (pref) => pref.id !== response.data.removeGearPref
-                ),
-              },
-            ],
+            allGearItems: {
+              gearItems: [
+                {
+                  ...allGearItems.gearItems[0],
+                  allPrefs: allGearItems.gearItems[0].allPrefs.filter(
+                    (pref) => pref.id !== response.data.removeGearPref
+                  ),
+                },
+              ],
+              totalDocs: null,
+            },
           }
         }
       )

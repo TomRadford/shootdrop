@@ -12,7 +12,7 @@ const schema = new mongoose.Schema({
     required: true,
   },
   description: String,
-  images: [{ type: mongoose.Schema.Types.ObjectId, ref: "GearImage" }], //TBC: might use string
+  images: [{ type: mongoose.Schema.Types.ObjectId, ref: "GearImage" }],
   productURL: String,
   tags: [
     {

@@ -183,6 +183,10 @@ const GEAR_ITEM_DETAILS = gql`
   }
 `
 
+//ToDo: adding additional feilds
+//along totalDocs & gearItems will
+//break client cache, find a
+//more streamlined approach
 export const ALL_GEAR_ITEMS = gql`
   query allGearItems(
     $id: String
@@ -202,6 +206,7 @@ export const ALL_GEAR_ITEMS = gql`
       offset: $offset
       limit: $limit
     ) {
+      totalDocs
       gearItems {
         ...GearItemDetails
       }
