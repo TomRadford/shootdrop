@@ -4,6 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { useInView } from "react-intersection-observer"
 import { useEffect, useState } from "react"
+import { UPDATE_TIMEOUT } from "../../lib/config"
 
 const whitePixel =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII="
@@ -19,33 +20,27 @@ const GearListSkeleton = ({ length = 20 }) => (
   </>
 )
 
-const GearFilter = ({ manufacturer, setManufacturer, refetch }) => {
-
-  // const [loadNewGearItems, gearResults] = useLazyQuery(ALL_GEAR_ITEMS, {
-  //   fetchPolicy: 'network-only', variables: {
-  //     manufacturer
-  //   }
-  // })
-
-  useEffect(() => {
-    if (manufacturer.length > 0) {
-      refetch({ manufacturer })
-    }
-  }, [manufacturer])
-
-  return (
-    <div className="flex flex-col">
-      <input
-        className="bg-transparent"
-        value={manufacturer} onChange={({ target }) => setManufacturer(target.value)} />
-      <input />
-    </div>
-  )
+const useGearFilters = () => {
+  const [filters, _updateFilter] = useState({
+    category: undefined,
+    manufacturer: undefined,
+    model: undefined,
+    tags: undefined,
+  })
+  const updateFilter = (filterType, value) => {
+    _updateFilter({
+      [filterType]: value,
+    })
+  }
+  return {
+    models: { filters },
+    operations: { updateFilter },
+  }
 }
 
 //GearBrowser to be used on /gear and /list/[id]/add routes
 const GearBrowser = ({ list }) => {
-  const [manufacturer, setManufacturer] = useState('')
+  const { models, operations } = useGearFilters()
   const [fetchingMore, setFetchingMore] = useState(false)
   const {
     data: allGearData,
@@ -57,10 +52,14 @@ const GearBrowser = ({ list }) => {
     //ToDo: update cache on local/subscription-based gearItem add
     {
       fetchPolicy: "network-only",
-      onCompleted: () => setFetchingMore(false)
+      onCompleted: () => setFetchingMore(false),
     }
   )
-  const { ref: inViewRef, inView, entry } = useInView({
+  const {
+    ref: inViewRef,
+    inView,
+    entry,
+  } = useInView({
     threshold: 0,
   })
 
@@ -68,7 +67,7 @@ const GearBrowser = ({ list }) => {
     if (
       inView &&
       allGearData.allGearItems.gearItems.length <
-      allGearData.allGearItems.totalDocs
+        allGearData.allGearItems.totalDocs
     ) {
       setFetchingMore(true)
       fetchMoreGear({
@@ -79,11 +78,29 @@ const GearBrowser = ({ list }) => {
     }
   }, [inView])
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      console.log(models)
+      //here!
+      refetch(models.filters)
+    }, 2000)
+    return () => clearTimeout(timeout)
+  }, [models])
+
   return (
     <div className="flex h-full min-h-screen">
       <div className="mb-10 w-full pt-0 text-center md:mx-0 md:pt-0">
-        <div className="flex flex-wrap w-full bg-gradient-to-b from-[#121212] to-transparent pb-8 pt-16 md:pt-8">
-          <GearFilter manufacturer={manufacturer} setManufacturer={setManufacturer} refetch={refetch} />
+        <div className="flex w-full flex-wrap bg-gradient-to-b from-[#121212] to-transparent pb-8 pt-16 md:pt-8">
+          <form className="flex flex-col">
+            <input
+              type="search"
+              className="bg-transparent"
+              onChange={({ target }) =>
+                operations.updateFilter("manufacturer", target.value)
+              }
+            />
+            <input />
+          </form>
         </div>
         {allGearLoading ? (
           <div className="mx-2 ">
