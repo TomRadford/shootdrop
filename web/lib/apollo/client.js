@@ -57,25 +57,25 @@ const cleanupTypeName = new ApolloLink((operation, forward) => {
 const wsLink =
   typeof window !== "undefined"
     ? new GraphQLWsLink(
-        createClient({
-          url: "ws://localhost:4000/subscriptions",
-        })
-      )
+      createClient({
+        url: "ws://localhost:4000/subscriptions",
+      })
+    )
     : null
 
 const splitLink =
   typeof window !== "undefined" && wsLink !== null
     ? split(
-        ({ query }) => {
-          const definition = getMainDefinition(query)
-          return (
-            definition.kind === "OperationDefinition" &&
-            definition.operation === "subscription"
-          )
-        },
-        wsLink,
-        ApolloLink.from([cleanupTypeName, handleError, authLink, httpLink])
-      )
+      ({ query }) => {
+        const definition = getMainDefinition(query)
+        return (
+          definition.kind === "OperationDefinition" &&
+          definition.operation === "subscription"
+        )
+      },
+      wsLink,
+      ApolloLink.from([cleanupTypeName, handleError, authLink, httpLink])
+    )
     : httpLink
 
 const cache = new InMemoryCache({
@@ -87,7 +87,7 @@ const cache = new InMemoryCache({
           keyArgs: ["id"], //ToDo: add keys based on filters
           // Prevents concatenation of existing entries in gearItems
           // and rather concats new values to existing while returning
-          //new total docs
+          // the new total docs for incoming
           merge(
             existing = { gearItems: [], totalDocs: null },
             incoming,

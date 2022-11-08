@@ -1,4 +1,4 @@
-import { useQuery } from "@apollo/client"
+import { useQuery, useLazyQuery } from "@apollo/client"
 import { ALL_GEAR_ITEMS } from "../../lib/apollo/queries"
 import Image from "next/image"
 import Link from "next/link"
@@ -19,8 +19,33 @@ const GearListSkeleton = ({ length = 20 }) => (
   </>
 )
 
+const GearFilter = ({ manufacturer, setManufacturer }) => {
+
+  // const [loadNewGearItems, gearResults] = useLazyQuery(ALL_GEAR_ITEMS, {
+  //   fetchPolicy: 'network-only', variables: {
+  //     manufacturer
+  //   }
+  // })
+
+  // useEffect(() => {
+  //   if (manufacturer.length > 0) {
+  //     loadNewGearItems()
+  //   }
+  // }, [manufacturer])
+
+  return (
+    <div className="flex flex-col">
+      <input
+        className="bg-transparent"
+        value={manufacturer} onChange={({ target }) => setManufacturer(target.value)} />
+      <input />
+    </div>
+  )
+}
+
 //GearBrowser to be used on /gear and /list/[id]/add routes
 const GearBrowser = ({ list }) => {
+  const [manufacturer, setManufacturer] = useState('')
   const [fetchingMore, setFetchingMore] = useState(false)
   const {
     data: allGearData,
@@ -31,7 +56,10 @@ const GearBrowser = ({ list }) => {
     //ToDo: update cache on local/subscription-based gearItem add
     {
       fetchPolicy: "network-only",
-      onCompleted: () => setFetchingMore(false),
+      variables: {
+        manufacturer
+      },
+      onCompleted: () => setFetchingMore(false)
     }
   )
   const { ref: inViewRef, inView, entry } = useInView({
@@ -56,8 +84,8 @@ const GearBrowser = ({ list }) => {
   return (
     <div className="flex h-full min-h-screen">
       <div className="mb-10 w-full pt-0 text-center md:mx-0 md:pt-0">
-        <div className="w-full bg-gradient-to-b from-[#121212] to-transparent pb-8 pt-16 md:pt-8">
-          <h1 className="text-lg font-semibold">filters will go here</h1>
+        <div className="flex flex-wrap w-full bg-gradient-to-b from-[#121212] to-transparent pb-8 pt-16 md:pt-8">
+          <GearFilter setManufacturer={setManufacturer} />
         </div>
         {allGearLoading ? (
           <div className="mx-2 ">
