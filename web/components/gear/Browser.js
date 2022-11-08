@@ -34,7 +34,7 @@ const GearBrowser = ({ list }) => {
       onCompleted: () => setFetchingMore(false),
     }
   )
-  const { ref, inView, entry } = useInView({
+  const { ref: inViewRef, inView, entry } = useInView({
     threshold: 0,
   })
 
@@ -42,7 +42,7 @@ const GearBrowser = ({ list }) => {
     if (
       inView &&
       allGearData.allGearItems.gearItems.length <
-        allGearData.allGearItems.totalDocs
+      allGearData.allGearItems.totalDocs
     ) {
       setFetchingMore(true)
       fetchMoreGear({
@@ -112,8 +112,8 @@ const GearBrowser = ({ list }) => {
               })}
               {fetchingMore && <GearListSkeleton length={4} />}
             </div>
-
-            <div ref={ref}></div>
+            {/* Empty div at end of list to trigger fetchMore */}
+            <div ref={inViewRef}></div>
           </div>
         )}
       </div>
