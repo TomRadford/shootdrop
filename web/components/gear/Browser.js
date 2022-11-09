@@ -4,8 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { useInView } from "react-intersection-observer"
 import { useEffect, useState } from "react"
-import { UPDATE_TIMEOUT } from "../../lib/config"
-
+import GearFilter from "./Filter"
 const whitePixel =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII="
 
@@ -20,28 +19,29 @@ const GearListSkeleton = ({ length = 20 }) => (
   </>
 )
 
-const useGearFilters = () => {
-  const [filters, _updateFilter] = useState({
-    category: undefined,
-    manufacturer: undefined,
-    model: undefined,
-    tags: undefined,
-  })
-  const updateFilter = (filterType, value) => {
-    _updateFilter({
-      [filterType]: value,
-    })
-  }
-  return {
-    models: { filters },
-    operations: { updateFilter },
-  }
-}
+// const useGearFilters = () => {
+//   const [filters, _updateFilter] = useState({
+//     category: undefined,
+//     manufacturer: undefined,
+//     model: undefined,
+//     tags: undefined,
+//   })
+//   const updateFilter = (filterType, value) => {
+//     _updateFilter({
+//       [filterType]: value,
+//     })
+//   }
+//   return {
+//     models: { filters },
+//     operations: { updateFilter },
+//   }
+// }
 
 //GearBrowser to be used on /gear and /list/[id]/add routes
+// Debounced query params used for search state
 const GearBrowser = ({ list }) => {
-  const { models, operations } = useGearFilters()
   const [fetchingMore, setFetchingMore] = useState(false)
+  const [refetching, setRefetching] = useState(false)
   const {
     data: allGearData,
     loading: allGearLoading,
@@ -78,31 +78,23 @@ const GearBrowser = ({ list }) => {
     }
   }, [inView])
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      console.log(models)
-      //here!
-      refetch(models.filters)
-    }, 2000)
-    return () => clearTimeout(timeout)
-  }, [models])
+  // useEffect(() => {
+  //   setRefetching(true)
+  //   const timeout = setTimeout(() => {
+  //     console.log(models)
+
+  //     refetch(models.filters)
+  //     setRefetching(false)
+  //   }, 2000)
+  //   return () => clearTimeout(timeout)
+  // }, [models])
 
   return (
     <div className="flex h-full min-h-screen">
       <div className="mb-10 w-full pt-0 text-center md:mx-0 md:pt-0">
-        <div className="flex w-full flex-wrap bg-gradient-to-b from-[#121212] to-transparent pb-8 pt-16 md:pt-8">
-          <form className="flex flex-col">
-            <input
-              type="search"
-              className="bg-transparent"
-              onChange={({ target }) =>
-                operations.updateFilter("manufacturer", target.value)
-              }
-            />
-            <input />
-          </form>
-        </div>
-        {allGearLoading ? (
+        <GearFilter setRefetching={setRefetching} />
+
+        {allGearLoading || refetching ? (
           <div className="mx-2 ">
             <div className="mx-auto flex max-w-7xl flex-wrap justify-center gap-4">
               <GearListSkeleton />

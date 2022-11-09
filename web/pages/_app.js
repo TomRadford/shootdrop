@@ -1,15 +1,18 @@
 import { ApolloProvider } from "@apollo/client"
 import client from "../lib/apollo/client"
 import "../styles/globals.css"
+import { NextAdapter } from "next-query-params"
+import { QueryParamProvider } from "use-query-params"
 import NextProgress from "next-progress"
 
 const App = ({ Component, pageProps }) => {
   return (
     <ApolloProvider client={client}>
-      <NextProgress
-        // delay={0} setting higher than 0 triggers endless loader indication on Router.push
-        color="#364667"
-        customGlobalCss={`
+      <QueryParamProvider adapter={NextAdapter}>
+        <NextProgress
+          // delay={0} setting higher than 0 triggers endless loader indication on Router.push
+          color="#364667"
+          customGlobalCss={`
 				#nprogress {
 					pointer-events: none;
 				}
@@ -42,11 +45,12 @@ const App = ({ Component, pageProps }) => {
 				}
 		
 				`}
-        options={{
-          minimum: 0.3,
-        }}
-      />
-      <Component {...pageProps} />
+          options={{
+            minimum: 0.3,
+          }}
+        />
+        <Component {...pageProps} />
+      </QueryParamProvider>
     </ApolloProvider>
   )
 }
