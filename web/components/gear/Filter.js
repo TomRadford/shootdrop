@@ -1,6 +1,3 @@
-import { UPDATE_TIMEOUT } from "../../lib/config"
-import { useLazyQuery } from "@apollo/client"
-import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import {
   useQueryParams,
@@ -8,8 +5,8 @@ import {
   ArrayParam,
   withDefault,
 } from "use-query-params"
-import { ALL_GEAR_ITEMS } from "../../lib/apollo/queries"
 
+// Debounced query params used for search state
 const GearFilter = ({ setRefetching, refetch }) => {
   const [query, setQuery] = useQueryParams({
     manufacturer: withDefault(StringParam, ""),
@@ -19,7 +16,7 @@ const GearFilter = ({ setRefetching, refetch }) => {
   const [debouncedManufacturer, setDebouncedManufacturer] = useState("")
   const [debouncedModel, setDebouncedModel] = useState("")
 
-  //set debouce values on history navigate
+  //set debouce values on history navigate / page load
   useEffect(() => {
     if (query.manufacturer !== undefined) {
       setDebouncedManufacturer(query.manufacturer)
@@ -27,11 +24,8 @@ const GearFilter = ({ setRefetching, refetch }) => {
     if (query.model !== undefined) {
       setDebouncedModel(query.model)
     }
-    refetch(query)
+    // refetch(query) happening in browser
   }, [query])
-
-  console.log("debounce=" + debouncedManufacturer)
-  console.log("query=" + query.manufacturer)
 
   useEffect(() => {
     if (
@@ -41,10 +35,10 @@ const GearFilter = ({ setRefetching, refetch }) => {
       console.log("updating query params")
       setRefetching(true)
       let newParams = {}
-      if (debouncedManufacturer.length > 1) {
+      if (debouncedManufacturer.length > 0) {
         newParams.manufacturer = debouncedManufacturer
       }
-      if (debouncedModel.length > 1) {
+      if (debouncedModel.length > 0) {
         newParams.model = debouncedModel
       }
       console.log(newParams)
@@ -55,21 +49,6 @@ const GearFilter = ({ setRefetching, refetch }) => {
       return () => clearTimeout(timeout)
     }
   }, [debouncedModel, debouncedManufacturer])
-
-  // useEffect(() => {
-  //   if (model.length === 0) {
-  //     removeParam("model")
-  //   } else {
-  //     if (model !== router.query.model) {
-  //       const timeout = setTimeout(() => {
-  //         router.push({
-  //           query: { ...router.query, model },
-  //         })
-  //       }, UPDATE_TIMEOUT)
-  //       return () => clearTimeout(timeout)
-  //     }
-  //   }
-  // }, [model])
 
   return (
     <div className="flex w-full flex-wrap justify-center bg-gradient-to-b from-[#121212] to-transparent pb-8 pt-16 md:pt-8">

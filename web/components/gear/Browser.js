@@ -4,6 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { useInView } from "react-intersection-observer"
 import { useEffect, useState } from "react"
+import { useRouter } from "next/router"
 import GearFilter from "./Filter"
 const whitePixel =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII="
@@ -18,28 +19,10 @@ const GearListSkeleton = ({ length = 20 }) => (
     ))}
   </>
 )
-
-// const useGearFilters = () => {
-//   const [filters, _updateFilter] = useState({
-//     category: undefined,
-//     manufacturer: undefined,
-//     model: undefined,
-//     tags: undefined,
-//   })
-//   const updateFilter = (filterType, value) => {
-//     _updateFilter({
-//       [filterType]: value,
-//     })
-//   }
-//   return {
-//     models: { filters },
-//     operations: { updateFilter },
-//   }
-// }
-
 //GearBrowser to be used on /gear and /list/[id]/add routes
-// Debounced query params used for search state
+
 const GearBrowser = ({ list }) => {
+  const router = useRouter()
   const [fetchingMore, setFetchingMore] = useState(false)
   const [refetching, setRefetching] = useState(false)
   const {
@@ -51,6 +34,7 @@ const GearBrowser = ({ list }) => {
     ALL_GEAR_ITEMS,
     //ToDo: update cache on local/subscription-based gearItem add
     {
+      variables: router.query, //use queryParams to filter
       fetchPolicy: "network-only",
       onCompleted: () => {
         setFetchingMore(false)
@@ -65,6 +49,11 @@ const GearBrowser = ({ list }) => {
   } = useInView({
     threshold: 0,
   })
+
+  useEffect(() => {
+    //refetch wi
+    refetch()
+  }, [router.query])
 
   useEffect(() => {
     if (
