@@ -1,57 +1,60 @@
 import { UPDATE_TIMEOUT } from "../../lib/config"
 import { useLazyQuery } from "@apollo/client"
 import { useRouter } from "next/router"
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
+import {
+  useQueryParams,
+  StringParam,
+  ArrayParam,
+  withDefault,
+} from "use-query-params"
+import { ALL_GEAR_ITEMS } from "../../lib/apollo/queries"
 
-const GearFilter = ({ setRefetching }) => {
-  const router = useRouter()
+const GearFilter = ({ setRefetching, refetch }) => {
+  const [query, setQuery] = useQueryParams({
+    manufacturer: withDefault(StringParam, ""),
+    model: withDefault(StringParam, ""),
+  })
+  // const [refetchGearData, ] = useLazyQuery(ALL_GEAR_ITEMS, { variables: query })
+  const [debouncedManufacturer, setDebouncedManufacturer] = useState("")
+  const [debouncedModel, setDebouncedModel] = useState("")
 
-  const [manufacturer, setManufacturer] = useState("")
-  const [model, setModel] = useState("")
+  //set debouce values on history navigate
+  useEffect(() => {
+    if (query.manufacturer !== undefined) {
+      setDebouncedManufacturer(query.manufacturer)
+    }
+    if (query.model !== undefined) {
+      setDebouncedModel(query.model)
+    }
+    refetch(query)
+  }, [query])
 
-  const removeParam = (param) => {
-    delete router.query[param]
-    router.push({
-      query: {
-        ...router.query,
-      },
-    })
-  }
+  console.log("debounce=" + debouncedManufacturer)
+  console.log("query=" + query.manufacturer)
 
-  // useEffect(() => {
-  //   if (router.query.manufacturer !== undefined && manufacturer === "") {
-  //   }
-  // }, [router.query])
-
-  // console.log(manufacturer)
-  // console.log(model)
-  console.log(router.query)
-
-  //working:
-  // useEffect(() => {
-  //   if (
-  //     manufacturer !== router.query.manufacturer ||
-  //     model !== router.query.model
-  //   ) {
-  //     console.log("updating query params")
-  //     setRefetching(true)
-  //     let newParams = {}
-  //     manufacturer.length > 0
-  //       ? (newParams.manufacturer = manufacturer)
-  //       : removeParam("manufacturer")
-  //     model.length > 0 ? (newParams.model = model) : removeParam("model")
-  //     const timeout = setTimeout(() => {
-  //       router.push({
-  //         query: {
-  //           ...router.query,
-  //           ...newParams,
-  //         },
-  //       })
-  //       setRefetching(false)
-  //     }, 1000)
-  //     return () => clearTimeout(timeout)
-  //   }
-  // }, [manufacturer, model])
+  useEffect(() => {
+    if (
+      query.manufacturer !== debouncedManufacturer ||
+      query.model !== debouncedModel
+    ) {
+      console.log("updating query params")
+      setRefetching(true)
+      let newParams = {}
+      if (debouncedManufacturer.length > 1) {
+        newParams.manufacturer = debouncedManufacturer
+      }
+      if (debouncedModel.length > 1) {
+        newParams.model = debouncedModel
+      }
+      console.log(newParams)
+      const timeout = setTimeout(() => {
+        //resets previous values with push over default pushIn
+        setQuery(newParams, "push")
+      }, 1200)
+      return () => clearTimeout(timeout)
+    }
+  }, [debouncedModel, debouncedManufacturer])
 
   // useEffect(() => {
   //   if (model.length === 0) {
@@ -75,15 +78,15 @@ const GearFilter = ({ setRefetching }) => {
           placeholder="Manufacturer"
           type="search"
           className=" bg-gray-800 bg-opacity-40 py-1 px-2"
-          value={manufacturer}
-          onChange={({ target }) => setManufacturer(target.value)}
+          value={debouncedManufacturer}
+          onChange={({ target }) => setDebouncedManufacturer(target.value)}
         />
         <input
           placeholder="Model"
           type="search"
           className=" bg-gray-800 bg-opacity-40 py-1 px-2"
-          value={model}
-          onChange={({ target }) => setModel(target.value)}
+          value={debouncedModel}
+          onChange={({ target }) => setDebouncedModel(target.value)}
         />
       </form>
     </div>

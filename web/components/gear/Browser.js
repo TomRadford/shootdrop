@@ -52,7 +52,10 @@ const GearBrowser = ({ list }) => {
     //ToDo: update cache on local/subscription-based gearItem add
     {
       fetchPolicy: "network-only",
-      onCompleted: () => setFetchingMore(false),
+      onCompleted: () => {
+        setFetchingMore(false)
+        setRefetching(false)
+      },
     }
   )
   const {
@@ -92,7 +95,7 @@ const GearBrowser = ({ list }) => {
   return (
     <div className="flex h-full min-h-screen">
       <div className="mb-10 w-full pt-0 text-center md:mx-0 md:pt-0">
-        <GearFilter setRefetching={setRefetching} />
+        <GearFilter setRefetching={setRefetching} refetch={refetch} />
 
         {allGearLoading || refetching ? (
           <div className="mx-2 ">
