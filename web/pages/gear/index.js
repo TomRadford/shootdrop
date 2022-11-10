@@ -15,4 +15,14 @@ const GearPage = () => {
   )
 }
 
+//Potential feature: prefil query values
+// export const getServerSideProps = (context) => {
+//   const { query } = context
+//   return {
+//     props: {
+//       serverQuery: query,
+//     },
+//   }
+// }
+
 export default GearPage

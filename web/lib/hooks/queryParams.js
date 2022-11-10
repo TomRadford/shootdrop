@@ -8,5 +8,6 @@ export const useGearQueryParams = () =>
   useQueryParams({
     manufacturer: withDefault(StringParam, ""),
     model: withDefault(StringParam, ""),
+    category: StringParam,
     tags: ArrayParam,
   })

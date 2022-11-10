@@ -96,7 +96,7 @@ const TagsModal = ({ setTagsModalOpen, tagsModalOpen, gearItem }) => {
                   <div className="mx-2 mt-2 mb-2">
                     <input
                       className="w-full bg-transparent text-white"
-                      placeholder="Search"
+                      placeholder="Search for more tags"
                       value={searchTerm}
                       onChange={({ target }) => setSearchTerm(target.value)}
                     />
@@ -120,7 +120,7 @@ const TagsModal = ({ setTagsModalOpen, tagsModalOpen, gearItem }) => {
                       </svg>
                     </div>
                   ) : (
-                    //Note: API limits to 10 list items
+                    //Note: API limits to 20 list items per query
                     tagsResults.data && (
                       <div>
                         <div className="mb-2 flex justify-center">
@@ -227,7 +227,8 @@ const TagsModal = ({ setTagsModalOpen, tagsModalOpen, gearItem }) => {
                             </div>
                           </div>
                         ) : (
-                          searchTerm && (
+                          searchTerm &&
+                          tagsResults.data.allTags.length === 0 && (
                             <div className="mt-0">
                               <p className="mb-2 text-center text-xs text-gray-500">
                                 No results

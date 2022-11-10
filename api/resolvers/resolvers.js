@@ -650,7 +650,7 @@ const resolvers = {
             ],
           }
         }
-        const tagSearch = await Tag.find(findParams).sort("name").limit(10)
+        const tagSearch = await Tag.find(findParams).sort("name").limit(20)
         return tagSearch
       } catch {
         throw new UserInputError(`Error searching for tag: ${args.tag}`)

@@ -27,12 +27,33 @@ const GearBrowser = ({ list }) => {
   const [fetchingMore, setFetchingMore] = useState(false)
   const [refetching, setRefetching] = useState(false)
   const [tagsModalOpen, setTagsModalOpen] = useState(false)
-  const {
-    data: allGearData,
-    loading: allGearLoading,
-    refetch,
-    fetchMore: fetchMoreGear,
-  } = useQuery(
+  // const {
+  //   data: allGearData,
+  //   loading: allGearLoading,
+  //   refetch,
+  //   fetchMore: fetchMoreGear,
+  // } = useQuery(
+  //   ALL_GEAR_ITEMS,
+  //   //ToDo: update cache on local/subscription-based gearItem add
+  //   {
+  //     variables: query, //use queryParams to filter
+  //     fetchPolicy: "network-only",
+  //     onCompleted: () => {
+  //       setFetchingMore(false)
+  //       setRefetching(false)
+  //     },
+  //   }
+  // )
+
+  const [
+    getGear,
+    {
+      data: allGearData,
+      loading: allGearLoading,
+      refetch,
+      fetchMore: fetchMoreGear,
+    },
+  ] = useLazyQuery(
     ALL_GEAR_ITEMS,
     //ToDo: update cache on local/subscription-based gearItem add
     {
@@ -44,6 +65,7 @@ const GearBrowser = ({ list }) => {
       },
     }
   )
+
   const {
     ref: inViewRef,
     inView,
@@ -54,6 +76,8 @@ const GearBrowser = ({ list }) => {
 
   useEffect(() => {
     //refetch when url query params change from filter
+    //getGear not used to prevent issues mismatched queries
+    //ToDo: relook at this issue
     refetch()
   }, [query])
 
