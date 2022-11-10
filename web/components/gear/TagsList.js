@@ -15,7 +15,7 @@ const GearTags = ({ gearItem, setTagsModalOpen }) => {
     loading: allTagsLoading,
     refetch: refetchTags,
   } = useQuery(ALL_TAGS, {
-    variables: { tags: query.tags },
+    variables: { tags: query.tags ? query.tags : [] },
   })
 
   const [editGearItem, editGearItemResult] = useMutation(EDIT_GEAR_ITEM)

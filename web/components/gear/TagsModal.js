@@ -4,13 +4,15 @@ import { useState, Fragment, useEffect } from "react"
 import useGetMe from "../../lib/hooks/getMe"
 import { Transition, Dialog } from "@headlessui/react"
 import { andFormatter } from "../../lib/text/formatter"
+import { useGearQueryParams } from "../../lib/hooks/queryParams"
 
 const TagsModal = ({ setTagsModalOpen, tagsModalOpen, gearItem }) => {
   const [searchTerm, setSearchTerm] = useState("")
   const [loading, setLoading] = useState(false)
-  const me = useGetMe()
+  const [query, setQuery] = useGearQueryParams()
   const [getTags, tagsResults] = useLazyQuery(ALL_TAGS)
 
+  //ToDo: refactor into normal useQuery with refetch
   useEffect(() => {
     getTags()
   }, [])
@@ -20,7 +22,7 @@ const TagsModal = ({ setTagsModalOpen, tagsModalOpen, gearItem }) => {
       setLoading(true)
       getTags({
         variables: {
-          category: gearItem.category,
+          category: gearItem ? gearItem.category : null, //array of categories or empty for Browser
         },
       })
       setLoading(false)
@@ -30,7 +32,7 @@ const TagsModal = ({ setTagsModalOpen, tagsModalOpen, gearItem }) => {
       const timeout = setTimeout(() => {
         getTags({
           variables: {
-            category: gearItem.category, //array of categories
+            category: gearItem ? gearItem.category : null, //array of categories or empty for Browser
             tag: searchTerm,
           },
         })
@@ -40,7 +42,11 @@ const TagsModal = ({ setTagsModalOpen, tagsModalOpen, gearItem }) => {
     }
   }, [searchTerm])
 
-  const tagIds = gearItem.tags.map((tag) => tag.id)
+  const tagIds = gearItem
+    ? gearItem.tags.map((tag) => tag.id)
+    : query.tags
+    ? query.tags
+    : []
 
   const [editGearItem, editGearItemResult] = useMutation(EDIT_GEAR_ITEM)
   const [addTag, addTagResult] = useMutation(ADD_TAG)
@@ -126,17 +132,22 @@ const TagsModal = ({ setTagsModalOpen, tagsModalOpen, gearItem }) => {
                                     onClick={(e) => {
                                       e.preventDefault()
                                       setTagsModalOpen(false)
-                                      editGearItem({
-                                        variables: {
-                                          id: gearItem.id,
-                                          tags: [
-                                            ...gearItem.tags.map(
-                                              (tag) => tag.name
-                                            ),
-                                            tag.name,
-                                          ],
-                                        },
-                                      })
+                                      gearItem
+                                        ? editGearItem({
+                                            variables: {
+                                              id: gearItem.id,
+                                              //ToDo: relook using name as tag ref on mutation
+                                              tags: [
+                                                ...gearItem.tags.map(
+                                                  (tag) => tag.name
+                                                ),
+                                                tag.name,
+                                              ],
+                                            },
+                                          })
+                                        : setQuery({
+                                            tags: [...tagIds, tag.id],
+                                          })
                                     }}
                                     key={tag.id}
                                     className="flex items-center rounded bg-teal-600 px-2 py-1 text-sm "
@@ -148,8 +159,8 @@ const TagsModal = ({ setTagsModalOpen, tagsModalOpen, gearItem }) => {
                             })}
                           </div>
                         </div>
-                        {/* Add gear if Editing an gear item */}
-                        {searchTerm && gearItem && (
+                        {/* Add tag option appear if Editing an gear item */}
+                        {searchTerm && gearItem ? (
                           <div className="mt-0">
                             <p className="mb-2 text-center text-xs text-gray-500">
                               Add a new tag
@@ -215,6 +226,14 @@ const TagsModal = ({ setTagsModalOpen, tagsModalOpen, gearItem }) => {
                               </div>
                             </div>
                           </div>
+                        ) : (
+                          searchTerm && (
+                            <div className="mt-0">
+                              <p className="mb-2 text-center text-xs text-gray-500">
+                                No results
+                              </p>
+                            </div>
+                          )
                         )}
                       </div>
                     )

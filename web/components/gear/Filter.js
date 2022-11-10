@@ -3,7 +3,7 @@ import GearTags from "./TagsList"
 import { useGearQueryParams } from "../../lib/hooks/queryParams"
 
 // Debounced query params used for search state
-const GearFilter = ({ setRefetching, refetch }) => {
+const GearFilter = ({ setRefetching, refetch, setTagsModalOpen }) => {
   const [query, setQuery] = useGearQueryParams()
   // const [refetchGearData, ] = useLazyQuery(ALL_GEAR_ITEMS, { variables: query })
   const [debouncedManufacturer, setDebouncedManufacturer] = useState("")
@@ -66,7 +66,7 @@ const GearFilter = ({ setRefetching, refetch }) => {
       </div>
       <div className="w-64 lg:w-96">
         <div className="rounded-3xl bg-gray-800 bg-opacity-40 py-4 px-4">
-          <GearTags />
+          <GearTags setTagsModalOpen={setTagsModalOpen} />
         </div>
       </div>
     </form>

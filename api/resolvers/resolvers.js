@@ -144,6 +144,7 @@ const resolvers = {
           tags,
           prefs,
         } = args
+        //ToDo: relook using name as tag ref on mutation
         const tagObjects = tags ? await handleTags(tags, category) : undefined
         if (prefs) {
           await handleEditPrefs(prefs, mongoose.Types.ObjectId(args.id))
@@ -598,7 +599,8 @@ const resolvers = {
     allTags: async (root, args, context) => {
       try {
         // if 'tags' array param, return all tags
-        // in that array
+        // in that array in order of request array
+        // using mongodb aggregation pipeline
         if (args.tags) {
           const tags = args.tags.map((tag) => mongoose.Types.ObjectId(tag))
           const res = await Tag.aggregate([
@@ -679,7 +681,7 @@ const resolvers = {
           searchTerms.category = { $in: [args.category] }
         }
         if (args.tags) {
-          searchTerms.tags = { $in: args.tags }
+          searchTerms.tags = { $all: args.tags }
         }
         let options = {
           populate: ["tags", "images"],

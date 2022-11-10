@@ -4,8 +4,9 @@ import Image from "next/image"
 import Link from "next/link"
 import { useInView } from "react-intersection-observer"
 import { useEffect, useState } from "react"
-import { useRouter } from "next/router"
+import TagsModal from "./TagsModal"
 import GearFilter from "./Filter"
+import { useGearQueryParams } from "../../lib/hooks/queryParams"
 const whitePixel =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII="
 
@@ -22,9 +23,10 @@ const GearListSkeleton = ({ length = 20 }) => (
 //GearBrowser to be used on /gear and /list/[id]/add routes
 
 const GearBrowser = ({ list }) => {
-  const router = useRouter()
+  const [query, setQuery] = useGearQueryParams()
   const [fetchingMore, setFetchingMore] = useState(false)
   const [refetching, setRefetching] = useState(false)
+  const [tagsModalOpen, setTagsModalOpen] = useState(false)
   const {
     data: allGearData,
     loading: allGearLoading,
@@ -34,7 +36,7 @@ const GearBrowser = ({ list }) => {
     ALL_GEAR_ITEMS,
     //ToDo: update cache on local/subscription-based gearItem add
     {
-      variables: router.query, //use queryParams to filter
+      variables: query, //use queryParams to filter
       fetchPolicy: "network-only",
       onCompleted: () => {
         setFetchingMore(false)
@@ -53,7 +55,7 @@ const GearBrowser = ({ list }) => {
   useEffect(() => {
     //refetch when url query params change from filter
     refetch()
-  }, [router.query])
+  }, [query])
 
   useEffect(() => {
     if (
@@ -73,7 +75,15 @@ const GearBrowser = ({ list }) => {
   return (
     <div className="flex h-full min-h-screen">
       <div className="mb-10 w-full pt-0 text-center md:mx-0 md:pt-0">
-        <GearFilter setRefetching={setRefetching} refetch={refetch} />
+        <TagsModal
+          tagsModalOpen={tagsModalOpen}
+          setTagsModalOpen={setTagsModalOpen}
+        />
+        <GearFilter
+          setRefetching={setRefetching}
+          refetch={refetch}
+          setTagsModalOpen={setTagsModalOpen}
+        />
 
         {allGearLoading || refetching ? (
           <div className="mx-2 ">
