@@ -88,10 +88,14 @@ const GearEditor = ({ children, gearItem }) => {
                   <GearDescription gearItem={gearItem} />
                 </div>
                 <div>
-                  <GearTags
-                    gearItem={gearItem}
-                    setTagsModalOpen={setTagsModalOpen}
-                  />
+                  <div className="mx-auto w-80 sm:w-96">
+                    <Card>
+                      <GearTags
+                        gearItem={gearItem}
+                        setTagsModalOpen={setTagsModalOpen}
+                      />
+                    </Card>
+                  </div>
                 </div>
               </div>
               <div className="mx-6 2xl:mx-48">

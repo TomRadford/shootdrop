@@ -1,5 +1,5 @@
 const { UserInputError, AuthenticationError } = require("apollo-server-core")
-const { GraphQLScalarType, Kind } = require("graphql")
+const { GraphQLScalarType, Kind, KnownArgumentNamesRule } = require("graphql")
 const mongoose = require("mongoose")
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
@@ -597,6 +597,38 @@ const resolvers = {
 
     allTags: async (root, args, context) => {
       try {
+        // if 'tags' array param, return all tags
+        // in that array
+        if (args.tags) {
+          const tags = args.tags.map((tag) => mongoose.Types.ObjectId(tag))
+          const res = await Tag.aggregate([
+            {
+              $match: {
+                _id: {
+                  $in: tags,
+                },
+              },
+            },
+            {
+              $addFields: {
+                __order: {
+                  $indexOfArray: [tags, "$_id"],
+                },
+              },
+            },
+            { $sort: { __order: 1 } },
+            {
+              $project: {
+                _id: 0,
+                id: "$_id",
+                name: 1,
+                category: 1,
+                __order: 1,
+              },
+            },
+          ])
+          return res
+        }
         let findParams = {}
         if (args.tag) {
           findParams = {

@@ -5,7 +5,10 @@ const schema = new mongoose.Schema({
     type: String,
     unique: true,
   },
-  category: [String],
+  category: {
+    type: [String],
+    default: [],
+  },
 })
 
 module.exports = mongoose.model("Tag", schema)

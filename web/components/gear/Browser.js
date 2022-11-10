@@ -84,7 +84,7 @@ const GearBrowser = ({ list }) => {
         ) : (
           <div className="mx-2 ">
             <div className="mx-auto flex max-w-7xl flex-wrap justify-center gap-4">
-              {allGearData.allGearItems.gearItems.length > 0 ? (
+              {allGearData && allGearData.allGearItems.gearItems.length > 0 ? (
                 allGearData.allGearItems.gearItems.map((gearItem) => {
                   return (
                     <div
