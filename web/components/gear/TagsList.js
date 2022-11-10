@@ -1,13 +1,22 @@
 import useGetMe from "../../lib/hooks/getMe"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Card from "../Card"
-import { useMutation } from "@apollo/client"
-import { EDIT_GEAR_ITEM } from "../../lib/apollo/queries"
+import { useMutation, useLazyQuery } from "@apollo/client"
+import { EDIT_GEAR_ITEM, ALL_TAGS } from "../../lib/apollo/queries"
 
-const GearTags = ({ gearItem, setTagsModalOpen }) => {
+// Takes either GearItem (GearEditor) or setQuery & query (GearBrowser)
+const GearTags = ({ gearItem, setTagsModalOpen, setQuery, query }) => {
   const me = useGetMe()
-  const { tags } = gearItem
+  const [getTags, tagsResults] = useLazyQuery(ALL_TAGS)
   const [editGearItem, editGearItemResult] = useMutation(EDIT_GEAR_ITEM)
+  let tags = []
+  if (gearItem) {
+    tags = gearItem.tags
+  } else {
+    //will get all tags,
+    //ToDo: refactor to get just tags in query
+  }
+
   return (
     <div className="mx-auto w-80 sm:w-96">
       <Card>
@@ -24,14 +33,21 @@ const GearTags = ({ gearItem, setTagsModalOpen }) => {
                 <button
                   onClick={(e) => {
                     e.preventDefault()
-                    editGearItem({
-                      variables: {
-                        id: gearItem.id,
-                        tags: gearItem.tags
-                          .filter((itemTag) => itemTag.id !== tag.id)
-                          .map((tag) => tag.name),
-                      },
-                    })
+                    gearItem
+                      ? editGearItem({
+                          variables: {
+                            id: gearItem.id,
+                            tags: gearItem.tags
+                              .filter((itemTag) => itemTag.id !== tag.id)
+                              .map((tag) => tag.name),
+                          },
+                        })
+                      : setQuery({
+                          //remove this tag from queryParams
+                          tags: query.tags.filter(
+                            (filterTag) => filterTag.name !== tag.name
+                          ),
+                        })
                   }}
                   disabled={!me}
                   className={`flex items-center rounded bg-teal-600 px-2 py-1 text-sm transition-colors duration-300 ${

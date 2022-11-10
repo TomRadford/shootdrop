@@ -12,6 +12,7 @@ const GearDescription = ({ gearItem }) => {
   const me = useGetMe()
   const [editGearItem, editGearItemResult] = useMutation(EDIT_GEAR_ITEM)
   useEffect(() => {
+    //If !gearItem.description, only update to description/"" if logged in
     if (gearItem.description !== description) {
       const timeout = setTimeout(() => {
         console.log("updating description")

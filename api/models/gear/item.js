@@ -11,7 +11,10 @@ const schema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  description: String,
+  description: {
+    type: String,
+    default: "",
+  },
   images: [{ type: mongoose.Schema.Types.ObjectId, ref: "GearImage" }],
   productURL: String,
   tags: [

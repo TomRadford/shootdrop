@@ -84,7 +84,7 @@ const TagsModal = ({ setTagsModalOpen, tagsModalOpen, gearItem }) => {
                   as="h3"
                   className="text-lg font-medium leading-6 text-white"
                 >
-                  Add a tag
+                  Select a tag
                 </Dialog.Title>
                 <div>
                   <div className="mx-2 mt-2 mb-2">
@@ -148,8 +148,8 @@ const TagsModal = ({ setTagsModalOpen, tagsModalOpen, gearItem }) => {
                             })}
                           </div>
                         </div>
-
-                        {searchTerm && (
+                        {/* Add gear if Editing an gear item */}
+                        {searchTerm && gearItem && (
                           <div className="mt-0">
                             <p className="mb-2 text-center text-xs text-gray-500">
                               Add a new tag
