@@ -694,6 +694,8 @@ const resolvers = {
         if (args.offset) {
           options.offset = args.offset
         }
+        //Sort by most recently added
+        options.sort = { _id: -1 }
         const paginatedResults = await GearItem.paginate(searchTerms, options)
         const { totalDocs, totalPages, page, prevPage, nextPage } =
           paginatedResults

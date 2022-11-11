@@ -10,7 +10,9 @@ const TagsModal = ({ setTagsModalOpen, tagsModalOpen, gearItem }) => {
   const [searchTerm, setSearchTerm] = useState("")
   const [loading, setLoading] = useState(false)
   const [query, setQuery] = useGearQueryParams()
-  const [getTags, tagsResults] = useLazyQuery(ALL_TAGS)
+  const [getTags, tagsResults] = useLazyQuery(ALL_TAGS, {
+    fetchPolicy: "cache-and-network",
+  })
 
   //ToDo: refactor into normal useQuery with refetch
   useEffect(() => {
@@ -22,7 +24,11 @@ const TagsModal = ({ setTagsModalOpen, tagsModalOpen, gearItem }) => {
       setLoading(true)
       getTags({
         variables: {
-          category: gearItem ? gearItem.category : null, //array of categories or empty for Browser
+          category: gearItem
+            ? gearItem.category
+            : query.category
+            ? [query.category]
+            : null, //array of categories or empty for Browser with
         },
       })
       setLoading(false)
@@ -32,7 +38,11 @@ const TagsModal = ({ setTagsModalOpen, tagsModalOpen, gearItem }) => {
       const timeout = setTimeout(() => {
         getTags({
           variables: {
-            category: gearItem ? gearItem.category : null, //array of categories or empty for Browser
+            category: gearItem
+              ? gearItem.category
+              : query.category
+              ? [query.category]
+              : null, //array of categories or empty for Browser with
             tag: searchTerm,
           },
         })
@@ -40,7 +50,7 @@ const TagsModal = ({ setTagsModalOpen, tagsModalOpen, gearItem }) => {
       }, 500)
       return () => clearTimeout(timeout)
     }
-  }, [searchTerm])
+  }, [searchTerm, query.category])
 
   const tagIds = gearItem
     ? gearItem.tags.map((tag) => tag.id)

@@ -19,7 +19,7 @@ const GearFilter = ({ setRefetching, refetch, setTagsModalOpen }) => {
     }
     // refetch(query) happening in GearBrowser
   }, [query])
-  // console.log(query)
+
   useEffect(() => {
     if (
       query.manufacturer !== debouncedManufacturer ||
@@ -37,7 +37,6 @@ const GearFilter = ({ setRefetching, refetch, setTagsModalOpen }) => {
       //prevent any tags / category from being reset
       newParams.tags = query.tags
       newParams.category = query.category
-      // console.log(newParams)
       const timeout = setTimeout(() => {
         //resets previous values with push over default pushIn
         setQuery(newParams, "push")
@@ -45,30 +44,72 @@ const GearFilter = ({ setRefetching, refetch, setTagsModalOpen }) => {
       return () => clearTimeout(timeout)
     }
   }, [debouncedModel, debouncedManufacturer])
-  console.log(query.category)
+  // console.log(query.category)
+
+  const handleCategoryChange = (e, newCategory) => {
+    e.preventDefault()
+    console.log(newCategory)
+    if (newCategory === "All categories") {
+      setQuery({
+        category: null,
+      })
+    } else {
+      setQuery({
+        category: newCategory.toUpperCase(),
+      })
+    }
+  }
 
   return (
     <form className="flex w-full flex-wrap items-center justify-center gap-8 bg-gradient-to-b from-[#121212] to-transparent pb-8 pt-16 md:pt-8">
-      <div className="flex flex-col gap-1 lg:flex-row">
-        <div>
-          <button className="w-36 bg-gray-800 bg-opacity-40 py-1 px-2">
-            All categories
-          </button>
-          {/* {["Category", "CAMERA", "GRIPS", "LIGHTING", "SOUND"].map(
-                (categoryOption) => ( */}
+      <div className="flex flex-col gap-1 px-3 xl:flex-row">
+        <div className="relative z-40 mb-14 flex w-full justify-center sm:justify-start xl:mr-40">
+          <div className="group absolute rounded-xl bg-[#191f29]">
+            <div className="w-32 cursor-pointer py-1 px-2 ">
+              {query.category ? query.category : `All categories`}
+            </div>
+            <div className="hidden flex-col justify-center gap-1  group-hover:flex">
+              {["All categories", "Camera", "Grips", "Lighting", "Sound"].map(
+                (categoryOption) =>
+                  query.category
+                    ? categoryOption.toUpperCase() !== query.category && (
+                        <button
+                          key={categoryOption}
+                          className="border-t-[1px] border-gray-400 px-2"
+                          onClick={(e) =>
+                            handleCategoryChange(e, categoryOption)
+                          }
+                        >
+                          {categoryOption}
+                        </button>
+                      )
+                    : categoryOption !== "All categories" && (
+                        <button
+                          key={categoryOption}
+                          className="border-t-[1px] border-gray-400 px-2"
+                          onClick={(e) =>
+                            handleCategoryChange(e, categoryOption)
+                          }
+                        >
+                          {categoryOption}
+                        </button>
+                      )
+              )}
+            </div>
+          </div>
         </div>
         <div className="flex flex-col gap-1">
           <input
             placeholder="Manufacturer"
             type="search"
-            className=" bg-gray-800 bg-opacity-40 py-1 px-2"
+            className=" bg-gray-800 bg-opacity-40 py-1 px-2 xl:w-96"
             value={debouncedManufacturer}
             onChange={({ target }) => setDebouncedManufacturer(target.value)}
           />
           <input
             placeholder="Model"
             type="search"
-            className=" bg-gray-800 bg-opacity-40 py-1 px-2"
+            className=" bg-gray-800 bg-opacity-40 py-1 px-2 xl:w-96"
             value={debouncedModel}
             onChange={({ target }) => setDebouncedModel(target.value)}
           />
