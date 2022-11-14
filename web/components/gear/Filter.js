@@ -21,6 +21,9 @@ const GearFilter = ({ setRefetching, refetch, setTagsModalOpen }) => {
   }, [query])
 
   useEffect(() => {
+    if (query.manufacturer === "" || query.model === "") {
+      setRefetching(false)
+    }
     if (
       query.manufacturer !== debouncedManufacturer ||
       query.model !== debouncedModel
@@ -66,7 +69,9 @@ const GearFilter = ({ setRefetching, refetch, setTagsModalOpen }) => {
         <div className="relative z-40 mb-14 flex w-full justify-center sm:justify-start xl:mr-40">
           <div className="group absolute rounded-xl bg-[#191f29]">
             <div className="w-32 cursor-pointer py-1 px-2 ">
-              {query.category ? query.category : `All categories`}
+              {query.category
+                ? `${query.category[0]}${query.category.slice(1).toLowerCase()}`
+                : `All categories`}
             </div>
             <div className="hidden flex-col justify-center gap-1  group-hover:flex">
               {["All categories", "Camera", "Grips", "Lighting", "Sound"].map(

@@ -28,7 +28,6 @@ const GearTags = ({ gearItem, setTagsModalOpen }) => {
       tags = [...allTagsData.allTags]
     }
   }
-  // console.log(query)
 
   return (
     <div className="flex flex-col gap-1 px-4 pb-4">
@@ -39,37 +38,50 @@ const GearTags = ({ gearItem, setTagsModalOpen }) => {
         )}
       </span>
       <div className="flex flex-wrap gap-2">
-        {tags.map((tag) => (
-          <div key={tag.id}>
-            <button
-              onClick={(e) => {
-                e.preventDefault()
-                gearItem
-                  ? editGearItem({
-                      variables: {
-                        id: gearItem.id,
-                        tags: gearItem.tags
-                          .filter((itemTag) => itemTag.id !== tag.id)
-                          .map((tag) => tag.name),
-                      },
-                    })
-                  : setQuery({
-                      //remove this tag from queryParams
-                      tags: query.tags.filter(
-                        (filterTag) => filterTag !== tag.id
-                      ),
-                    })
-              }}
-              disabled={!me && gearItem}
-              className={`flex items-center rounded bg-teal-600 px-2 py-1 text-sm transition-colors duration-300 ${
-                (me || !gearItem) && `hover:bg-red-500`
-              }`}
-              key={tag.id}
-            >
-              <div>{tag.name}</div>
-            </button>
-          </div>
-        ))}
+        {allTagsLoading ? (
+          // Sekelon loader for tags while pulling in ALL_TAGS query for tag.name
+          <>
+            {query.tags &&
+              query.tags.map((tagId) => (
+                <button
+                  key={tagId}
+                  className="flex h-7 w-20 animate-pulse items-center rounded bg-teal-600 px-2 py-1 text-sm opacity-70"
+                ></button>
+              ))}
+          </>
+        ) : (
+          tags.map((tag) => (
+            <div key={tag.id}>
+              <button
+                onClick={(e) => {
+                  e.preventDefault()
+                  gearItem
+                    ? editGearItem({
+                        variables: {
+                          id: gearItem.id,
+                          tags: gearItem.tags
+                            .filter((itemTag) => itemTag.id !== tag.id)
+                            .map((tag) => tag.name),
+                        },
+                      })
+                    : setQuery({
+                        //remove this tag from queryParams
+                        tags: query.tags.filter(
+                          (filterTag) => filterTag !== tag.id
+                        ),
+                      })
+                }}
+                disabled={!me && gearItem}
+                className={`flex items-center rounded bg-teal-600 px-2 py-1 text-sm transition-colors duration-300 ${
+                  (me || !gearItem) && `hover:bg-red-500`
+                }`}
+                key={tag.id}
+              >
+                <div>{tag.name}</div>
+              </button>
+            </div>
+          ))
+        )}
         {(me || !gearItem) && (
           <button
             onClick={(e) => {

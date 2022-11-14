@@ -27,23 +27,6 @@ const GearBrowser = ({ list }) => {
   const [fetchingMore, setFetchingMore] = useState(false)
   const [refetching, setRefetching] = useState(false)
   const [tagsModalOpen, setTagsModalOpen] = useState(false)
-  // const {
-  //   data: allGearData,
-  //   loading: allGearLoading,
-  //   refetch,
-  //   fetchMore: fetchMoreGear,
-  // } = useQuery(
-  //   ALL_GEAR_ITEMS,
-  //   //ToDo: update cache on local/subscription-based gearItem add
-  //   {
-  //     variables: query, //use queryParams to filter
-  //     fetchPolicy: "network-only",
-  //     onCompleted: () => {
-  //       setFetchingMore(false)
-  //       setRefetching(false)
-  //     },
-  //   }
-  // )
 
   const [
     getGear,
