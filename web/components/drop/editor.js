@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { useMutation } from "@apollo/client"
 import DropDates from "./Dates"
 import DropInfo from "./Info"
-import DropListsInfo from "./Lists"
+import DropListInfo from "./List"
 import useGetMe from "../../lib/hooks/getMe"
 
 const DropEditor = ({ children, drop }) => {
@@ -17,9 +17,10 @@ const DropEditor = ({ children, drop }) => {
       setUserInDrop(true)
     }
   }, [me])
+
   return (
     <div className="flex h-full min-h-screen">
-      <div className="w-full pt-16 text-center md:mx-3 md:pt-6">
+      <div className="mb-10 w-full pt-16 text-center md:mx-3 md:pt-6">
         <form>
           <DropHeader drop={drop} userInDrop={userInDrop} />
           {drop && (
@@ -32,7 +33,42 @@ const DropEditor = ({ children, drop }) => {
                   </section>
                   <h2 className="py-5 text-xl font-semibold">Lists</h2>
                   <section className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-16">
-                    <DropListsInfo />
+                    <DropListInfo
+                      dropId={drop.id}
+                      listEntry={
+                        drop.lists.filter(
+                          (list) => list.category === "CAMERA"
+                        )[0]
+                      }
+                      category="CAMERA"
+                    />
+                    <DropListInfo
+                      dropId={drop.id}
+                      listEntry={
+                        drop.lists.filter(
+                          (list) => list.category === "SOUND"
+                        )[0]
+                      }
+                      category="SOUND"
+                    />
+                    <DropListInfo
+                      dropId={drop.id}
+                      listEntry={
+                        drop.lists.filter(
+                          (list) => list.category === "LIGHTING"
+                        )[0]
+                      }
+                      category="LIGHTING"
+                    />
+                    <DropListInfo
+                      dropId={drop.id}
+                      listEntry={
+                        drop.lists.filter(
+                          (list) => list.category === "GRIPS"
+                        )[0]
+                      }
+                      category="GRIPS"
+                    />
                   </section>
                 </div>
               </div>

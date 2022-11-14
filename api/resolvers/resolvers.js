@@ -58,19 +58,13 @@ const resolvers = {
       return gearItemPrefs
     },
   },
-  // TBC if needed to populate this scheme here
-  // GearList: {
-  // 	items: async (root, args, context) => {
-  // 		// await root.populate({
-  // 		// 	path: 'items',
-  // 		// 	populate: {
-  // 		// 		path: 'gearItem',
-  // 		// 		model: 'GearItem',
-  // 		// 	},
-  // 		// })
-  //
-  // 		console.log(root.items[0].gearItem)
-  // 	},
+
+  GearList: {
+    drop: async (root, args, context) => {
+      const drop = await Drop.findById(root.drop)
+      return drop
+    },
+  },
   GearListItem: {
     gearItem: async (root, args, context) => {
       const gearItem = await GearItem.findById(root.gearItem)
@@ -366,7 +360,7 @@ const resolvers = {
         comment,
         drop: existingDrop, //List page
       })
-
+      //ToDo: $push query
       existingDrop.lists = existingDrop.lists.concat(newGearList)
       await existingDrop.save()
 
@@ -591,9 +585,19 @@ const resolvers = {
         //placeholder to protect all drops on prod
         throw new AuthenticationError("Unauthoized")
       }
-      const drops = await Drop.find({}).populate("users").populate("lists")
+      const drops = await Drop.find({}).populate("users")
 
       return drops
+    },
+
+    getList: async (root, args, context) => {
+      try {
+        return await GearList.findById(args.id)
+      } catch (e) {
+        throw new UserInputError("Error finding list", {
+          error: e,
+        })
+      }
     },
 
     allTags: async (root, args, context) => {

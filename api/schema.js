@@ -43,7 +43,7 @@ const typeDefs = gql`
     id: ID!
     category: String
     comment: String
-    drop: String!
+    drop: Drop
     items: [GearListItem]
     updatedAt: Date
   }
@@ -121,6 +121,7 @@ const typeDefs = gql`
       limit: Int
       offset: Int
     ): GearItemResults
+    getList(id: String!): GearList!
     gearCount: Int!
     getProfileImageUpload: String!
     getGearImageUpload(gearItem: String!): String!

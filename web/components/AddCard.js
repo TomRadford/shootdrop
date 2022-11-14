@@ -1,9 +1,14 @@
 import Link from "next/link"
 import Card from "./Card"
 
-const AddButton = ({ onClick }) => (
-  <button className={`mx-auto w-80 sm:w-96`}>
+export const AddButton = ({ onClick, title }) => (
+  <button className={`relative mx-auto w-80 sm:w-96`}>
     <Card>
+      {title && (
+        <div className="text-md absolute top-5 left-10 flex font-semibold">{`${
+          title[0]
+        }${title.slice(1).toLowerCase()}`}</div>
+      )}
       <div className="flex h-44 items-center justify-center" onClick={onClick}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -32,7 +37,7 @@ const AddCard = ({ href, title, onClick }) =>
       </a>
     </Link>
   ) : (
-    <AddButton onClick={onClick} />
+    <AddButton onClick={onClick} title={title} />
   )
 
 export default AddCard

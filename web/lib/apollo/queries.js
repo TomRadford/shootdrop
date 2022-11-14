@@ -9,6 +9,82 @@ const USER_DETAILS = gql`
   }
 `
 
+const GEAR_ITEM_DETAILS = gql`
+  fragment GearItemDetails on GearItem {
+    id
+    category
+    manufacturer
+    model
+    description
+    productURL
+    images {
+      id
+      url
+      width
+      height
+    }
+    allPrefs {
+      id
+      name
+      allOpts {
+        id
+        name
+      }
+    }
+    tags {
+      id
+      name
+    }
+  }
+`
+
+export const GEAR_LIST_ITEM_DETAILS = gql`
+  fragment GearListItemDetails on GearListItem {
+    id
+    gearItem {
+      ...GearItemDetails
+    }
+    quantity
+    prefs {
+      pref {
+        id
+        name
+        allOpts {
+          name
+          id
+        }
+      }
+      opts {
+        name
+        id
+      }
+    }
+    comment
+    userThatUpdated {
+      id
+      fullName
+      profilePicture
+    }
+  }
+  ${GEAR_ITEM_DETAILS}
+`
+
+export const LIST_DETAILS = gql`
+  fragment ListDetails on GearList {
+    id
+    category
+    comment
+    drop {
+      id
+    }
+    items {
+      ...GearListItemDetails
+    }
+    updatedAt
+  }
+  ${GEAR_LIST_ITEM_DETAILS}
+`
+
 export const LOGIN = gql`
   mutation login($username: String!, $password: String!) {
     login(username: $username, password: $password) {
@@ -89,10 +165,11 @@ const DROP_DETAILS = gql`
       ...UserDetails
     }
     lists {
-      id
+      ...ListDetails
     }
   }
   ${USER_DETAILS}
+  ${LIST_DETAILS}
 `
 export const ALL_DROPS = gql`
   query allDrops($drop: String!) {
@@ -153,34 +230,6 @@ export const UPDATE_DROP = gql`
     }
   }
   ${DROP_DETAILS}
-`
-const GEAR_ITEM_DETAILS = gql`
-  fragment GearItemDetails on GearItem {
-    id
-    category
-    manufacturer
-    model
-    description
-    productURL
-    images {
-      id
-      url
-      width
-      height
-    }
-    allPrefs {
-      id
-      name
-      allOpts {
-        id
-        name
-      }
-    }
-    tags {
-      id
-      name
-    }
-  }
 `
 
 //ToDo: adding additional feilds
@@ -366,4 +415,20 @@ export const ADD_TAG = gql`
       category
     }
   }
+`
+
+export const GET_LIST = gql`
+  query getList($listId: String!) {
+    ...ListDetails
+  }
+  ${LIST_DETAILS}
+`
+
+export const ADD_LIST = gql`
+  mutation addList($drop: String!, $category: GearCategory!, $comment: String) {
+    addList(drop: $drop, category: $category, comment: $comment) {
+      ...ListDetails
+    }
+  }
+  ${LIST_DETAILS}
 `

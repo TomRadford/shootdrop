@@ -51,7 +51,6 @@ const GearFilter = ({ setRefetching, refetch, setTagsModalOpen }) => {
 
   const handleCategoryChange = (e, newCategory) => {
     e.preventDefault()
-    console.log(newCategory)
     if (newCategory === "All categories") {
       setQuery({
         category: null,
