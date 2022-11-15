@@ -1,15 +1,33 @@
 import { gql } from "@apollo/client"
 import client from "../../lib/apollo/client"
 import Head from "next/head"
+import Layout from "../../components/layout"
 
 const ListPage = ({ list }) => {
+  if (!list) {
+    return (
+      <>
+        <Head>
+          <title>List not found | ShootDrop</title>
+        </Head>
+        <Layout>
+          <div className="flex h-screen">
+            <div className="m-auto text-center">
+              <h1 className="m-5 text-5xl font-bold">404</h1>
+              <p className="">List was not found.</p>
+            </div>
+          </div>
+        </Layout>
+      </>
+    )
+  }
+
   return (
     <>
       <Head>
         <title>
-          {`${list.category[0]}${list.category.slice(1).toLowerCase()}`} gear |{" "}
-          {list.drop.project}
-          {list.drop.name} | ShootDrop
+          {`${list.category[0]}${list.category.slice(1).toLowerCase()} gear |
+          ${list.drop.project}  ${list.drop.name} | ShootDrop`}
         </title>
       </Head>
     </>
@@ -33,7 +51,7 @@ export const getServerSideProps = async ({ params }) => {
     const { data } = await client.query({
       query: LIST_PROJECT,
       variables: {
-        id: "63724ceea99814760e7d01f6",
+        id: params.id,
       },
       fetchPolicy: "no-cache",
     })
