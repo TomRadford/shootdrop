@@ -613,8 +613,8 @@ const resolvers = {
 
     getListItems: async (root, args, context) => {
       try {
-        const searchTerms = {}
-        searchTerms.gearList = args.list
+        // const searchTerms = {}
+        // searchTerms.gearList = new mongoose.Types.ObjectId(args.list)
 
         let options = {
           // populate: ["tags", "images"],
@@ -628,17 +628,50 @@ const resolvers = {
         if (args.offset) {
           options.offset = args.offset
         }
+        // if (args.tags) {
+        //   searchTerms.gearItem = {
+        //     tags: {
+        //       $in: args.tags.map((tag) => mongoose.Types.ObjectId(tag)),
+        //     },
+        //   }
+        // }
         //Sort by most recently added
-
         options.sort = { _id: -1 }
-        const paginatedResults = await GearListItem.paginate(
-          searchTerms,
+        const gearListItemAggregate = GearListItem.aggregate([
+          {
+            $lookup: {
+              from: "gearitems",
+              localField: "gearItem",
+              foreignField: "_id",
+              as: "gearItem",
+              pipeline: [
+                {
+                  $match: {
+                    tags: {
+                      $in: args.tags.map((tag) => mongoose.Types.ObjectId(tag)),
+                    },
+                  },
+                },
+              ],
+            },
+          },
+          {
+            $match: {
+              gearList: new mongoose.Types.ObjectId(args.list),
+            },
+          },
+          {
+            $addFields: {
+              id: "$_id",
+            },
+          },
+        ])
+        // console.log(gearListItemAggregate)
+        const paginatedResults = await GearListItem.aggregatePaginate(
+          gearListItemAggregate,
           options
         )
-
-        // if (args.tags) {
-        //   searchTerms.gearItem = { tags: { $all: args.tags } }
-        // }
+        console.log(paginatedResults.docs)
 
         const { totalDocs, totalPages, page, prevPage, nextPage } =
           paginatedResults

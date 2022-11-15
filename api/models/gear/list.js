@@ -1,5 +1,5 @@
 const mongoose = require("mongoose")
-const mongoosePaginate = require("mongoose-paginate-v2")
+const aggregatePaginate = require("mongoose-aggregate-paginate-v2")
 //GearListItem
 const GearListItemSchema = new mongoose.Schema(
   {
@@ -38,7 +38,7 @@ const GearListItemSchema = new mongoose.Schema(
   },
   { timestamps: true }
 )
-GearListItemSchema.plugin(mongoosePaginate)
+GearListItemSchema.plugin(aggregatePaginate)
 
 const GearListSchema = new mongoose.Schema(
   {
