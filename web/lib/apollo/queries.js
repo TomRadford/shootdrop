@@ -38,6 +38,7 @@ const GEAR_ITEM_DETAILS = gql`
   }
 `
 
+// Only request required gear item details ??
 export const GEAR_LIST_ITEM_DETAILS = gql`
   fragment GearListItemDetails on GearListItem {
     id
@@ -76,9 +77,6 @@ export const LIST_DETAILS = gql`
     comment
     drop {
       id
-    }
-    items {
-      ...GearListItemDetails
     }
     updatedAt
   }

@@ -7,7 +7,7 @@ const { nanoid } = require("nanoid/async")
 const User = require("../models/user")
 const Drop = require("../models/drop")
 const Tag = require("../models/gear/tag")
-const GearList = require("../models/gear/list")
+const { GearList, GearListItem } = require("../models/gear/list")
 const GearItem = require("../models/gear/item")
 const GearImage = require("../models/gear/image")
 const config = require("../utils/config")
@@ -56,6 +56,15 @@ const resolvers = {
       }).populate("allOpts")
 
       return gearItemPrefs
+    },
+    //Populates tags/images if they're queried
+    tags: async (root, args, context) => {
+      const gearItemWithTags = await root.populate("tags")
+      return gearItemWithTags.tags
+    },
+    images: async (root, args, context) => {
+      const gearItemWithImages = await root.populate("images")
+      return gearItemWithImages.images
     },
   },
 
@@ -360,8 +369,8 @@ const resolvers = {
         comment,
         drop: existingDrop, //List page
       })
-      //ToDo: $push query
-      existingDrop.lists = existingDrop.lists.concat(newGearList)
+
+      existingDrop.lists.push(newGearList)
       await existingDrop.save()
 
       return await newGearList.save()
@@ -374,7 +383,7 @@ const resolvers = {
         throw new UserInputError("List does not exist")
       }
       const parentDrop = await Drop.findOne({ lists: existingGearList })
-      await checkDropPermissions(context, parentDrop)
+      checkDropPermissions(context, parentDrop)
       const { comment } = args
       const newList = await GearList.findByIdAndUpdate(
         args.id,
@@ -418,10 +427,11 @@ const resolvers = {
       const parentDrop = await Drop.findOne({ lists: listToAdd })
       checkDropPermissions(context, parentDrop)
       const { gearItem, quantity, prefs, comment } = args
-      listToAdd.items.push({
+      const newGearListItem = new GearListItem({
         gearItem,
         quantity,
         comment,
+        gearList: listToAdd,
         userThatUpdated: context.currentUser,
         prefs: prefs
           ? prefs.map((pref) => {
@@ -432,7 +442,7 @@ const resolvers = {
             })
           : null,
       })
-      return await listToAdd.save()
+      return await newGearListItem.save()
     },
 
     editListItem: async (root, args, context) => {
@@ -591,12 +601,57 @@ const resolvers = {
     },
 
     getList: async (root, args, context) => {
+      //ToDo: Potential pagination on GearListItem
       try {
         return await GearList.findById(args.id)
       } catch (e) {
         throw new UserInputError("Error finding list", {
           error: e,
         })
+      }
+    },
+
+    getListItems: async (root, args, context) => {
+      try {
+        const searchTerms = {}
+        searchTerms.gearList = args.list
+
+        let options = {
+          // populate: ["tags", "images"],
+        }
+
+        if (args.limit) {
+          options.limit = args.limit
+        } else {
+          options.limit = 16
+        }
+        if (args.offset) {
+          options.offset = args.offset
+        }
+        //Sort by most recently added
+
+        options.sort = { _id: -1 }
+        const paginatedResults = await GearListItem.paginate(
+          searchTerms,
+          options
+        )
+
+        // if (args.tags) {
+        //   searchTerms.gearItem = { tags: { $all: args.tags } }
+        // }
+
+        const { totalDocs, totalPages, page, prevPage, nextPage } =
+          paginatedResults
+        return {
+          gearListItems: paginatedResults.docs,
+          totalDocs,
+          totalPages,
+          page,
+          prevPage,
+          nextPage,
+        }
+      } catch (e) {
+        throw new UserInputError(`Error searching: ${e}`)
       }
     },
 
@@ -666,8 +721,8 @@ const resolvers = {
         //skip pagination if single item
         //pagination values will return null
         const gearItem = await GearItem.findById(args.id)
-          .populate("tags")
-          .populate("images")
+        // .populate("tags")
+        // .populate("images")
         return { gearItems: [gearItem] }
       }
       try {
@@ -688,7 +743,7 @@ const resolvers = {
           searchTerms.tags = { $all: args.tags }
         }
         let options = {
-          populate: ["tags", "images"],
+          // populate: ["tags", "images"],
         }
         if (args.limit) {
           options.limit = args.limit

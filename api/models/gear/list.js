@@ -1,8 +1,12 @@
 const mongoose = require("mongoose")
-
+const mongoosePaginate = require("mongoose-paginate-v2")
 //GearListItem
-const subSchema = new mongoose.Schema(
+const GearListItemSchema = new mongoose.Schema(
   {
+    gearList: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "GearList",
+    },
     gearItem: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "GearItem",
@@ -34,15 +38,15 @@ const subSchema = new mongoose.Schema(
   },
   { timestamps: true }
 )
+GearListItemSchema.plugin(mongoosePaginate)
 
-const schema = new mongoose.Schema(
+const GearListSchema = new mongoose.Schema(
   {
     category: {
       type: String,
       required: true,
     },
     comment: String,
-    items: [subSchema],
     drop: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Drop",
@@ -53,4 +57,7 @@ const schema = new mongoose.Schema(
   }
 )
 
-module.exports = mongoose.model("GearList", schema)
+module.exports = {
+  GearList: mongoose.model("GearList", GearListSchema),
+  GearListItem: mongoose.model("GearListItem", GearListItemSchema),
+}

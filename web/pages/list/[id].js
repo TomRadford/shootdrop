@@ -1,9 +1,13 @@
-import { gql } from "@apollo/client"
+import { gql, useQuery } from "@apollo/client"
 import client from "../../lib/apollo/client"
 import Head from "next/head"
 import Layout from "../../components/layout"
+import { useRouter } from "next/router"
 
 const ListPage = ({ list }) => {
+  const router = useRouter()
+  const listId = router.query.id
+  // const listResult = useQuery()
   if (!list) {
     return (
       <>

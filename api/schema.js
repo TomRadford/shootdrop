@@ -44,12 +44,12 @@ const typeDefs = gql`
     category: String
     comment: String
     drop: Drop
-    items: [GearListItem]
     updatedAt: Date
   }
 
   type GearListItem {
     id: ID!
+    gearList: GearList!
     gearItem: GearItem!
     quantity: Int
     prefs: [GearListGearPref]
@@ -108,6 +108,15 @@ const typeDefs = gql`
     nextPage: Int
   }
 
+  type ListItemResults {
+    gearListItems: [GearListItem]
+    totalDocs: Int
+    totalPages: Int
+    page: Int
+    prevPage: Int
+    nextPage: Int
+  }
+
   type Query {
     me: User
     allDrops(drop: String): [Drop!]
@@ -122,7 +131,12 @@ const typeDefs = gql`
       offset: Int
     ): GearItemResults
     getList(id: String!): GearList!
-    gearCount: Int!
+    getListItems(
+      list: String!
+      tags: [String]
+      limit: Int
+      offset: Int
+    ): ListItemResults!
     getProfileImageUpload: String!
     getGearImageUpload(gearItem: String!): String!
     allUsers(fullName: String): [User]
@@ -220,7 +234,7 @@ const typeDefs = gql`
       quantity: Int
       prefs: [ListPrefInput]
       comment: String
-    ): GearList!
+    ): GearListItem!
     editListItem(
       list: String!
       id: String!
