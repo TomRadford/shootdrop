@@ -613,12 +613,7 @@ const resolvers = {
 
     getListItems: async (root, args, context) => {
       try {
-        // const searchTerms = {}
-        // searchTerms.gearList = new mongoose.Types.ObjectId(args.list)
-
-        let options = {
-          // populate: ["tags", "images"],
-        }
+        let options = {}
 
         if (args.limit) {
           options.limit = args.limit
@@ -628,36 +623,14 @@ const resolvers = {
         if (args.offset) {
           options.offset = args.offset
         }
-        // if (args.tags) {
-        //   searchTerms.gearItem = {
-        //     tags: {
-        //       $in: args.tags.map((tag) => mongoose.Types.ObjectId(tag)),
-        //     },
-        //   }
-        // }
-        //Sort by most recently added
-        options.sort = { _id: -1 }
-        const gearListItemAggregate = GearListItem.aggregate([
+
+        const aggregateParams = [
           {
             $lookup: {
               from: "gearitems",
               localField: "gearItem",
               foreignField: "_id",
               as: "gearItem",
-              pipeline: [
-                {
-                  $match: {
-                    tags: {
-                      $in: args.tags.map((tag) => mongoose.Types.ObjectId(tag)),
-                    },
-                  },
-                },
-              ],
-            },
-          },
-          {
-            $match: {
-              gearList: new mongoose.Types.ObjectId(args.list),
             },
           },
           {
@@ -665,13 +638,33 @@ const resolvers = {
               id: "$_id",
             },
           },
-        ])
-        // console.log(gearListItemAggregate)
+        ]
+
+        if (args.list) {
+          aggregateParams.push({
+            $match: {
+              gearList: new mongoose.Types.ObjectId(args.list),
+            },
+          })
+        }
+
+        if (args.tags) {
+          aggregateParams.push({
+            $match: {
+              "gearItem.tags": {
+                $all: args.tags.map((tag) => mongoose.Types.ObjectId(tag)),
+              },
+            },
+          })
+        }
+
+        options.sort = { _id: -1 }
+        const gearListItemAggregate = GearListItem.aggregate(aggregateParams)
+
         const paginatedResults = await GearListItem.aggregatePaginate(
           gearListItemAggregate,
           options
         )
-        console.log(paginatedResults.docs)
 
         const { totalDocs, totalPages, page, prevPage, nextPage } =
           paginatedResults
@@ -775,9 +768,7 @@ const resolvers = {
         if (args.tags) {
           searchTerms.tags = { $all: args.tags }
         }
-        let options = {
-          // populate: ["tags", "images"],
-        }
+        let options = {}
         if (args.limit) {
           options.limit = args.limit
         } else {
