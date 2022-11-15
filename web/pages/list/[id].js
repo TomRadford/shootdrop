@@ -3,11 +3,18 @@ import client from "../../lib/apollo/client"
 import Head from "next/head"
 import Layout from "../../components/layout"
 import { useRouter } from "next/router"
+import { GET_LIST } from "../../lib/apollo/queries"
+import Loading from "../../components/Loading"
+import GearBrowser from "../../components/gear/Browser"
 
 const ListPage = ({ list }) => {
   const router = useRouter()
   const listId = router.query.id
-  // const listResult = useQuery()
+  const listResult = useQuery(GET_LIST, {
+    variables: {
+      id: listId,
+    },
+  })
   if (!list) {
     return (
       <>
@@ -30,10 +37,26 @@ const ListPage = ({ list }) => {
     <>
       <Head>
         <title>
-          {`${list.category[0]}${list.category.slice(1).toLowerCase()} gear |
-          ${list.drop.project}  ${list.drop.name} | ShootDrop`}
+          {listResult.data
+            ? `${
+                listResult.data.getList.category[0]
+              }${listResult.data.getList.category.slice(1).toLowerCase()} gear |
+          ${listResult.data.getList.drop.project}  ${
+                listResult.data.getList.drop.name
+              } | ShootDrop`
+            : `${list.category[0]}${list.category.slice(1).toLowerCase()} gear |
+          ${list.drop.project} | ShootDrop`}
         </title>
       </Head>
+      {listResult.loading ? (
+        <Loading />
+      ) : (
+        <Layout>
+          <GearBrowser
+            list={listResult.data ? listResult.data.getList : list}
+          />
+        </Layout>
+      )}
     </>
   )
 }
@@ -44,6 +67,7 @@ const LIST_PROJECT = gql`
       id
       category
       drop {
+        id
         project
       }
     }

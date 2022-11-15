@@ -15,7 +15,7 @@ const GearPage = () => {
   )
 }
 
-//Potential feature: prefil query values
+//ToDo: Potential feature: prefil query values
 // export const getServerSideProps = (context) => {
 //   const { query } = context
 //   return {

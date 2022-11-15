@@ -39,36 +39,36 @@ const GEAR_ITEM_DETAILS = gql`
 `
 
 // Only request required gear item details ??
-export const GEAR_LIST_ITEM_DETAILS = gql`
-  fragment GearListItemDetails on GearListItem {
-    id
-    gearItem {
-      ...GearItemDetails
-    }
-    quantity
-    prefs {
-      pref {
-        id
-        name
-        allOpts {
-          name
-          id
-        }
-      }
-      opts {
-        name
-        id
-      }
-    }
-    comment
-    userThatUpdated {
-      id
-      fullName
-      profilePicture
-    }
-  }
-  ${GEAR_ITEM_DETAILS}
-`
+// export const GEAR_LIST_ITEM_DETAILS = gql`
+//   fragment GearListItemDetails on GearListItem {
+//     id
+//     gearItem {
+//       ...GearItemDetails
+//     }
+//     quantity
+//     prefs {
+//       pref {
+//         id
+//         name
+//         allOpts {
+//           name
+//           id
+//         }
+//       }
+//       opts {
+//         name
+//         id
+//       }
+//     }
+//     comment
+//     userThatUpdated {
+//       id
+//       fullName
+//       profilePicture
+//     }
+//   }
+//   ${GEAR_ITEM_DETAILS}
+// `
 
 export const LIST_DETAILS = gql`
   fragment ListDetails on GearList {
@@ -77,10 +77,10 @@ export const LIST_DETAILS = gql`
     comment
     drop {
       id
+      project
     }
     updatedAt
   }
-  ${GEAR_LIST_ITEM_DETAILS}
 `
 
 export const LOGIN = gql`
@@ -416,10 +416,47 @@ export const ADD_TAG = gql`
 `
 
 export const GET_LIST = gql`
-  query getList($listId: String!) {
-    ...ListDetails
+  query getList($id: String!) {
+    getList(id: $id) {
+      ...ListDetails
+    }
   }
   ${LIST_DETAILS}
+`
+export const GET_LIST_ITEMS = gql`
+  query getListItems(
+    $list: String!
+    $limit: Int
+    $offset: Int
+    $tags: [String]
+  ) {
+    getListItems(list: $list, limit: $limit, offset: $offset, tags: $tags) {
+      totalDocs
+      gearListItems {
+        id
+        quantity
+        comment
+        gearItem {
+          ...GearItemDetails
+        }
+        userThatUpdated {
+          ...UserDetails
+        }
+        prefs {
+          pref {
+            id
+            name
+          }
+          opts {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+  ${GEAR_ITEM_DETAILS}
+  ${USER_DETAILS}
 `
 
 export const ADD_LIST = gql`

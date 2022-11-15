@@ -1,5 +1,5 @@
 import { useQuery, useLazyQuery } from "@apollo/client"
-import { ALL_GEAR_ITEMS } from "../../lib/apollo/queries"
+import { ALL_GEAR_ITEMS, GET_LIST_ITEMS } from "../../lib/apollo/queries"
 import Image from "next/image"
 import Link from "next/link"
 import { useInView } from "react-intersection-observer"
@@ -7,8 +7,7 @@ import { useEffect, useState } from "react"
 import TagsModal from "./TagsModal"
 import GearFilter from "./Filter"
 import { useGearQueryParams } from "../../lib/hooks/queryParams"
-const whitePixel =
-  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII="
+import GearItem from "./Item"
 
 const GearListSkeleton = ({ length = 20 }) => (
   <>
@@ -20,9 +19,14 @@ const GearListSkeleton = ({ length = 20 }) => (
     ))}
   </>
 )
+
+const NoResults = () => (
+  <h3 className="font-light text-gray-300">No results :(</h3>
+)
+
 //GearBrowser to be used on /gear and /list/[id]/add routes
 
-const GearBrowser = ({ list }) => {
+const GearBrowser = ({ listToAdd, list }) => {
   const [query, setQuery] = useGearQueryParams()
   const [fetchingMore, setFetchingMore] = useState(false)
   const [refetching, setRefetching] = useState(false)
@@ -37,10 +41,10 @@ const GearBrowser = ({ list }) => {
       fetchMore: fetchMoreGear,
     },
   ] = useLazyQuery(
-    ALL_GEAR_ITEMS,
+    list ? GET_LIST_ITEMS : ALL_GEAR_ITEMS,
     //ToDo: update cache on local/subscription-based gearItem add
     {
-      variables: query, //use queryParams to filter
+      variables: list ? { ...query, list: list.id } : query, //use queryParams to filter
       fetchPolicy: "network-only",
       onCompleted: () => {
         setFetchingMore(false)
@@ -48,6 +52,7 @@ const GearBrowser = ({ list }) => {
       },
     }
   )
+  console.log(allGearData)
 
   const {
     ref: inViewRef,
@@ -67,13 +72,18 @@ const GearBrowser = ({ list }) => {
   useEffect(() => {
     if (
       inView &&
-      allGearData.allGearItems.gearItems.length <
-        allGearData.allGearItems.totalDocs
+      (list
+        ? allGearData.getListItems.gearListItems.length <
+          allGearData.getListItems.totalDocs
+        : allGearData.allGearItems.gearItems.length <
+          allGearData.allGearItems.totalDocs)
     ) {
       setFetchingMore(true)
       fetchMoreGear({
         variables: {
-          offset: allGearData.allGearItems.gearItems.length,
+          offset: list
+            ? allGearData.getListItems.gearListItems.length
+            : allGearData.allGearItems.gearItems.length,
         },
       })
     }
@@ -84,12 +94,16 @@ const GearBrowser = ({ list }) => {
       <div className="mb-10 w-full pt-0 text-center md:mx-0 md:pt-0">
         <TagsModal
           tagsModalOpen={tagsModalOpen}
+          listCategory={list ? list.category : null}
           setTagsModalOpen={setTagsModalOpen}
         />
+
         <GearFilter
           setRefetching={setRefetching}
           refetch={refetch}
           setTagsModalOpen={setTagsModalOpen}
+          list={list}
+          listToAdd={listToAdd}
         />
 
         {allGearLoading || refetching ? (
@@ -101,56 +115,36 @@ const GearBrowser = ({ list }) => {
         ) : (
           <div className="mx-2 ">
             <div className="mx-auto flex max-w-7xl flex-wrap justify-center gap-4">
-              {allGearData && allGearData.allGearItems.gearItems.length > 0 ? (
-                allGearData.allGearItems.gearItems.map((gearItem) => {
-                  return (
-                    <div
-                      className="overflow-hidden rounded-xl shadow-lg"
+              {list ? (
+                allGearData &&
+                allGearData.getListItems.gearListItems.length > 0 ? (
+                  allGearData.getListItems.gearListItems.map((gearListItem) => (
+                    <GearItem
+                      key={gearListItem.id}
+                      data={gearListItem}
+                      list={list}
+                    />
+                  ))
+                ) : (
+                  <NoResults />
+                )
+              ) : null}
+              {!list ? (
+                allGearData && allGearData.allGearItems.gearItems.length > 0 ? (
+                  allGearData.allGearItems.gearItems.map((gearItem) => (
+                    <GearItem
                       key={gearItem.id}
-                    >
-                      <Link href={`/gear/${gearItem.id}`}>
-                        {/* ToDo: Consider target blank to open new tab
-															Disadvantage would be reloading app in new tab
-											*/}
-                        <a>
-                          <div className="relative -mb-1 hover:cursor-pointer">
-                            {gearItem.images.length > 0 ? (
-                              <Image
-                                src={gearItem.images[0].url}
-                                width="300px"
-                                height="330px"
-                                objectFit="cover"
-                                placeholder="blur"
-                                blurDataURL={whitePixel}
-                              />
-                            ) : (
-                              <Image
-                                src={`/img/default_gear.jpg`}
-                                width="300px"
-                                height="330px"
-                                objectFit="cover"
-                                placeholder="blur"
-                                blurDataURL={whitePixel}
-                              />
-                            )}
-                            <div className="absolute bottom-[6px] flex w-full flex-col bg-gradient-to-t from-[#000000b9] to-transparent px-3 pb-2 pt-12 text-left ">
-                              <h3 className="font-bold">
-                                {gearItem.manufacturer}
-                              </h3>
-                              <h3>{gearItem.model}</h3>
-                            </div>
-                          </div>
-                        </a>
-                      </Link>
-                      {list && (
-                        <button className="my-3 font-bold">Add Item</button>
-                      )}
-                    </div>
-                  )
-                })
-              ) : (
-                <h3 className="font-light text-gray-300">No results :(</h3>
-              )}
+                      data={gearItem}
+                      listToAdd={listToAdd}
+                    />
+                  ))
+                ) : (
+                  <>
+                    <NoResults />
+                  </>
+                )
+              ) : null}
+
               {fetchingMore && <GearListSkeleton length={4} />}
             </div>
             {/* Empty div at end of list to trigger fetchMore */}

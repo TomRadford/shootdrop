@@ -57,25 +57,25 @@ const cleanupTypeName = new ApolloLink((operation, forward) => {
 const wsLink =
   typeof window !== "undefined"
     ? new GraphQLWsLink(
-      createClient({
-        url: "ws://localhost:4000/subscriptions",
-      })
-    )
+        createClient({
+          url: "ws://localhost:4000/subscriptions",
+        })
+      )
     : null
 
 const splitLink =
   typeof window !== "undefined" && wsLink !== null
     ? split(
-      ({ query }) => {
-        const definition = getMainDefinition(query)
-        return (
-          definition.kind === "OperationDefinition" &&
-          definition.operation === "subscription"
-        )
-      },
-      wsLink,
-      ApolloLink.from([cleanupTypeName, handleError, authLink, httpLink])
-    )
+        ({ query }) => {
+          const definition = getMainDefinition(query)
+          return (
+            definition.kind === "OperationDefinition" &&
+            definition.operation === "subscription"
+          )
+        },
+        wsLink,
+        ApolloLink.from([cleanupTypeName, handleError, authLink, httpLink])
+      )
     : httpLink
 
 const cache = new InMemoryCache({
@@ -100,6 +100,28 @@ const cache = new InMemoryCache({
               mergedGearItems[offset + i] = incoming.gearItems[i]
             }
             return { totalDocs: incoming.totalDocs, gearItems: mergedGearItems }
+          },
+        },
+        getListItems: {
+          keyArgs: ["list"], //ToDo: add keys based on filters
+          // Prevents concatenation of existing entries in gearItems
+          // and rather concats new values to existing while returning
+          // the new total docs for incoming
+          merge(
+            existing = { gearListItems: [], totalDocs: null },
+            incoming,
+            { args: { offset = 0 } }
+          ) {
+            const mergedGearItems = existing.gearListItems
+              ? existing.gearListItems.slice(0) //slice used to immutable existing
+              : []
+            for (let i = 0; i < incoming.gearListItems.length; ++i) {
+              mergedGearItems[offset + i] = incoming.gearListItems[i]
+            }
+            return {
+              totalDocs: incoming.totalDocs,
+              gearListItems: mergedGearItems,
+            }
           },
         },
       },

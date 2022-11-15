@@ -79,6 +79,10 @@ const resolvers = {
       const gearItem = await GearItem.findById(root.gearItem)
       return gearItem
     },
+    userThatUpdated: async (root, args, context) => {
+      const user = await User.findById(root.userThatUpdated)
+      return user
+    },
   },
   GearListGearPref: {
     pref: async (root, args, context) => {
@@ -601,7 +605,6 @@ const resolvers = {
     },
 
     getList: async (root, args, context) => {
-      //ToDo: Potential pagination on GearListItem
       try {
         return await GearList.findById(args.id)
       } catch (e) {
