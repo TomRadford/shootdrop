@@ -5,7 +5,7 @@ const whitePixel =
 
 const GearItem = ({ data, listToAdd, list }) => {
   const gearItem = list ? data.gearItem : data
-  console.log(gearItem)
+
   return (
     <div className="overflow-hidden rounded-xl shadow-lg">
       <Link href={`/gear/${gearItem.id}`}>

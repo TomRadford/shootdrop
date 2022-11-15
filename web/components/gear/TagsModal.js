@@ -6,13 +6,20 @@ import { Transition, Dialog } from "@headlessui/react"
 import { andFormatter } from "../../lib/text/formatter"
 import { useGearQueryParams } from "../../lib/hooks/queryParams"
 
-const TagsModal = ({ setTagsModalOpen, tagsModalOpen, gearItem }) => {
+const TagsModal = ({
+  setTagsModalOpen,
+  tagsModalOpen,
+  gearItem,
+  listCategory,
+}) => {
   const [searchTerm, setSearchTerm] = useState("")
   const [loading, setLoading] = useState(false)
   const [query, setQuery] = useGearQueryParams()
   const [getTags, tagsResults] = useLazyQuery(ALL_TAGS, {
     fetchPolicy: "cache-and-network",
   })
+  const [editGearItem, editGearItemResult] = useMutation(EDIT_GEAR_ITEM)
+  const [addTag, addTagResult] = useMutation(ADD_TAG)
 
   //ToDo: refactor into normal useQuery with refetch
   useEffect(() => {
@@ -28,11 +35,16 @@ const TagsModal = ({ setTagsModalOpen, tagsModalOpen, gearItem }) => {
             ? gearItem.category
             : query.category
             ? [query.category]
+            : listCategory
+            ? [listCategory]
             : null, //array of categories or empty for Browser with
         },
       })
       setLoading(false)
     }
+
+    console.log(query.category)
+
     if (searchTerm.length > 0) {
       setLoading(true)
       const timeout = setTimeout(() => {
@@ -42,6 +54,8 @@ const TagsModal = ({ setTagsModalOpen, tagsModalOpen, gearItem }) => {
               ? gearItem.category
               : query.category
               ? [query.category]
+              : listCategory
+              ? [listCategory]
               : null, //array of categories or empty for Browser with
             tag: searchTerm,
           },
@@ -57,9 +71,6 @@ const TagsModal = ({ setTagsModalOpen, tagsModalOpen, gearItem }) => {
     : query.tags
     ? query.tags
     : []
-
-  const [editGearItem, editGearItemResult] = useMutation(EDIT_GEAR_ITEM)
-  const [addTag, addTagResult] = useMutation(ADD_TAG)
 
   return (
     <Transition

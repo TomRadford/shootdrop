@@ -3,6 +3,7 @@ import GearTags from "./TagsList"
 import { useGearQueryParams } from "../../lib/hooks/queryParams"
 import { useRouter } from "next/router"
 import Link from "next/link"
+import ListComment from "../list/Comment"
 
 // Debounced query params used for search state
 const GearFilter = ({
@@ -127,6 +128,7 @@ const GearFilter = ({
             </Link>
           </div>
         )}
+        {list && <ListComment list={list} />}
         {/* ToDo: show this filter on listToAdd */}
         {!list ? (
           <div className="flex flex-col gap-1">

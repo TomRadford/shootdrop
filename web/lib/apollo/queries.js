@@ -423,6 +423,16 @@ export const GET_LIST = gql`
   }
   ${LIST_DETAILS}
 `
+
+export const EDIT_LIST = gql`
+  mutation editList($id: String!, $comment: String!) {
+    editList(id: $id, comment: $comment) {
+      ...ListDetails
+    }
+  }
+  ${LIST_DETAILS}
+`
+
 export const GET_LIST_ITEMS = gql`
   query getListItems(
     $list: String!

@@ -44,7 +44,7 @@ const GearBrowser = ({ listToAdd, list }) => {
     list ? GET_LIST_ITEMS : ALL_GEAR_ITEMS,
     //ToDo: update cache on local/subscription-based gearItem add
     {
-      variables: list ? { ...query, list: list.id } : query, //use queryParams to filter
+      variables: list ? { ...query, list: list.id } : query, //use queryParams to filter & list.id if list
       fetchPolicy: "network-only",
       onCompleted: () => {
         setFetchingMore(false)
@@ -52,7 +52,6 @@ const GearBrowser = ({ listToAdd, list }) => {
       },
     }
   )
-  console.log(allGearData)
 
   const {
     ref: inViewRef,
