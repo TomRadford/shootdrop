@@ -465,25 +465,26 @@ const resolvers = {
       checkDropPermissions(context, parentDrop)
       const { quantity, prefs, comment } = args
       try {
-        listToEdit.items.id(args.id).userThatUpdated = context.currentUser
+        const listItem = await GearListItem.findById(args.id)
+        listItem.userThatUpdated = context.currentUser
         if (quantity) {
-          listToEdit.items.id(args.id).quantity = quantity
+          listItem.quantity = quantity
         }
         if (comment) {
-          listToEdit.items.id(args.id).comment = comment
+          listItem.comment = comment
         }
         if (prefs) {
-          listToEdit.items.id(args.id).prefs = prefs.map((pref) => {
+          listItem.prefs = prefs.map((pref) => {
             return {
               pref: mongoose.Types.ObjectId(pref.id),
               opts: pref.opts.map((opt) => mongoose.Types.ObjectId(opt)),
             }
           })
         }
+        return await listItem.save()
       } catch {
         throw new UserInputError("List item does not exist")
       }
-      return await listToEdit.save()
     },
 
     removeListItem: async (root, args, context) => {

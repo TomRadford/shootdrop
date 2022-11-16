@@ -436,6 +436,41 @@ export const EDIT_LIST = gql`
   ${LIST_DETAILS}
 `
 
+export const ADD_LIST = gql`
+  mutation addList($drop: String!, $category: GearCategory!, $comment: String) {
+    addList(drop: $drop, category: $category, comment: $comment) {
+      ...ListDetails
+    }
+  }
+  ${LIST_DETAILS}
+`
+
+const GEAR_LIST_ITEM_DETAILS = gql`
+  fragment GearListItemDetails on GearListItem {
+    id
+    quantity
+    comment
+    gearItem {
+      ...GearItemDetails
+    }
+    userThatUpdated {
+      ...UserDetails
+    }
+    prefs {
+      pref {
+        id
+        name
+      }
+      opts {
+        id
+        name
+      }
+    }
+  }
+  ${GEAR_ITEM_DETAILS}
+  ${USER_DETAILS}
+`
+
 export const GET_LIST_ITEMS = gql`
   query getListItems(
     $list: String!
@@ -446,37 +481,30 @@ export const GET_LIST_ITEMS = gql`
     getListItems(list: $list, limit: $limit, offset: $offset, tags: $tags) {
       totalDocs
       gearListItems {
-        id
-        quantity
-        comment
-        gearItem {
-          ...GearItemDetails
-        }
-        userThatUpdated {
-          ...UserDetails
-        }
-        prefs {
-          pref {
-            id
-            name
-          }
-          opts {
-            id
-            name
-          }
-        }
+        ...GearListItemDetails
       }
     }
   }
-  ${GEAR_ITEM_DETAILS}
-  ${USER_DETAILS}
+  ${GEAR_LIST_ITEM_DETAILS}
 `
 
-export const ADD_LIST = gql`
-  mutation addList($drop: String!, $category: GearCategory!, $comment: String) {
-    addList(drop: $drop, category: $category, comment: $comment) {
-      ...ListDetails
+export const EDIT_LIST_ITEM = gql`
+  mutation editListItem(
+    $list: String!
+    $id: String!
+    $quantity: Int
+    $prefs: [ListPrefInput]
+    $comment: String
+  ) {
+    editListItem(
+      list: $list
+      id: $id
+      quantity: $quantity
+      prefs: $prefs
+      comment: $comment
+    ) {
+      ...GearListItemDetails
     }
   }
-  ${LIST_DETAILS}
+  ${GEAR_LIST_ITEM_DETAILS}
 `

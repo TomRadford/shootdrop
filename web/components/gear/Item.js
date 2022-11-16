@@ -1,11 +1,14 @@
 import Link from "next/link"
 import Image from "next/image"
+import ItemQuantity from "../list/ItemQuantity"
+import useUserInDrop from "../../lib/hooks/userInDrop"
 const whitePixel =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII="
 
 const GearItem = ({ data, listToAdd, list }) => {
   const gearItem = list ? data.gearItem : data
-
+  const userInDrop = useUserInDrop(list.drop)
+  console.log(data)
   return (
     <div className="overflow-hidden rounded-xl shadow-lg">
       <Link href={`/gear/${gearItem.id}`}>
@@ -41,6 +44,15 @@ const GearItem = ({ data, listToAdd, list }) => {
         </a>
       </Link>
       {listToAdd && <button className="my-3 font-bold">Add Item</button>}
+      {list && (
+        <div className="mx-4 my-2 flex">
+          <ItemQuantity
+            listId={list.id}
+            gearListItem={data}
+            userInDrop={userInDrop}
+          />
+        </div>
+      )}
     </div>
   )
 }

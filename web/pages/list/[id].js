@@ -41,9 +41,7 @@ const ListPage = ({ list }) => {
             ? `${
                 listResult.data.getList.category[0]
               }${listResult.data.getList.category.slice(1).toLowerCase()} gear |
-          ${listResult.data.getList.drop.project}  ${
-                listResult.data.getList.drop.name
-              } | ShootDrop`
+          ${listResult.data.getList.drop.project} | ShootDrop`
             : `${list.category[0]}${list.category.slice(1).toLowerCase()} gear |
           ${list.drop.project} | ShootDrop`}
         </title>
