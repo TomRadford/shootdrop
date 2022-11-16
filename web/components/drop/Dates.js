@@ -23,6 +23,7 @@ const DateOption = ({ label, date, setDate, dropDate, userInDrop }) => {
             onClick={(e) => {
               me ? setDate(new Date()) : e.preventDefault()
             }}
+            disabled={!me || !userInDrop}
             className={`text-lg ${!me && `cursor-default`}`}
           >
             {me && userInDrop ? "Click to add" : "Join to add"}

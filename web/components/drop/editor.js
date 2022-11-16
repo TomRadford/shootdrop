@@ -6,17 +6,10 @@ import DropDates from "./Dates"
 import DropInfo from "./Info"
 import DropListInfo from "./List"
 import useGetMe from "../../lib/hooks/getMe"
+import useUserInDrop from "../../lib/hooks/userInDrop"
 
 const DropEditor = ({ children, drop }) => {
-  const me = useGetMe()
-  const [userInDrop, setUserInDrop] = useState(true)
-  useEffect(() => {
-    if (me && drop) {
-      setUserInDrop(drop.users.find((user) => user.id === me.id))
-    } else {
-      setUserInDrop(true)
-    }
-  }, [me])
+  const userInDrop = useUserInDrop(drop)
 
   return (
     <div className="flex h-full min-h-screen">

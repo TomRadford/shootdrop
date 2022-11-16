@@ -73,7 +73,7 @@ const GearFilter = ({
 
   return (
     <form className="flex w-full flex-wrap items-center justify-center gap-8 bg-gradient-to-b from-[#121212] to-transparent pb-8 pt-16 md:pt-8">
-      <div className="flex flex-col gap-1 px-3 xl:flex-row">
+      <div className="flex flex-col items-center gap-1 px-3 xl:flex-row">
         {!list ? (
           <div className="relative z-40 mb-14 flex w-full justify-center sm:justify-start xl:mr-40">
             <div className="group absolute rounded-xl bg-[#191f29]">

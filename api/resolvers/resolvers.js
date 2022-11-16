@@ -67,6 +67,12 @@ const resolvers = {
       return gearItemWithImages.images
     },
   },
+  Drop: {
+    users: async (root, args, context) => {
+      const dropWithUsers = await root.populate("users")
+      return dropWithUsers.users
+    },
+  },
 
   GearList: {
     drop: async (root, args, context) => {

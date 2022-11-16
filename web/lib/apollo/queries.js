@@ -78,6 +78,9 @@ export const LIST_DETAILS = gql`
     drop {
       id
       project
+      users {
+        id
+      }
     }
     updatedAt
   }

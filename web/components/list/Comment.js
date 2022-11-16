@@ -4,19 +4,22 @@ import useGetMe from "../../lib/hooks/getMe"
 import { useMutation } from "@apollo/client"
 import { EDIT_LIST } from "../../lib/apollo/queries"
 import { useEffect } from "react"
+import useUserInDrop from "../../lib/hooks/userInDrop"
 
 const ListComment = ({ list }) => {
-  console.log(list)
   const [comment, setComment] = useState(
     list ? (list.comment ? list.comment : "") : ""
   )
   const me = useGetMe()
+  const userInDrop = useUserInDrop(list.drop)
+
   const [editList, editListResult] = useMutation(EDIT_LIST)
+
   useEffect(() => {
     //If !gearItem.description, only update to description/"" if logged in
     if (list.comment !== comment) {
       const timeout = setTimeout(() => {
-        console.log("updating description")
+        console.log("updating list comment")
         editList({
           //Here
           variables: {
@@ -33,14 +36,14 @@ const ListComment = ({ list }) => {
     <TextareaAutosize
       name="Model"
       className="w-full resize-none whitespace-pre-wrap bg-transparent text-left text-sm font-light text-gray-200 md:text-sm"
-      placeholder="Short description of this gear item, ideally from the manufacturer or a reputable website."
+      placeholder="Short description of this list, ideally making any important notes on the gear selection."
       autoComplete="off"
       data-gramm="false"
       data-gramm_editor="false"
       data-enable-grammarly="false"
       value={comment}
       onChange={({ target }) => setComment(target.value)}
-      disabled={!me}
+      disabled={!me || !userInDrop}
     />
   )
 }
