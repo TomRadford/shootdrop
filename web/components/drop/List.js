@@ -4,22 +4,25 @@ import { AddButton } from "../AddCard"
 import { useRouter } from "next/router"
 import { useEffect } from "react"
 import Card from "../Card"
-const DropListInfo = ({ dropId, category, listEntry }) => {
+import useUserInDrop from "../../lib/hooks/userInDrop"
+import useGetMe from "../../lib/hooks/getMe"
+const DropListInfo = ({ drop, category, listEntry }) => {
   const router = useRouter()
+  const userInDrop = useUserInDrop(drop)
+  const me = useGetMe()
   const [addList, { data, loading, error }] = useMutation(ADD_LIST)
   const handleAdd = (e) => {
     e.preventDefault()
     addList({
       variables: {
         category,
-        drop: dropId,
+        drop: drop.id,
       },
     })
   }
 
   useEffect(() => {
     if (data) {
-      console.log(data)
       router.push(`/list/${data.addList.id}`)
     }
   }, [data])
@@ -36,9 +39,9 @@ const DropListInfo = ({ dropId, category, listEntry }) => {
             </div>
           </Card>
         </div>
-      ) : (
+      ) : userInDrop && me ? (
         <AddButton title={category} onClick={handleAdd} />
-      )}
+      ) : null}
     </>
   )
 }

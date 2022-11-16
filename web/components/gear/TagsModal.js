@@ -43,8 +43,6 @@ const TagsModal = ({
       setLoading(false)
     }
 
-    console.log(query.category)
-
     if (searchTerm.length > 0) {
       setLoading(true)
       const timeout = setTimeout(() => {

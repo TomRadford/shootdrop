@@ -605,7 +605,7 @@ const resolvers = {
         //placeholder to protect all drops on prod
         throw new AuthenticationError("Unauthoized")
       }
-      const drops = await Drop.find({}).populate("users")
+      const drops = await Drop.find({}).populate("users").populate("lists")
 
       return drops
     },
