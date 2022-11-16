@@ -2,21 +2,23 @@ import Link from "next/link"
 import Image from "next/image"
 import ItemQuantity from "../list/ItemQuantity"
 import useUserInDrop from "../../lib/hooks/userInDrop"
+import ItemComment from "../list/ItemComment"
+import ItemPreference from "../list/ItemPreference"
 const whitePixel =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII="
 
 const GearItem = ({ data, listToAdd, list }) => {
   const gearItem = list ? data.gearItem : data
-  const userInDrop = useUserInDrop(list.drop)
-  console.log(data)
+  const userInDrop = list ? useUserInDrop(list.drop) : false
+  // console.log(data)
   return (
-    <div className="overflow-hidden rounded-xl shadow-lg">
+    <div className="h-full overflow-hidden rounded-xl bg-black bg-opacity-30 shadow-xl">
       <Link href={`/gear/${gearItem.id}`}>
         {/* ToDo: Consider target blank to open new tab
 				Disadvantage would be reloading app in new tab
 */}
         <a>
-          <div className="relative -mb-1 hover:cursor-pointer">
+          <div className="relative -mb-2 hover:cursor-pointer">
             {gearItem.images.length > 0 ? (
               <Image
                 src={gearItem.images[0].url}
@@ -45,8 +47,18 @@ const GearItem = ({ data, listToAdd, list }) => {
       </Link>
       {listToAdd && <button className="my-3 font-bold">Add Item</button>}
       {list && (
-        <div className="mx-4 my-2 flex">
+        <div className="mx-4 my-2 flex flex-col ">
           <ItemQuantity
+            listId={list.id}
+            gearListItem={data}
+            userInDrop={userInDrop}
+          />
+          <ItemComment
+            listId={list.id}
+            gearListItem={data}
+            userInDrop={userInDrop}
+          />
+          <ItemPreference
             listId={list.id}
             gearListItem={data}
             userInDrop={userInDrop}

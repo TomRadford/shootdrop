@@ -34,7 +34,7 @@ const ListComment = ({ list }) => {
 
   return (
     <TextareaAutosize
-      name="Model"
+      name="Comment"
       className="w-full resize-none whitespace-pre-wrap bg-transparent text-left text-sm font-light text-gray-200 md:text-sm"
       placeholder="Short description of this list, ideally making any important notes on the gear selection."
       autoComplete="off"

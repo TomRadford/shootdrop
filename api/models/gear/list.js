@@ -46,7 +46,10 @@ const GearListSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    comment: String,
+    comment: {
+      type: String,
+      default: "",
+    },
     drop: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Drop",

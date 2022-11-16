@@ -473,6 +473,9 @@ const resolvers = {
         if (comment) {
           listItem.comment = comment
         }
+        if (comment === "") {
+          listItem.comment = ""
+        }
         if (prefs) {
           listItem.prefs = prefs.map((pref) => {
             return {
