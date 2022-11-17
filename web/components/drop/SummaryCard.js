@@ -1,5 +1,5 @@
 import Card from "../../components/Card"
-import { format } from "date-fns"
+import { formatDistance, format } from "date-fns"
 import Image from "next/image"
 import Link from "next/link"
 const DropSummaryCard = ({ drop }) => {
@@ -82,7 +82,7 @@ const DropSummaryCard = ({ drop }) => {
             </div>
             <div className="flex items-center justify-end gap-2 pb-0">
               <p className="text-right text-xs text-gray-300">
-                Last edited {format(new Date(drop.updatedAt), "HH:mm d/M/yy")}
+                Last edited {formatDistance(new Date(drop.updatedAt), new Date())} ago
               </p>
               <div className="flex -space-x-2 self-start ">
                 {drop &&
