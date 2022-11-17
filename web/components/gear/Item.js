@@ -10,7 +10,7 @@ const whitePixel =
 const GearItem = ({ data, listToAdd, list }) => {
   const gearItem = list ? data.gearItem : data
   const userInDrop = list ? useUserInDrop(list.drop) : false
-  // console.log(data)
+  console.log(data)
   return (
     <div className="h-full overflow-hidden rounded-xl bg-black bg-opacity-30 shadow-xl">
       <Link href={`/gear/${gearItem.id}`}>
