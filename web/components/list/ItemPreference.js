@@ -19,6 +19,7 @@ const PrefOpt = ({
         (listItemPref) => listItemPref.pref.id === pref.id
       )
       //ToDo: relook creating a mutation for add/remove listItemPref
+      // instead of passing through all prefs each time
       let newListItemPref = {}
       if (selected) {
         newListItemPref = existingPref
@@ -27,7 +28,7 @@ const PrefOpt = ({
       } else {
         newListItemPref = { id: existingPref.pref.id, opts: [...existingPref.opts.filter(existingOpt => existingOpt.id !== opt.id).map(opt => opt.id)] }
       }
-      console.log(newListItemPref) //HERE
+      console.log("updating options")
       editListItem({
         variables: {
           list: listId,
@@ -38,24 +39,19 @@ const PrefOpt = ({
     }
   }, [selected])
   return (
-    <div className="ml-2 flex gap-2" key={opt.id}>
+    <label className="text-sm ml-2 flex gap-2 items-center form-control ">
       <input
         type="checkbox"
         checked={selected}
         disabled={!userInDrop}
         onChange={() => setSelected(!selected)}
       />
-      <label className="text-sm">{opt.name}</label>
-    </div>
+      {opt.name}
+    </label>
   )
 }
 
 const ItemPreference = ({ listId, gearListItem, userInDrop }) => {
-  // console.log(
-  //   gearListItem.gearItem.id === "6368d2052b2cf28e1c31ae5d"
-  //     ? console.log(gearListItem)
-  //     : ""
-  // )
   const { gearItem } = gearListItem
   const listItemPrefs = gearListItem.prefs ? gearListItem.prefs : []
 
