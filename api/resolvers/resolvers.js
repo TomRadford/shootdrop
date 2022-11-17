@@ -680,8 +680,6 @@ const resolvers = {
           options
         )
 
-        console.log(paginatedResults)
-
         const { totalDocs, totalPages, page, prevPage, nextPage } =
           paginatedResults
         return {
