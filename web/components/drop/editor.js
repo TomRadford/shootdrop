@@ -10,7 +10,7 @@ import useUserInDrop from "../../lib/hooks/userInDrop"
 
 const DropEditor = ({ children, drop }) => {
   const userInDrop = useUserInDrop(drop)
-
+  const me = useGetMe()
   return (
     <div className="flex h-full min-h-screen">
       <div className="mb-10 w-full pt-16 text-center md:mx-3 md:pt-6">

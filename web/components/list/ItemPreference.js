@@ -9,6 +9,7 @@ const PrefOpt = ({
   listId,
   userInDrop,
   pref,
+  gearListItem
 }) => {
   const [selected, setSelected] = useState(optSelected)
   const [editListItem, { data, loading, error }] = useMutation(EDIT_LIST_ITEM)
@@ -17,18 +18,23 @@ const PrefOpt = ({
       const existingPref = listItemPrefs.find(
         (listItemPref) => listItemPref.pref.id === pref.id
       )
-
-      const prefToAdd = existingPref
-        ? { id: existingPref.pref.id, opts: existingPref.opts }
-        : { id: pref.id, opts: [opt.id] }
-      console.log(prefToAdd) //HERE
-      // editListItem({
-      // 	variables: {
-      // 		list: listId,
-      // 		id: gearListItem.id,
-      // 		prefs: gearListItem.prefs.concat()
-      // 	}
-      // })
+      //ToDo: relook creating a mutation for add/remove listItemPref
+      let newListItemPref = {}
+      if (selected) {
+        newListItemPref = existingPref
+          ? { id: existingPref.pref.id, opts: [...existingPref.opts.map(existingOpt => existingOpt.id), opt.id] }
+          : { id: pref.id, opts: [opt.id] }
+      } else {
+        newListItemPref = { id: existingPref.pref.id, opts: [...existingPref.opts.filter(existingOpt => existingOpt.id !== opt.id).map(opt => opt.id)] }
+      }
+      console.log(newListItemPref) //HERE
+      editListItem({
+        variables: {
+          list: listId,
+          id: gearListItem.id,
+          prefs: newListItemPref
+        }
+      })
     }
   }, [selected])
   return (
@@ -77,6 +83,7 @@ const ItemPreference = ({ listId, gearListItem, userInDrop }) => {
               optSelected={isPrefSelected(pref, opt)}
               listItemPrefs={listItemPrefs}
               listId={listId}
+              gearListItem={gearListItem}
               userInDrop={userInDrop}
             />
           ))}
