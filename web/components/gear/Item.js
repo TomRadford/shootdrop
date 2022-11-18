@@ -13,14 +13,19 @@ const GearItem = ({ data, listToAdd, list }) => {
   const gearItem = list ? data.gearItem : data
   const userInDrop = list ? useUserInDrop(list.drop) : false
   return (
-    <div className="relative h-full bg-black bg-opacity-30 shadow-xl">
+    <div
+      // Double overflow on parent and child for
+      className={`relative h-full rounded-xl bg-black bg-opacity-30 shadow-xl ${
+        list || listToAdd ? `` : "overflow-hidden"
+      }`}
+    >
       {userInDrop && <ItemRemove listId={list.id} gearListItemId={data.id} />}
       <Link href={`/gear/${gearItem.id}`}>
         {/* ToDo: Consider target blank to open new tab
 				Disadvantage would be reloading app in new tab
 */}
         <a>
-          <div className="relative -mb-2 overflow-hidden rounded-xl hover:cursor-pointer">
+          <div className="relative -mb-2 overflow-hidden rounded-2xl hover:cursor-pointer">
             {gearItem.images.length > 0 ? (
               <>
                 <Image
