@@ -509,3 +509,9 @@ export const EDIT_LIST_ITEM = gql`
   }
   ${GEAR_LIST_ITEM_DETAILS}
 `
+
+export const REMOVE_LIST_ITEM = gql`
+  mutation removeListItem($list: String!, $id: String!) {
+    removeListItem(list: $list, id: $id)
+  }
+`

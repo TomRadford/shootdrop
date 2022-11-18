@@ -445,11 +445,11 @@ const resolvers = {
         userThatUpdated: context.currentUser,
         prefs: prefs
           ? prefs.map((pref) => {
-            return {
-              pref: mongoose.Types.ObjectId(pref.id),
-              opts: pref.opts.map((opt) => mongoose.Types.ObjectId(opt)),
-            }
-          })
+              return {
+                pref: mongoose.Types.ObjectId(pref.id),
+                opts: pref.opts.map((opt) => mongoose.Types.ObjectId(opt)),
+              }
+            })
           : null,
       })
       return await newGearListItem.save()
@@ -499,11 +499,11 @@ const resolvers = {
       const parentDrop = await Drop.findOne({ lists: listToEdit })
       checkDropPermissions(context, parentDrop)
       try {
-        listToEdit.items.id(args.id).remove()
+        await GearListItem.findByIdAndDelete(args.id)
+        return args.id
       } catch {
         throw new UserInputError("List item does not exist")
       }
-      return await listToEdit.save()
     },
 
     login: async (root, args) => {
@@ -652,7 +652,6 @@ const resolvers = {
             },
           },
         ]
-
 
         if (args.list) {
           aggregateParams.push({

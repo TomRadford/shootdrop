@@ -9,7 +9,7 @@ const PrefOpt = ({
   listId,
   userInDrop,
   pref,
-  gearListItem
+  gearListItem,
 }) => {
   const [selected, setSelected] = useState(optSelected)
   const [editListItem, { data, loading, error }] = useMutation(EDIT_LIST_ITEM)
@@ -23,31 +23,46 @@ const PrefOpt = ({
       let newListItemPref = {}
       if (selected) {
         newListItemPref = existingPref
-          ? { id: existingPref.pref.id, opts: [...existingPref.opts.map(existingOpt => existingOpt.id), opt.id] }
+          ? {
+              id: existingPref.pref.id,
+              opts: [
+                ...existingPref.opts.map((existingOpt) => existingOpt.id),
+                opt.id,
+              ],
+            }
           : { id: pref.id, opts: [opt.id] }
       } else {
-        newListItemPref = { id: existingPref.pref.id, opts: [...existingPref.opts.filter(existingOpt => existingOpt.id !== opt.id).map(opt => opt.id)] }
+        newListItemPref = {
+          id: existingPref.pref.id,
+          opts: [
+            ...existingPref.opts
+              .filter((existingOpt) => existingOpt.id !== opt.id)
+              .map((opt) => opt.id),
+          ],
+        }
       }
       console.log("updating options")
       editListItem({
         variables: {
           list: listId,
           id: gearListItem.id,
-          prefs: newListItemPref
-        }
+          prefs: newListItemPref,
+        },
       })
     }
   }, [selected])
   return (
-    <label className="text-sm ml-2 flex gap-2 items-center form-control ">
+    <div className="flex">
       <input
         type="checkbox"
         checked={selected}
         disabled={!userInDrop}
         onChange={() => setSelected(!selected)}
       />
-      {opt.name}
-    </label>
+      <label className="form-control ml-2 flex items-center gap-2 text-sm ">
+        {opt.name}
+      </label>
+    </div>
   )
 }
 
@@ -71,18 +86,20 @@ const ItemPreference = ({ listId, gearListItem, userInDrop }) => {
       {gearItem.allPrefs.map((pref) => (
         <div key={pref.id}>
           <h4 className="mb-1 font-semibold">{pref.name}</h4>
-          {pref.allOpts.map((opt) => (
-            <PrefOpt
-              key={opt.id}
-              pref={pref}
-              opt={opt}
-              optSelected={isPrefSelected(pref, opt)}
-              listItemPrefs={listItemPrefs}
-              listId={listId}
-              gearListItem={gearListItem}
-              userInDrop={userInDrop}
-            />
-          ))}
+          <div className="flex flex-col gap-2">
+            {pref.allOpts.map((opt) => (
+              <PrefOpt
+                key={opt.id}
+                pref={pref}
+                opt={opt}
+                optSelected={isPrefSelected(pref, opt)}
+                listItemPrefs={listItemPrefs}
+                listId={listId}
+                gearListItem={gearListItem}
+                userInDrop={userInDrop}
+              />
+            ))}
+          </div>
         </div>
       ))}
     </div>
