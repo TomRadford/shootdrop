@@ -14,6 +14,9 @@ const ListPage = ({ list }) => {
     variables: {
       id: listId,
     },
+    // Refresh list on page load to ensure latest
+    // data between users
+    // ToDo: potentially replace this with subscription
     fetchPolicy: 'cache-and-network'
   })
   if (!list) {

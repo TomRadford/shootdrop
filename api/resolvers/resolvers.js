@@ -437,22 +437,40 @@ const resolvers = {
       const parentDrop = await Drop.findOne({ lists: listToAdd })
       checkDropPermissions(context, parentDrop)
       const { gearItem, quantity, prefs, comment } = args
-      const newGearListItem = new GearListItem({
-        gearItem,
-        quantity,
-        comment,
-        gearList: listToAdd,
-        userThatUpdated: context.currentUser,
-        prefs: prefs
+      const existingGearListItem = await GearListItem.findOne({ gearItem, gearList: args.list })
+      if (existingGearListItem) {
+        // If gearItem already exists in this list: 
+        // increment quantity instead of duplicating
+        existingGearListItem.quantity = existingGearListItem.quantity + 1
+        existingGearListItem.comment = comment
+        existingGearListItem.prefs = prefs
           ? prefs.map((pref) => {
+            return {
+              pref: mongoose.Types.ObjectId(pref.id),
+              opts: pref.opts.map((opt) => mongoose.Types.ObjectId(opt)),
+            }
+          })
+          : null
+        existingGearListItem.userThatUpdated = context.currentUser
+        return await existingGearListItem.save()
+      } else {
+        const newGearListItem = new GearListItem({
+          gearItem,
+          quantity,
+          comment,
+          gearList: listToAdd,
+          userThatUpdated: context.currentUser,
+          prefs: prefs
+            ? prefs.map((pref) => {
               return {
                 pref: mongoose.Types.ObjectId(pref.id),
                 opts: pref.opts.map((opt) => mongoose.Types.ObjectId(opt)),
               }
             })
-          : null,
-      })
-      return await newGearListItem.save()
+            : null,
+        })
+        return await newGearListItem.save()
+      }
     },
 
     editListItem: async (root, args, context) => {
