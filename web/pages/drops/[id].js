@@ -17,6 +17,7 @@ const DropPage = ({ drop }) => {
     variables: {
       drop: dropId,
     },
+    fetchPolicy: 'cache-and-network'
   })
 
   if (!drop) {

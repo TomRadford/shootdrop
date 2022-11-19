@@ -44,7 +44,7 @@ const GearBrowser = ({ listToAdd, list }) => {
     list ? GET_LIST_ITEMS : ALL_GEAR_ITEMS,
     //ToDo: update cache on local/subscription-based gearItem add
     {
-      variables: list ? { ...query, list: list.id } : query, //use queryParams to filter & list.id if list
+      variables: list ? { ...query, list: list.id } : listToAdd ? { ...query, category: listToAdd.category } : query, //use queryParams to filter & list.id if list
       fetchPolicy: "network-only",
       onCompleted: () => {
         setFetchingMore(false)
@@ -73,9 +73,9 @@ const GearBrowser = ({ listToAdd, list }) => {
       inView &&
       (list
         ? allGearData.getListItems.gearListItems.length <
-          allGearData.getListItems.totalDocs
+        allGearData.getListItems.totalDocs
         : allGearData.allGearItems.gearItems.length <
-          allGearData.allGearItems.totalDocs)
+        allGearData.allGearItems.totalDocs)
     ) {
       setFetchingMore(true)
       fetchMoreGear({
@@ -90,7 +90,7 @@ const GearBrowser = ({ listToAdd, list }) => {
 
   return (
     <div className="flex h-full min-h-screen">
-      <div className="mb-10 w-full pt-0 text-center md:mx-0 md:pt-0">
+      <div className="w-full pt-0 text-center md:mx-0 md:pt-0 mb-10">
         <TagsModal
           tagsModalOpen={tagsModalOpen}
           listCategory={list ? list.category : null}
@@ -104,54 +104,88 @@ const GearBrowser = ({ listToAdd, list }) => {
           list={list}
           listToAdd={listToAdd}
         />
-
-        {allGearLoading || refetching ? (
-          <div className="mx-2 ">
-            <div className="mx-auto flex max-w-7xl flex-wrap justify-center gap-4">
-              <GearListSkeleton />
+        <div className="mb-10">
+          {allGearLoading || refetching ? (
+            <div className="mx-2 ">
+              <div className="mx-auto flex max-w-7xl flex-wrap justify-center gap-4">
+                <GearListSkeleton />
+              </div>
             </div>
-          </div>
-        ) : (
-          <div className="mx-2 ">
-            <div className="mx-auto flex max-w-7xl flex-wrap justify-center gap-4">
-              {list ? (
-                allGearData &&
-                allGearData.getListItems.gearListItems.length > 0 ? (
-                  allGearData.getListItems.gearListItems.map((gearListItem) => (
-                    <GearItem
-                      key={gearListItem.id}
-                      data={gearListItem}
-                      list={list}
-                    />
-                  ))
-                ) : (
-                  <NoResults />
-                )
-              ) : null}
-              {!list ? (
-                allGearData && allGearData.allGearItems.gearItems.length > 0 ? (
-                  allGearData.allGearItems.gearItems.map((gearItem) => (
-                    <GearItem
-                      key={gearItem.id}
-                      data={gearItem}
-                      listToAdd={listToAdd}
-                    />
-                  ))
-                ) : (
-                  <>
+          ) : (
+            <div className="mx-2 ">
+              <div className="mx-auto flex max-w-7xl flex-wrap justify-center gap-4">
+                {list ? (
+                  allGearData &&
+                    allGearData.getListItems.gearListItems.length > 0 ? (
+                    allGearData.getListItems.gearListItems.map((gearListItem) => (
+                      <GearItem
+                        key={gearListItem.id}
+                        data={gearListItem}
+                        list={list}
+                      />
+                    ))
+                  ) : (
                     <NoResults />
-                  </>
-                )
-              ) : null}
+                  )
+                ) : null}
+                {!list ? (
+                  allGearData && allGearData.allGearItems.gearItems.length > 0 ? (
+                    allGearData.allGearItems.gearItems.map((gearItem) => (
+                      <GearItem
+                        key={gearItem.id}
+                        data={gearItem}
+                        listToAdd={listToAdd}
+                      />
+                    ))
+                  ) : (
+                    <>
+                      <NoResults />
+                    </>
+                  )
+                ) : null}
 
-              {fetchingMore && <GearListSkeleton length={4} />}
+                {fetchingMore && <GearListSkeleton length={4} />}
+              </div>
+              {/* Empty div at end of list to trigger fetchMore */}
+              <div ref={inViewRef}></div>
             </div>
-            {/* Empty div at end of list to trigger fetchMore */}
-            <div ref={inViewRef}></div>
+          )}
+        </div>
+        {list || listToAdd ?
+          <div className="fixed left-0 md:pl-64 bottom-0 w-full">
+            <div className="flex justify-between px-10 pb-4 py-16 bg-gradient-to-t from-black w-full xl:px-64">
+              <div>
+                {list ?
+                  <Link href={`/drops/${list.drop.id}`}>
+                    <a className="flex gap-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
+                      </svg>
+                      Back to Drop
+                    </a>
+                  </Link> : <Link href={`/list/${listToAdd.id}`}>
+                    <a className="flex gap-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
+                      </svg>
+                      Back to List
+                    </a>
+                  </Link>
+                }
+              </div>
+              {list &&
+                <div>
+                  <Link href={`/list/${list.id}/add`}>
+                    <a className="flex gap-2">
+                      Add Items +
+                    </a>
+                  </Link>
+                </div>}
+            </div>
           </div>
-        )}
+          : null}
       </div>
-    </div>
+    </div >
   )
 }
 

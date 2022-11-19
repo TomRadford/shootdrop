@@ -10,7 +10,7 @@ const DropOption = ({ label, value, setValue, userInDrop }) => {
     <div className="flex flex-row justify-between">
       <p className="text-left font-light text-gray-300">{label}</p>
       <input
-        placeholder={me && userInDrop ? "Click to add" : "Login to add"}
+        placeholder={me && userInDrop ? "Click to add" : "Join to add"}
         className="w-[10rem] bg-transparent text-right font-semibold sm:w-[14rem]"
         value={value}
         onChange={({ target }) => setValue(target.value)}
