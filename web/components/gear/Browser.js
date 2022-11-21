@@ -49,7 +49,7 @@ const GearBrowser = ({ listToAdd, list }) => {
         : listToAdd
         ? { ...query, category: listToAdd.category }
         : query, //use queryParams to filter & list.id if list
-      fetchPolicy: "network-only",
+      // fetchPolicy: "network-only",
       onCompleted: () => {
         setFetchingMore(false)
         setRefetching(false)

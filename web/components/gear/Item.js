@@ -6,12 +6,29 @@ import ItemComment from "../list/ItemComment"
 import ItemPreference from "../list/ItemPreference"
 import { formatDistance } from "date-fns"
 import ItemRemove from "../list/ItemRemove"
+import { useMutation } from "@apollo/client"
+import { ADD_LIST_ITEM } from "../../lib/apollo/queries"
 const whitePixel =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII="
 
 const GearItem = ({ data, listToAdd, list }) => {
   const gearItem = list ? data.gearItem : data
   const userInDrop = list ? useUserInDrop(list.drop) : false
+  const [
+    addListItem,
+    {
+      data: addListItemData,
+      loading: addListItemLoading,
+      error: addListItemError,
+    },
+  ] = useMutation(ADD_LIST_ITEM)
+
+  const handleAddListItem = (e) => {
+    e.preventDefault()
+    //Adds new GearListItem then opens ListItem modal to edit prefs
+    addListItem({ variables: { list: listToAdd.id, gearItem: gearItem.id } })
+  }
+
   return (
     <div
       // Double overflow on parent and child for
@@ -54,7 +71,11 @@ const GearItem = ({ data, listToAdd, list }) => {
           </div>
         </a>
       </Link>
-      {listToAdd && <button className="my-3 font-bold">Add Item</button>}
+      {listToAdd && (
+        <button className="my-3 font-bold" onClick={handleAddListItem}>
+          Add Item
+        </button>
+      )}
       {list && (
         <div className="mx-4 my-2 flex flex-col ">
           <ItemQuantity

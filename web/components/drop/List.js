@@ -13,7 +13,7 @@ const DropListInfo = ({ drop, category, listEntry }) => {
   const router = useRouter()
   const userInDrop = useUserInDrop(drop)
   const [getListItems, { data: itemsData, loading: itemsLoading }] =
-    useLazyQuery(GET_LIST_ITEMS)
+    useLazyQuery(GET_LIST_ITEMS, { fetchPolicy: "network-only" })
   const me = useGetMe()
   const [addList, { data, loading, error }] = useMutation(ADD_LIST)
   const handleAdd = (e) => {
@@ -63,12 +63,10 @@ const DropListInfo = ({ drop, category, listEntry }) => {
                       <div className="flex -space-x-3 md:-space-x-2">
                         {itemsData.getListItems.gearListItems.map(
                           (listItem, i) => {
-                            console.log(listItem)
                             if (i < 5) {
                               return (
-                                <div>
+                                <div key={listItem.id}>
                                   <Image
-                                    key={listItem.id}
                                     src={
                                       listItem.gearItem.images[0]
                                         ? listItem.gearItem.images[0].url

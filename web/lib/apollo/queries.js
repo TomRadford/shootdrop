@@ -489,6 +489,27 @@ export const GET_LIST_ITEMS = gql`
   ${GEAR_LIST_ITEM_DETAILS}
 `
 
+export const ADD_LIST_ITEM = gql`
+  mutation addListItem(
+    $list: String!
+    $gearItem: String!
+    $quantity: Int
+    $prefs: [ListPrefInput]
+    $comment: String
+  ) {
+    addListItem(
+      list: $list
+      gearItem: $gearItem
+      quantity: $quantity
+      prefs: $prefs
+      comment: $comment
+    ) {
+      ...GearListItemDetails
+    }
+  }
+  ${GEAR_LIST_ITEM_DETAILS}
+`
+
 export const EDIT_LIST_ITEM = gql`
   mutation editListItem(
     $list: String!

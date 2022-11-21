@@ -10,14 +10,14 @@ const ItemRemove = ({ listId, gearListItemId }) => {
           { query: GET_LIST_ITEMS, variables: { list: listId } },
           ({ getListItems }) => {
             console.log(getListItems)
-            return {
-              getListItems: {
-                totalDocs: getListItems.totalDocs - 1,
-                gearListItems: getListItems.gearListItems.filter(
-                  (gearListItem) => gearListItem.id !== gearListItemId
-                ),
-              },
-            }
+            // return {
+            //   getListItems: {
+            //     totalDocs: getListItems.totalDocs - 1,
+            //     gearListItems: getListItems.gearListItems.filter(
+            //       (gearListItem) => gearListItem.id !== gearListItemId
+            //     ),
+            //   },
+            // }
           }
         )
       },
