@@ -437,19 +437,22 @@ const resolvers = {
       const parentDrop = await Drop.findOne({ lists: listToAdd })
       checkDropPermissions(context, parentDrop)
       const { gearItem, quantity, prefs, comment } = args
-      const existingGearListItem = await GearListItem.findOne({ gearItem, gearList: args.list })
+      const existingGearListItem = await GearListItem.findOne({
+        gearItem,
+        gearList: args.list,
+      })
       if (existingGearListItem) {
-        // If gearItem already exists in this list: 
+        // If gearItem already exists in this list:
         // increment quantity instead of duplicating
         existingGearListItem.quantity = existingGearListItem.quantity + 1
         existingGearListItem.comment = comment
         existingGearListItem.prefs = prefs
           ? prefs.map((pref) => {
-            return {
-              pref: mongoose.Types.ObjectId(pref.id),
-              opts: pref.opts.map((opt) => mongoose.Types.ObjectId(opt)),
-            }
-          })
+              return {
+                pref: mongoose.Types.ObjectId(pref.id),
+                opts: pref.opts.map((opt) => mongoose.Types.ObjectId(opt)),
+              }
+            })
           : null
         existingGearListItem.userThatUpdated = context.currentUser
         return await existingGearListItem.save()
@@ -462,11 +465,11 @@ const resolvers = {
           userThatUpdated: context.currentUser,
           prefs: prefs
             ? prefs.map((pref) => {
-              return {
-                pref: mongoose.Types.ObjectId(pref.id),
-                opts: pref.opts.map((opt) => mongoose.Types.ObjectId(opt)),
-              }
-            })
+                return {
+                  pref: mongoose.Types.ObjectId(pref.id),
+                  opts: pref.opts.map((opt) => mongoose.Types.ObjectId(opt)),
+                }
+              })
             : null,
         })
         return await newGearListItem.save()
@@ -517,8 +520,9 @@ const resolvers = {
       const parentDrop = await Drop.findOne({ lists: listToEdit })
       checkDropPermissions(context, parentDrop)
       try {
-        await GearListItem.findByIdAndDelete(args.id)
-        return args.id
+        const gearListItem = await GearListItem.findById(args.id)
+        await gearListItem.delete()
+        return gearListItem.id
       } catch {
         throw new UserInputError("List item does not exist")
       }

@@ -1,23 +1,27 @@
 import { useMutation } from "@apollo/client"
 import { GET_LIST_ITEMS, REMOVE_LIST_ITEM } from "../../lib/apollo/queries"
 
-const ItemRemove = ({ listId, gearListItemId }) => {
+const ItemRemove = ({ list, gearListItemId }) => {
   const [removeListItem, { data, error, loading }] = useMutation(
     REMOVE_LIST_ITEM,
     {
       update: (cache, response) => {
         cache.updateQuery(
-          { query: GET_LIST_ITEMS, variables: { list: listId } },
+          {
+            query: GET_LIST_ITEMS,
+            variables: { list: list.id },
+            overwrite: true, //Ignores merge queries
+          },
           ({ getListItems }) => {
-            console.log(getListItems)
-            // return {
-            //   getListItems: {
-            //     totalDocs: getListItems.totalDocs - 1,
-            //     gearListItems: getListItems.gearListItems.filter(
-            //       (gearListItem) => gearListItem.id !== gearListItemId
-            //     ),
-            //   },
-            // }
+            return {
+              getListItems: {
+                totalDocs: getListItems.totalDocs - 1,
+                gearListItems: getListItems.gearListItems.filter(
+                  (gearListItem) =>
+                    gearListItem.id !== response.data.removeListItem
+                ),
+              },
+            }
           }
         )
       },
@@ -26,7 +30,7 @@ const ItemRemove = ({ listId, gearListItemId }) => {
   const handleRemove = () => {
     removeListItem({
       variables: {
-        list: listId,
+        list: list.id,
         id: gearListItemId,
       },
     })

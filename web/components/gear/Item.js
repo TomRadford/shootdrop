@@ -36,7 +36,7 @@ const GearItem = ({ data, listToAdd, list }) => {
         list || listToAdd ? `` : "overflow-hidden"
       }`}
     >
-      {userInDrop && <ItemRemove listId={list.id} gearListItemId={data.id} />}
+      {userInDrop && <ItemRemove list={list} gearListItemId={data.id} />}
       <Link href={`/gear/${gearItem.id}`}>
         {/* ToDo: Consider target blank to open new tab
 				Disadvantage would be reloading app in new tab
