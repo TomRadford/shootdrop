@@ -10,7 +10,7 @@ const ItemRemove = ({ list, gearListItemId }) => {
           {
             query: GET_LIST_ITEMS,
             variables: { list: list.id },
-            overwrite: true, //Ignores merge queries
+            overwrite: true, //Ignores merge function defined in client setup
           },
           ({ getListItems }) => {
             return {

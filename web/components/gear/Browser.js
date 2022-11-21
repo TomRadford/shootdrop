@@ -8,6 +8,8 @@ import TagsModal from "./TagsModal"
 import GearFilter from "./Filter"
 import { useGearQueryParams } from "../../lib/hooks/queryParams"
 import GearItem from "./Item"
+import ItemModal from "../list/ItemModal"
+import useListItemStore from "../../lib/hooks/store/listItem"
 
 const GearListSkeleton = ({ length = 20 }) => (
   <>
@@ -31,7 +33,6 @@ const GearBrowser = ({ listToAdd, list }) => {
   const [fetchingMore, setFetchingMore] = useState(false)
   const [refetching, setRefetching] = useState(false)
   const [tagsModalOpen, setTagsModalOpen] = useState(false)
-
   const [
     getGear,
     {
@@ -49,7 +50,7 @@ const GearBrowser = ({ listToAdd, list }) => {
         : listToAdd
         ? { ...query, category: listToAdd.category }
         : query, //use queryParams to filter & list.id if list
-      // fetchPolicy: "network-only",
+      fetchPolicy: "cache-and-network",
       onCompleted: () => {
         setFetchingMore(false)
         setRefetching(false)
@@ -100,6 +101,7 @@ const GearBrowser = ({ listToAdd, list }) => {
           listCategory={list ? list.category : null}
           setTagsModalOpen={setTagsModalOpen}
         />
+        <ItemModal list={listToAdd} />
 
         <GearFilter
           setRefetching={setRefetching}

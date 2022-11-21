@@ -1,21 +1,36 @@
-import { Fragment } from "react"
+import { Fragment, useEffect, useState } from "react"
 import { Transition, Dialog } from "@headlessui/react"
 import ItemQuantity from "./ItemQuantity"
 import ItemPreference from "./ItemPreference"
 import ItemComment from "./ItemComment"
+import useUserInDrop from "../../lib/hooks/userInDrop"
+import useListItemStore from "../../lib/hooks/store/listItem"
 
-const ItemModal = ({ list, gearListItem, userInDrop }) => {
+const ItemModal = ({ list }) => {
+  const listItem = useListItemStore((store) => store.listItem)
+  const setListItem = useListItemStore((store) => store.setListItem)
+  const userInDrop = list ? useUserInDrop(list.drop) : false
+  const [itemModalOpen, setItemModalOpen] = useState(false)
+  useEffect(() => {
+    console.log(listItem)
+    if (listItem) {
+      console.log(listItem)
+      setItemModalOpen(true)
+    }
+  }, [listItem])
   return (
     <Transition
       appear
-      show={tagsModalOpen}
+      show={itemModalOpen}
       as={Fragment}
-      // afterLeave={() => setSearchTerm("")}
+      afterLeave={() => setListItem(undefined)}
     >
       <Dialog
         as="div"
         className="relative z-10"
-        onClose={() => setTagsModalOpen(false)}
+        onClose={() => {
+          setItemModalOpen(false)
+        }}
       >
         <Transition.Child
           as={Fragment}
@@ -47,21 +62,25 @@ const ItemModal = ({ list, gearListItem, userInDrop }) => {
                   Choose your preferences
                 </Dialog.Title>
                 <div className="mx-4 my-2 flex flex-col ">
-                  <ItemQuantity
-                    listId={list.id}
-                    gearListItem={data}
-                    userInDrop={userInDrop}
-                  />
-                  <ItemComment
-                    listId={list.id}
-                    gearListItem={data}
-                    userInDrop={userInDrop}
-                  />
-                  <ItemPreference
-                    listId={list.id}
-                    gearListItem={data}
-                    userInDrop={userInDrop}
-                  />
+                  {listItem && (
+                    <>
+                      <ItemQuantity
+                        listId={list.id}
+                        gearListItem={listItem}
+                        userInDrop={userInDrop}
+                      />
+                      <ItemComment
+                        listId={list.id}
+                        gearListItem={listItem}
+                        userInDrop={userInDrop}
+                      />
+                      <ItemPreference
+                        listId={list.id}
+                        gearListItem={listItem}
+                        userInDrop={userInDrop}
+                      />
+                    </>
+                  )}
                 </div>
               </Dialog.Panel>
             </Transition.Child>

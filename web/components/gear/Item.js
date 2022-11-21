@@ -7,13 +7,17 @@ import ItemPreference from "../list/ItemPreference"
 import { formatDistance } from "date-fns"
 import ItemRemove from "../list/ItemRemove"
 import { useMutation } from "@apollo/client"
-import { ADD_LIST_ITEM } from "../../lib/apollo/queries"
+import { ADD_LIST_ITEM, GET_LIST_ITEMS } from "../../lib/apollo/queries"
+import useListItemStore from "../../lib/hooks/store/listItem"
+import { useEffect } from "react"
 const whitePixel =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII="
 
 const GearItem = ({ data, listToAdd, list }) => {
   const gearItem = list ? data.gearItem : data
   const userInDrop = list ? useUserInDrop(list.drop) : false
+  const listItem = useListItemStore((state) => state.listItem)
+  const setListItem = useListItemStore((state) => state.setListItem)
   const [
     addListItem,
     {
@@ -21,13 +25,42 @@ const GearItem = ({ data, listToAdd, list }) => {
       loading: addListItemLoading,
       error: addListItemError,
     },
-  ] = useMutation(ADD_LIST_ITEM)
+  ] = useMutation(ADD_LIST_ITEM, {
+    update: (cache, response) => {
+      // ToDo: update gearListItems using cache,
+      //currently using cache-and-network fetch policy due to
+      // not being able to merge dupes (quantity > 1) on client
+      // cache.updateQuery(
+      //   {
+      //     query: GET_LIST_ITEMS,
+      //     variables: { list: listToAdd.id },
+      //   },
+      //   ({ getListItems }) => {
+      //     return {
+      //       getListItems: {
+      //         totalDocs: getListItems.totalDocs + 1,
+      //         gearListItems: getListItems.gearListItems.concat(
+      //           response.data.addListItem
+      //         ),
+      //       },
+      //     }
+      //   }
+      // )
+    },
+  })
+  // ToDo: cache update
 
   const handleAddListItem = (e) => {
     e.preventDefault()
     //Adds new GearListItem then opens ListItem modal to edit prefs
     addListItem({ variables: { list: listToAdd.id, gearItem: gearItem.id } })
   }
+
+  useEffect(() => {
+    if (addListItemData) {
+      setListItem(addListItemData.addListItem)
+    }
+  }, [addListItemData])
 
   return (
     <div
