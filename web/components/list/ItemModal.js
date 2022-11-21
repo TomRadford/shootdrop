@@ -12,9 +12,7 @@ const ItemModal = ({ list }) => {
   const userInDrop = list ? useUserInDrop(list.drop) : false
   const [itemModalOpen, setItemModalOpen] = useState(false)
   useEffect(() => {
-    console.log(listItem)
     if (listItem) {
-      console.log(listItem)
       setItemModalOpen(true)
     }
   }, [listItem])
@@ -57,9 +55,9 @@ const ItemModal = ({ list }) => {
               <Dialog.Panel className="w-full max-w-xs transform overflow-hidden rounded-2xl bg-black px-10 py-5 text-left align-middle text-white shadow-xl transition-all sm:max-w-md">
                 <Dialog.Title
                   as="h3"
-                  className="text-lg font-medium leading-6 text-white"
+                  className="leading-2 text-lg font-medium text-white"
                 >
-                  Choose your preferences
+                  Added! Choose your preferences
                 </Dialog.Title>
                 <div className="mx-4 my-2 flex flex-col ">
                   {listItem && (

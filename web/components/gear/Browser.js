@@ -9,7 +9,7 @@ import GearFilter from "./Filter"
 import { useGearQueryParams } from "../../lib/hooks/queryParams"
 import GearItem from "./Item"
 import ItemModal from "../list/ItemModal"
-import useListItemStore from "../../lib/hooks/store/listItem"
+import useUserInDrop from "../../lib/hooks/userInDrop"
 
 const GearListSkeleton = ({ length = 20 }) => (
   <>
@@ -22,17 +22,13 @@ const GearListSkeleton = ({ length = 20 }) => (
   </>
 )
 
-const NoResults = () => (
-  <h3 className="font-light text-gray-300">No results :(</h3>
-)
-
 //GearBrowser to be used on /gear, /list/[id] and /list/[id]/add routes
-
 const GearBrowser = ({ listToAdd, list }) => {
   const [query, setQuery] = useGearQueryParams()
   const [fetchingMore, setFetchingMore] = useState(false)
   const [refetching, setRefetching] = useState(false)
   const [tagsModalOpen, setTagsModalOpen] = useState(false)
+  const userInDrop = useUserInDrop(list ? list.drop : false)
   const [
     getGear,
     {
@@ -133,7 +129,13 @@ const GearBrowser = ({ listToAdd, list }) => {
                       )
                     )
                   ) : (
-                    <NoResults />
+                    <h3 className="font-light text-gray-300">
+                      No items yet,{" "}
+                      <Link href={`/list/${list.id}/add`}>
+                        <a className="font-bold">add </a>
+                      </Link>
+                      something!
+                    </h3>
                   )
                 ) : null}
                 {!list ? (
@@ -148,7 +150,9 @@ const GearBrowser = ({ listToAdd, list }) => {
                     ))
                   ) : (
                     <>
-                      <NoResults />
+                      <h3 className="font-light text-gray-300">
+                        No results :(
+                      </h3>
                     </>
                   )
                 ) : null}
@@ -206,13 +210,13 @@ const GearBrowser = ({ listToAdd, list }) => {
                   </Link>
                 )}
               </div>
-              {list && (
+              {list && userInDrop ? (
                 <div>
                   <Link href={`/list/${list.id}/add`}>
                     <a className="flex gap-2">Add Items +</a>
                   </Link>
                 </div>
-              )}
+              ) : null}
             </div>
           </div>
         ) : null}

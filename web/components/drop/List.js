@@ -63,7 +63,7 @@ const DropListInfo = ({ drop, category, listEntry }) => {
                       <div className="flex -space-x-3 md:-space-x-2">
                         {itemsData.getListItems.gearListItems.map(
                           (listItem, i) => {
-                            if (i < 5) {
+                            if (i < 12) {
                               return (
                                 <div key={listItem.id}>
                                   <Image
@@ -79,10 +79,15 @@ const DropListInfo = ({ drop, category, listEntry }) => {
                                   />
                                 </div>
                               )
-                            } else
-                              <div className="h-[30px] w-[30px] rounded-full bg-gray-600">
-                                {itemsData.getListItems.totalDocs + 1 - i}
-                              </div>
+                            } else {
+                              if (i === 12) {
+                                return (
+                                  <div className="z-10 flex h-[30px] w-[30px] items-center justify-center rounded-full bg-gray-800 text-[10px]">
+                                    +{itemsData.getListItems.totalDocs - 8}
+                                  </div>
+                                )
+                              }
+                            }
                           }
                         )}
                       </div>

@@ -441,6 +441,11 @@ const resolvers = {
         gearItem,
         gearList: args.list,
       })
+      //force update timestamps of drop and list
+      parentDrop.updatedAt = new Date()
+      await parentDrop.save()
+      listToAdd.updatedAt = new Date()
+      await listToAdd.save()
       if (existingGearListItem) {
         // If gearItem already exists in this list:
         // increment quantity instead of duplicating
@@ -472,6 +477,7 @@ const resolvers = {
               })
             : null,
         })
+
         return await newGearListItem.save()
       }
     },

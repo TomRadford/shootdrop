@@ -34,7 +34,10 @@ const GearListItemSchema = new mongoose.Schema(
         ],
       },
     ],
-    comment: String,
+    comment: {
+      type: String,
+      default: "",
+    },
   },
   { timestamps: true }
 )
