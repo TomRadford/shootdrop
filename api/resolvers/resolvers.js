@@ -457,6 +457,8 @@ const resolvers = {
     },
 
     addListItem: async (root, args, context) => {
+      //Note: if GearItem already exisits, quantity will increment
+      // and existing ListItem will return
       checkAuth(context)
       const listToAdd = await GearList.findById(args.list)
       if (!listToAdd) {
