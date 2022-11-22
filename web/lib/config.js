@@ -1,1 +1,1 @@
-export const UPDATE_TIMEOUT = 2000
+export const UPDATE_TIMEOUT = 1000

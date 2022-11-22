@@ -1,6 +1,7 @@
 import { useMutation } from "@apollo/client"
 import { useEffect, useState } from "react"
 import { EDIT_LIST_ITEM } from "../../lib/apollo/queries"
+import useListItemStore from "../../lib/hooks/store/listItem"
 
 const PrefOpt = ({
   opt,
@@ -12,7 +13,17 @@ const PrefOpt = ({
   gearListItem,
 }) => {
   const [selected, setSelected] = useState(optSelected)
+  const listItem = useListItemStore((store) => store.listItem)
+  const setListItem = useListItemStore((store) => store.setListItem)
   const [editListItem, { data, loading, error }] = useMutation(EDIT_LIST_ITEM)
+
+  useEffect(() => {
+    //If in item modal switch store to use editListItem data instead of addListItem
+    if (listItem && data) {
+      setListItem(data.editListItem)
+    }
+  }, [data])
+
   useEffect(() => {
     if (optSelected !== selected) {
       const existingPref = listItemPrefs.find(
@@ -59,6 +70,7 @@ const PrefOpt = ({
       ]
 
       console.log("updating options")
+      console.log(newPrefs)
       editListItem({
         variables: {
           list: listId,
@@ -97,8 +109,6 @@ const ItemPreference = ({ listId, gearListItem, userInDrop }) => {
       } else return false
     } else return false
   }
-
-  console.log(listItemPrefs)
 
   return (
     <div className="flex flex-col gap-2 text-left">

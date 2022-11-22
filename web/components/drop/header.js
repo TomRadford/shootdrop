@@ -103,7 +103,7 @@ const DropHeader = ({ drop, userInDrop }) => {
             data-enable-grammarly="false"
             value={dropName}
             onChange={({ target }) => setDropName(target.value)}
-            disabled={!me || !userInDrop}
+            disabled={drop ? !me || !userInDrop : !me}
           />
           <div className="mr-3 flex flex-col justify-end text-right text-gray-300 md:w-full">
             <div className="flex">
@@ -113,7 +113,7 @@ const DropHeader = ({ drop, userInDrop }) => {
                 className="w-2/3 bg-transparent text-right"
                 value={clientName}
                 onChange={({ target }) => setClientName(target.value)}
-                disabled={!me || !userInDrop}
+                disabled={drop ? !me || !userInDrop : !me}
               />
             </div>
           </div>
