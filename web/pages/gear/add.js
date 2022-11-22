@@ -18,12 +18,14 @@ const AddGearPage = () => {
             <ClientOnly>
               <GearEditor>
                 <div className="my-20 text-gray-400">
-                  {isAdding ? (
+                  {isAdding === 1 && (
                     <p className="animate-bounce">
-                      Almost there, keep adding details!
+                      Almost there, keep typing details!
                     </p>
-                  ) : (
-                    <p>Please enter the details above</p>
+                  )}
+                  {isAdding === 0 && <p>Please enter the details above</p>}
+                  {isAdding === 2 && (
+                    <p className="animate-ping">New gear coming in hot!</p>
                   )}
                 </div>
               </GearEditor>

@@ -7,6 +7,7 @@ import { Fragment } from "react"
 import { useMutation, useQuery } from "@apollo/client"
 import { ADD_GEAR_ITEM, EDIT_GEAR_ITEM } from "../../lib/apollo/queries"
 import { andFormatter } from "../../lib/text/formatter"
+import useIsAddingStore from "../../lib/hooks/store/isAdding"
 
 const GearHeader = ({ gearItem }) => {
   const [category, setCategory] = useState(gearItem ? gearItem.category : [])
@@ -20,12 +21,22 @@ const GearHeader = ({ gearItem }) => {
   const [editGearItem, editGearItemResult] = useMutation(EDIT_GEAR_ITEM)
   const me = useGetMe()
   const router = useRouter()
+  const setIsAdding = useIsAddingStore((state) => state.setIsAdding)
+
+  useEffect(() => {
+    setIsAdding(0)
+  }, [])
 
   useEffect(() => {
     if (!gearItem) {
-      if (category.length > 0 && manufacturer.length > 1 && model.length > 3) {
+      if (category.length > 0 || manufacturer.length > 0 || model.length > 0) {
+        setIsAdding(1)
+      } else {
+        setIsAdding(0)
+      }
+      if (category.length > 0 && manufacturer.length > 1 && model.length > 2) {
+        setIsAdding(2)
         const timeout = setTimeout(() => {
-          console.log("updating headers")
           addGearItem({
             variables: {
               category,

@@ -1,7 +1,7 @@
 import create from "zustand"
 
 const useIsAddingStore = create((set) => ({
-  isAdding: false,
+  isAdding: 0,
   setIsAdding: (value) => set({ isAdding: value }),
 }))
 

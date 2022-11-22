@@ -22,10 +22,12 @@ const AddDropPage = () => {
             <ClientOnly>
               <DropEditor>
                 <div className="my-20 text-gray-400">
-                  {isAdding ? (
+                  {isAdding === 1 && (
                     <p className="animate-bounce">Almost there, keep typing!</p>
-                  ) : (
-                    <p>Please enter the details above</p>
+                  )}
+                  {isAdding === 0 && <p>Please enter the details above</p>}
+                  {isAdding === 2 && (
+                    <p className="animate-ping">New drop coming in hot!</p>
                   )}
                 </div>
               </DropEditor>

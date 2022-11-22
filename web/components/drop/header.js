@@ -13,7 +13,6 @@ const DropHeader = ({ drop, userInDrop }) => {
   const [modalOpen, setModalOpen] = useState(false)
   const [dropName, setDropName] = useState(drop ? drop.project : "")
   const [clientName, setClientName] = useState(drop ? drop.client : "")
-  const isAdding = useIsAddingStore((state) => state.isAdding)
   const setIsAdding = useIsAddingStore((state) => state.setIsAdding)
   const [addDrop, { data, loading, error }] = useMutation(ADD_DROP, {
     // refetchQueries: [{ query: ME_DROPS }],
@@ -26,28 +25,35 @@ const DropHeader = ({ drop, userInDrop }) => {
     },
   })
   const [updateDrop, updateDropResult] = useMutation(UPDATE_DROP)
-  const me = useGetMe()
+  //ME_DROPS for cache update used here
+  const { data: meData } = useQuery(ME_DROPS)
+  const me = meData ? meData.me : null
+
   const router = useRouter()
+
+  useEffect(() => {
+    setIsAdding(0)
+  }, [])
 
   useEffect(() => {
     if (!drop) {
       if (dropName.length > 0 || clientName.length > 0) {
-        setIsAdding(true)
+        setIsAdding(1)
       } else {
-        setIsAdding(false)
+        setIsAdding(0)
       }
-      const timeout = setTimeout(() => {
-        if (dropName.length > 3 && clientName.length > 0) {
-          setIsAdding(false)
+      if (dropName.length > 3 && clientName.length > 0) {
+        setIsAdding(2)
+        const timeout = setTimeout(() => {
           addDrop({
             variables: {
               project: dropName,
               client: clientName,
             },
           })
-        }
-      }, 2000)
-      return () => clearTimeout(timeout)
+        }, 2000)
+        return () => clearTimeout(timeout)
+      }
     } else {
       if (drop.project !== dropName || drop.client !== clientName) {
         const timeout = setTimeout(() => {
