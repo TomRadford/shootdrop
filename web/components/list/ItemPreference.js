@@ -18,10 +18,13 @@ const PrefOpt = ({
       const existingPref = listItemPrefs.find(
         (listItemPref) => listItemPref.pref.id === pref.id
       )
+      console.log(listItemPrefs)
       //ToDo: relook creating a mutation for add/remove listItemPref
       // instead of passing through all prefs each time
       let newListItemPref = {}
+      console.log(existingPref)
       if (selected) {
+        console.log("selected")
         newListItemPref = existingPref
           ? {
               id: existingPref.pref.id,
@@ -32,6 +35,7 @@ const PrefOpt = ({
             }
           : { id: pref.id, opts: [opt.id] }
       } else {
+        console.log("deselected")
         newListItemPref = {
           id: existingPref.pref.id,
           opts: [
@@ -41,12 +45,35 @@ const PrefOpt = ({
           ],
         }
       }
+      console.log(newListItemPref)
+      const newPrefs = existingPref
+        ? [
+            ...listItemPrefs
+              .filter((listItemPref) => listItemPref.pref.id === pref.id)
+              .map((listItemPref) => {
+                return {
+                  id: listItemPref.pref.id,
+                  opts: listItemPref.opts.map((existingOpt) => existingOpt.id),
+                }
+              }),
+            newListItemPref,
+          ]
+        : [
+            ...listItemPrefs.map((listItemPref) => {
+              return {
+                id: listItemPref.pref.id,
+                opts: listItemPref.opts.map((existingOpt) => existingOpt.id),
+              }
+            }),
+            newListItemPref,
+          ]
+      console.log(newPrefs)
       console.log("updating options")
       editListItem({
         variables: {
           list: listId,
           id: gearListItem.id,
-          prefs: newListItemPref,
+          prefs: newPrefs,
         },
       })
     }

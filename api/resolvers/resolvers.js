@@ -212,6 +212,19 @@ const resolvers = {
         const prefToDelete = await GearPref.findById(args.id)
         await GearPrefOpt.deleteMany({ _id: { $in: prefToDelete.opts } })
         await prefToDelete.delete()
+        //Also delete refs in GearListItem
+        const listItemsWithPref = await GearListItem.find({
+          "prefs.pref": mongoose.Types.ObjectId(prefToDelete.id),
+        })
+
+        listItemsWithPref.map(async (listItem) => {
+          listItem.prefs = listItem.prefs.filter(
+            (pref) => pref.pref.toString() !== prefToDelete.id
+          )
+
+          await listItem.save()
+        })
+
         return prefToDelete.id
       } catch (e) {
         throw new UserInputError(e)

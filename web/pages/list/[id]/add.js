@@ -7,16 +7,18 @@ import client from "../../../lib/apollo/client"
 import Layout from "../../../components/layout"
 import GearBrowser from "../../../components/gear/Browser"
 import Loading from "../../../components/Loading"
-
+import useCheckAuth from "../../../lib/hooks/checkAuth"
 
 const ListAddPage = ({ list }) => {
   const router = useRouter()
   const { id: listId } = router.query
   const listResult = useQuery(GET_LIST, {
     variables: {
-      id: listId
-    }
+      id: listId,
+    },
   })
+
+  useCheckAuth()
 
   if (!list) {
     return (
@@ -41,10 +43,13 @@ const ListAddPage = ({ list }) => {
       <Head>
         <title>
           {listResult.data
-            ? `Add ${listResult.data.getList.category[0]
-            }${listResult.data.getList.category.slice(1).toLowerCase()} gear |
+            ? `Add ${
+                listResult.data.getList.category[0]
+              }${listResult.data.getList.category.slice(1).toLowerCase()} gear |
           ${listResult.data.getList.drop.project} | ShootDrop`
-            : `Add ${list.category[0]}${list.category.slice(1).toLowerCase()} gear |
+            : `Add ${list.category[0]}${list.category
+                .slice(1)
+                .toLowerCase()} gear |
           ${list.drop.project} | ShootDrop`}
         </title>
       </Head>
@@ -59,7 +64,6 @@ const ListAddPage = ({ list }) => {
       )}
     </>
   )
-
 }
 
 const LIST_PROJECT = gql`

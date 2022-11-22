@@ -52,12 +52,13 @@ const ItemModal = ({ list }) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-xs transform overflow-hidden rounded-2xl bg-black px-10 py-5 text-left align-middle text-white shadow-xl transition-all sm:max-w-md">
+              <Dialog.Panel className="max-w-xs transform overflow-hidden rounded-2xl bg-black px-10 py-5 text-left align-middle text-white shadow-xl transition-all sm:max-w-md">
                 <Dialog.Title
-                  as="h3"
-                  className="leading-2 text-lg font-medium text-white"
+                  as="div"
+                  className="leading-2 text-md text-center font-medium"
                 >
-                  Added! Choose your preferences
+                  <h2>Added!</h2>
+                  <h4>Any preferences?</h4>
                 </Dialog.Title>
                 <div className="mx-4 my-2 flex flex-col ">
                   {listItem && (
@@ -77,6 +78,12 @@ const ItemModal = ({ list }) => {
                         gearListItem={listItem}
                         userInDrop={userInDrop}
                       />
+                      <button
+                        className="mx-auto mt-4 w-max rounded-lg bg-gray-900 px-2 py-1"
+                        onClick={() => setItemModalOpen(false)}
+                      >
+                        Close
+                      </button>
                     </>
                   )}
                 </div>
