@@ -2,8 +2,10 @@ import Head from "next/head"
 import Link from "next/link"
 import { useState } from "react"
 import Layout from "../components/layout"
+import useGetMe from "../lib/hooks/getMe"
 
 const Home = () => {
+  const me = useGetMe()
   return (
     <Layout>
       <Head>
@@ -20,7 +22,7 @@ const Home = () => {
           </h1>
           <p className="mt-3">
             Make an asset list with a{" "}
-            <Link href="/drops/add">
+            <Link href={me ? `/drops/add` : `/login`}>
               <a>
                 <button className="bg-size-200 bg-pos-0 hover:bg-pos-100 ml-1 rounded bg-gradient-to-r from-sky-700 via-sky-800 to-sky-900 px-3 py-1 font-bold transition-all duration-500">
                   Drop!

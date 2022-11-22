@@ -130,11 +130,16 @@ const GearBrowser = ({ listToAdd, list }) => {
                     )
                   ) : (
                     <h3 className="font-light text-gray-300">
-                      No items yet,{" "}
-                      <Link href={`/list/${list.id}/add`}>
-                        <a className="font-bold">add </a>
-                      </Link>
-                      something!
+                      {userInDrop ? (
+                        <>
+                          No items yet,
+                          <Link href={`/list/${list.id}/add`}>
+                            <a className="font-bold"> add something! </a>
+                          </Link>
+                        </>
+                      ) : (
+                        <>No items yet.</>
+                      )}
                     </h3>
                   )
                 ) : null}

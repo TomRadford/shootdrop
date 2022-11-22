@@ -7,12 +7,14 @@ import { useRouter } from "next/router"
 import useGetMe from "../../lib/hooks/getMe"
 import UserModal from "./UserModal"
 import { format } from "date-fns"
+import useIsAddingStore from "../../lib/hooks/store/isAdding"
 
 const DropHeader = ({ drop, userInDrop }) => {
   const [modalOpen, setModalOpen] = useState(false)
   const [dropName, setDropName] = useState(drop ? drop.project : "")
   const [clientName, setClientName] = useState(drop ? drop.client : "")
-
+  const isAdding = useIsAddingStore((state) => state.isAdding)
+  const setIsAdding = useIsAddingStore((state) => state.setIsAdding)
   const [addDrop, { data, loading, error }] = useMutation(ADD_DROP, {
     // refetchQueries: [{ query: ME_DROPS }],
     update: (cache, response) => {
@@ -29,8 +31,14 @@ const DropHeader = ({ drop, userInDrop }) => {
 
   useEffect(() => {
     if (!drop) {
+      if (dropName.length > 0 || clientName.length > 0) {
+        setIsAdding(true)
+      } else {
+        setIsAdding(false)
+      }
       const timeout = setTimeout(() => {
         if (dropName.length > 3 && clientName.length > 0) {
+          setIsAdding(false)
           addDrop({
             variables: {
               project: dropName,

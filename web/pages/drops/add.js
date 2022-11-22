@@ -3,11 +3,13 @@ import Layout from "../../components/layout"
 import DropEditor from "../../components/drop/Editor"
 import useCheckAuth from "../../lib/hooks/checkAuth"
 import ClientOnly from "../../components/ClientOnly"
+import useIsAddingStore from "../../lib/hooks/store/isAdding"
 
 // Route for DropEditor to mount with no drop
 
 const AddDropPage = () => {
   useCheckAuth()
+  const isAdding = useIsAddingStore((state) => state.isAdding)
 
   return (
     <>
@@ -20,7 +22,11 @@ const AddDropPage = () => {
             <ClientOnly>
               <DropEditor>
                 <div className="my-20 text-gray-400">
-                  Please enter the details above
+                  {isAdding ? (
+                    <p className="animate-bounce">Almost there, keep typing!</p>
+                  ) : (
+                    <p>Please enter the details above</p>
+                  )}
                 </div>
               </DropEditor>
             </ClientOnly>

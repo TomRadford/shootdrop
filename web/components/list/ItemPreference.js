@@ -70,7 +70,7 @@ const PrefOpt = ({
       ]
 
       console.log("updating options")
-      console.log(newPrefs)
+
       editListItem({
         variables: {
           list: listId,

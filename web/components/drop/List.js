@@ -37,8 +37,6 @@ const DropListInfo = ({ drop, category, listEntry }) => {
     }
   }, [data])
 
-  console.log(itemsData)
-
   return (
     <>
       {listEntry ? (
