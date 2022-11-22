@@ -166,7 +166,7 @@ const GearBrowser = ({ listToAdd, list }) => {
         </div>
         {list || listToAdd ? (
           <div className="fixed left-0 bottom-0 flex w-full justify-center bg-gradient-to-t from-black px-10 md:pl-64">
-            <div className="flex w-full max-w-4xl justify-between py-16 px-4 pb-4">
+            <div className="flex w-full max-w-4xl justify-between py-16 px-4 pb-4 md:pb-10">
               <div>
                 {list ? (
                   <Link href={`/drops/${list.drop.id}`}>

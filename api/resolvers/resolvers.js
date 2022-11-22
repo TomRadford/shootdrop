@@ -217,7 +217,7 @@ const resolvers = {
           "prefs.pref": mongoose.Types.ObjectId(prefToDelete.id),
         })
 
-        listItemsWithPref.map(async (listItem) => {
+        listItemsWithPref.forEach(async (listItem) => {
           listItem.prefs = listItem.prefs.filter(
             (pref) => pref.pref.toString() !== prefToDelete.id
           )
@@ -278,8 +278,23 @@ const resolvers = {
       checkAuth(context)
       try {
         //removes opt and reutrns new GearPref
-        //ToDo: handle issue with
         await GearPrefOpt.findByIdAndDelete(args.id)
+
+        //Delete opt refs in GearListItem
+        const listItemsWithPref = await GearListItem.find({
+          "prefs.pref": mongoose.Types.ObjectId(args.gearPref),
+        })
+        listItemsWithPref.forEach(async (listItem) => {
+          listItem.prefs = listItem.prefs.map((pref) => {
+            return {
+              pref: pref.pref,
+              opts: pref.opts.filter((opt) => opt.toString() !== args.id),
+              _id: pref._id,
+            }
+          })
+          await listItem.save()
+        })
+        //Remove this opt ref in GearPref
         return await GearPref.findByIdAndUpdate(
           args.gearPref,
           {
@@ -453,7 +468,7 @@ const resolvers = {
       const existingGearListItem = await GearListItem.findOne({
         gearItem,
         gearList: args.list,
-      })
+      }).populate("prefs")
       //force update timestamps of drop and list
       parentDrop.updatedAt = new Date()
       await parentDrop.save()
@@ -466,13 +481,18 @@ const resolvers = {
         existingGearListItem.comment = comment
         existingGearListItem.prefs = prefs
           ? prefs.map((pref) => {
+              //ToDo: relook at pref getting added here as existing would be overriten
+              //for now client does not alter prefs on add so can be ignored
               return {
                 pref: mongoose.Types.ObjectId(pref.id),
                 opts: pref.opts.map((opt) => mongoose.Types.ObjectId(opt)),
               }
             })
+          : existingGearListItem.prefs
+          ? existingGearListItem.prefs
           : null
         existingGearListItem.userThatUpdated = context.currentUser
+        console.log(existingGearListItem)
         return await existingGearListItem.save()
       } else {
         const newGearListItem = new GearListItem({

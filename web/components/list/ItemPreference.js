@@ -45,7 +45,7 @@ const PrefOpt = ({
           ],
         }
       }
-      console.log(listItemPrefs)
+
       const newPrefs = [
         ...listItemPrefs
           .filter((listItemPref) => listItemPref.pref.id !== newListItemPref.id)
@@ -57,7 +57,7 @@ const PrefOpt = ({
           }),
         newListItemPref,
       ]
-      console.log(newPrefs)
+
       console.log("updating options")
       editListItem({
         variables: {
@@ -97,6 +97,8 @@ const ItemPreference = ({ listId, gearListItem, userInDrop }) => {
       } else return false
     } else return false
   }
+
+  console.log(listItemPrefs)
 
   return (
     <div className="flex flex-col gap-2 text-left">
