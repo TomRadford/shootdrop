@@ -91,7 +91,7 @@ const GearBrowser = ({ listToAdd, list }) => {
 
   return (
     <div className="flex h-full min-h-screen">
-      <div className="mb-10 w-full pt-0 text-center md:mx-0 md:pt-0">
+      <div className="mb-10 w-full pt-0 text-center md:mx-0 md:mb-20 md:pt-0">
         <TagsModal
           tagsModalOpen={tagsModalOpen}
           listCategory={list ? list.category : null}
