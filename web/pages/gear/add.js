@@ -25,7 +25,7 @@ const AddGearPage = () => {
                   )}
                   {isAdding === 0 && <p>Please enter the details above</p>}
                   {isAdding === 2 && (
-                    <p className="animate-ping">New gear coming in hot!</p>
+                    <p className="animate-ping">New gear incoming!</p>
                   )}
                 </div>
               </GearEditor>

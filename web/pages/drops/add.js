@@ -27,7 +27,7 @@ const AddDropPage = () => {
                   )}
                   {isAdding === 0 && <p>Please enter the details above</p>}
                   {isAdding === 2 && (
-                    <p className="animate-ping">New drop coming in hot!</p>
+                    <p className="animate-ping">New drop incoming!</p>
                   )}
                 </div>
               </DropEditor>

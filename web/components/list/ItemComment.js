@@ -13,7 +13,7 @@ const ItemComment = ({ listId, gearListItem, userInDrop }) => {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      if (comment !== gearListItem.comment) {
+      if (comment !== gearListItem.comment && comment !== "") {
         console.log("updating comment")
         editListItem({
           variables: {
