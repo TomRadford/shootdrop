@@ -592,7 +592,7 @@ const resolvers = {
     createUser: async (root, args) => {
       const existingUser = await User.findOne({ username: args.username })
       if (existingUser) {
-        return new UserInputError("Username already exists")
+        return new UserInputError("Account already exists")
       }
       const passwordHash = await bcrypt.hash(args.password, 10)
       const newUser = new User({

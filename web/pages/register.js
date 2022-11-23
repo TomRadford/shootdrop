@@ -3,20 +3,25 @@ import { useRouter } from "next/router"
 import Layout from "../components/layout"
 import Notification from "../components/Notification"
 import Card from "../components/Card"
-import { LOGIN, ME } from "../lib/apollo/queries"
+import { CREATE_USER, LOGIN, ME } from "../lib/apollo/queries"
 import { useMutation, useQuery, useLazyQuery } from "@apollo/client"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import Loading from "../components/Loading"
 import Link from "next/link"
+import {
+  GoogleReCaptchaProvider,
+  useGoogleReCaptcha,
+} from "react-google-recaptcha-v3"
 
 const RegisterCard = () => {
   const [fullName, setFullName] = useState("")
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [messageData, setMessageData] = useState({ message: "", type: "" })
+  const { executeRecaptcha } = useGoogleReCaptcha()
   const router = useRouter()
   const me = useQuery(ME)
-  const [login, result] = useMutation(LOGIN, {
+  const [login, result] = useMutation(CREATE_USER, {
     onError: (e) =>
       setMessageData({ message: e.graphQLErrors[0].message, type: "error" }),
   })
@@ -46,30 +51,46 @@ const RegisterCard = () => {
     }
   }, [result.data])
 
-  const handleLogin = (e) => {
-    e.preventDefault()
+  const handleLogin = () => {
     login({
       variables: {
+        fullName,
         username,
         password,
       },
     })
   }
+
+  const handleReCaptchaVerify = useCallback(
+    async (e) => {
+      e.preventDefault()
+      if (executeRecaptcha) {
+        console.log(await executeRecaptcha("createUser"))
+      } else {
+        setMessageData({
+          message: "Unable to ReCaptcha, please try again.",
+          type: "error",
+        })
+      }
+    },
+    [executeRecaptcha]
+  )
+
   return (
-    <div className="w-56">
+    <div className="w-[17rem]">
       <div className="mb-4">
-        <h2 className="text-xl font-semibold">
+        <h2 className="mb-3 text-xl font-semibold">
           Register or{" "}
           <Link href="/login">
             <a className="font-bold underline">login</a>
           </Link>
         </h2>
         <p className="font-light">
-          Please fill in the details below to request access!
+          Fill in the details below to join early access!
         </p>
       </div>
       <Card>
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleReCaptchaVerify}>
           <input
             className="bg-transparent"
             placeholder="Your full name"
@@ -108,6 +129,7 @@ const RegisterCard = () => {
           <button type="submit" className="mt-4">
             Register
           </button>
+          <div id="registerCaptchaContainer"></div>
         </form>
       </Card>
     </div>
@@ -120,7 +142,16 @@ const LoginPage = () => {
   if (loading) return <Loading />
 
   return (
-    <>
+    <GoogleReCaptchaProvider
+      reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+      container={{
+        element: "registerCaptchaContainer",
+        parameters: {
+          badge: "inline",
+          theme: "dark",
+        },
+      }}
+    >
       <Head>
         <title>Registration | ShootDrop</title>
       </Head>
@@ -131,7 +162,7 @@ const LoginPage = () => {
           </div>
         </div>
       </Layout>
-    </>
+    </GoogleReCaptchaProvider>
   )
 }
 

@@ -100,8 +100,11 @@ export const CREATE_USER = gql`
     $username: String!
     $password: String!
   ) {
-    createUser(fullName: $fullName, username: $username, password: password)
+    createUser(fullName: $fullName, username: $username, password: $password) {
+      ...UserDetails
+    }
   }
+  ${USER_DETAILS}
 `
 
 export const ME = gql`
