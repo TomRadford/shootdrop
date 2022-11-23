@@ -9,15 +9,18 @@ const Notification = ({ messageData, setMessageData }) => {
       return () => clearTimeout(timeout)
     }
   }, [messageData])
-
-  return (
-    <div className="mt-5">
-      <p
-        className={messageData.type === "error" ? "text-red-600" : "text-white"}
-      >
-        {messageData.message}
-      </p>
-    </div>
-  )
+  if (messageData.message) {
+    return (
+      <div className="mt-5">
+        <p
+          className={
+            messageData.type === "error" ? "text-red-600" : "text-white"
+          }
+        >
+          {messageData.message}
+        </p>
+      </div>
+    )
+  }
 }
 export default Notification

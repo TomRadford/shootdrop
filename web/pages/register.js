@@ -9,7 +9,8 @@ import { useEffect, useState } from "react"
 import Loading from "../components/Loading"
 import Link from "next/link"
 
-const LoginCard = () => {
+const RegisterCard = () => {
+  const [fullName, setFullName] = useState("")
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [messageData, setMessageData] = useState({ message: "", type: "" })
@@ -25,13 +26,13 @@ const LoginCard = () => {
         //replace used instead of push
         //to prevent /login from being
         //added to history stack
-        router.replace("/drops")
+        // router.replace("/drops")
       }
     }
   }, [me.data])
   useEffect(() => {
     if (result.loading) {
-      setMessageData({ message: "Logging in!", type: "info" })
+      setMessageData({ message: "Registering!", type: "info" })
     }
   }, [result.loading])
   useEffect(() => {
@@ -39,6 +40,7 @@ const LoginCard = () => {
       const token = result.data.login.value
       localStorage.setItem("shootdrop-user-token", token)
       me.refetch() //To invalidate null "me" in cache
+      setFullName("")
       setUsername("")
       setPassword("")
     }
@@ -54,15 +56,30 @@ const LoginCard = () => {
     })
   }
   return (
-    <div className="">
-      <h2 className="mb-4 text-xl font-semibold">
-        Please login or{" "}
-        <Link href="/register">
-          <a className="font-bold underline">register</a>
-        </Link>
-      </h2>
+    <div className="w-56">
+      <div className="mb-4">
+        <h2 className="text-xl font-semibold">
+          Register or{" "}
+          <Link href="/login">
+            <a className="font-bold underline">login</a>
+          </Link>
+        </h2>
+        <p className="font-light">
+          Please fill in the details below to request access!
+        </p>
+      </div>
       <Card>
         <form onSubmit={handleLogin}>
+          <input
+            className="bg-transparent"
+            placeholder="Your full name"
+            type="text"
+            value={fullName}
+            autoComplete="name"
+            onChange={({ target }) => setFullName(target.value)}
+            required
+          />
+          <br />
           <input
             className="bg-transparent"
             placeholder="Email"
@@ -70,6 +87,7 @@ const LoginCard = () => {
             value={username}
             autoComplete="email"
             onChange={({ target }) => setUsername(target.value)}
+            required
           />
           <br />
           <input
@@ -81,12 +99,14 @@ const LoginCard = () => {
             autoComplete="current-password"
             required
           />
+
           <Notification
             messageData={messageData}
             setMessageData={setMessageData}
           />
+
           <button type="submit" className="mt-4">
-            Login
+            Register
           </button>
         </form>
       </Card>
@@ -102,12 +122,12 @@ const LoginPage = () => {
   return (
     <>
       <Head>
-        <title>Login | ShootDrop</title>
+        <title>Registration | ShootDrop</title>
       </Head>
       <Layout>
         <div className="flex h-screen ">
           <div className="m-auto text-center">
-            <LoginCard />
+            <RegisterCard />
           </div>
         </div>
       </Layout>
@@ -116,4 +136,4 @@ const LoginPage = () => {
 }
 
 export default LoginPage
-export { LoginCard }
+export { RegisterCard }
