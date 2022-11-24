@@ -21,6 +21,8 @@ const {
   createNewPref,
 } = require("../utils/prefs")
 const { generateUploadURL, deleteS3Object } = require("../utils/s3")
+const fetch = require("node-fetch")
+
 const dateScalar = new GraphQLScalarType({
   name: "Date",
   description: "Date scalar type",
@@ -578,6 +580,9 @@ const resolvers = {
       if (!passwordCorrect) {
         throw new UserInputError("Incorrect password")
       }
+      if (!user.enabled) {
+        throw new UserInputError("Account not activated yet")
+      }
       const userForToken = {
         id: user._id,
         username: user.username,
@@ -590,16 +595,34 @@ const resolvers = {
     },
 
     createUser: async (root, args) => {
-      const existingUser = await User.findOne({ username: args.username })
+      const hcaptchaRes = await fetch("https://hcaptcha.com/siteverify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: `response=${args.captchaToken}&secret=${config.HCAPTCHASECRET}`,
+      })
+      const hCaptchaResult = await hcaptchaRes.json()
+      if (!hCaptchaResult.success) {
+        throw new UserInputError("Captcha invalid please try again", {
+          invalidArgs: args.captchaToken,
+          errorCodes: hCaptchaResult["error-codes"],
+        })
+      }
+
+      const existingUser = await User.findOne({
+        username: args.username.toLowerCase(),
+      })
       if (existingUser) {
         return new UserInputError("Account already exists")
       }
       const passwordHash = await bcrypt.hash(args.password, 10)
       const newUser = new User({
-        username: args.username,
+        username: args.username.toLowerCase(),
         passwordHash,
         profilePicture: args.profilePicture,
         fullName: args.fullName,
+        enabled: false,
       })
       try {
         return newUser.save()

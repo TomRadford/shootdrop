@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
 
 const schema = new mongoose.Schema({
+  //NB: doubles as email address
   username: {
     type: String,
     required: true,
@@ -16,6 +17,11 @@ const schema = new mongoose.Schema({
   },
   fullName: String,
   profilePicture: String,
+  //For early access control, manually set in db
+  enabled: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 schema.set("toJSON", {

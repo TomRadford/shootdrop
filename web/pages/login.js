@@ -62,7 +62,7 @@ const LoginCard = () => {
         </Link>
       </h2>
       <Card>
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleLogin} className="flex flex-col gap-1">
           <input
             className="bg-transparent"
             placeholder="Email"
@@ -71,7 +71,7 @@ const LoginCard = () => {
             autoComplete="email"
             onChange={({ target }) => setUsername(target.value)}
           />
-          <br />
+
           <input
             className="block bg-transparent"
             placeholder="Password"
@@ -90,6 +90,17 @@ const LoginCard = () => {
           </button>
         </form>
       </Card>
+      <p className="mt-5">
+        Made by{" "}
+        <a
+          target="_blank"
+          className="font-semibold"
+          href="https://tomradford.co.za"
+        >
+          Tom
+        </a>{" "}
+        🎥
+      </p>
     </div>
   )
 }

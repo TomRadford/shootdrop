@@ -15,6 +15,8 @@ const AWS_SECRET_ACCESS_KEY =
 const S3_BUCKET =
   NODE_ENV === "production" ? process.env.S3_BUCKET : process.env.DEV_S3_BUCKET
 
+const HCAPTCHASECRET = process.env.HCAPTCHASECRET
+
 module.exports = {
   SECRET,
   MONGODB_URI,
@@ -23,4 +25,5 @@ module.exports = {
   AWS_ACCESS_KEY_ID,
   AWS_SECRET_ACCESS_KEY,
   S3_BUCKET,
+  HCAPTCHASECRET,
 }

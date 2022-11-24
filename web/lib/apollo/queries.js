@@ -99,8 +99,14 @@ export const CREATE_USER = gql`
     $fullName: String!
     $username: String!
     $password: String!
+    $captchaToken: String!
   ) {
-    createUser(fullName: $fullName, username: $username, password: $password) {
+    createUser(
+      fullName: $fullName
+      username: $username
+      password: $password
+      captchaToken: $captchaToken
+    ) {
       ...UserDetails
     }
   }

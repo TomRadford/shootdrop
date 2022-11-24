@@ -3,27 +3,27 @@ import { useRouter } from "next/router"
 import Layout from "../components/layout"
 import Notification from "../components/Notification"
 import Card from "../components/Card"
-import { CREATE_USER, LOGIN, ME } from "../lib/apollo/queries"
-import { useMutation, useQuery, useLazyQuery } from "@apollo/client"
-import { useCallback, useEffect, useState } from "react"
+import { CREATE_USER, ME } from "../lib/apollo/queries"
+import { useMutation, useQuery } from "@apollo/client"
+import { useCallback, useEffect, useRef, useState } from "react"
 import Loading from "../components/Loading"
 import Link from "next/link"
-import {
-  GoogleReCaptchaProvider,
-  useGoogleReCaptcha,
-} from "react-google-recaptcha-v3"
+import HCaptcha from "@hcaptcha/react-hcaptcha"
 
 const RegisterCard = () => {
   const [fullName, setFullName] = useState("")
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
+  const [captchaToken, setCaptchaToken] = useState(null)
+  const captchaRef = useRef(null)
   const [messageData, setMessageData] = useState({ message: "", type: "" })
-  const { executeRecaptcha } = useGoogleReCaptcha()
   const router = useRouter()
   const me = useQuery(ME)
   const [login, result] = useMutation(CREATE_USER, {
-    onError: (e) =>
-      setMessageData({ message: e.graphQLErrors[0].message, type: "error" }),
+    onError: (e) => {
+      setMessageData({ message: e.graphQLErrors[0].message, type: "error" })
+      captchaRef.current.resetCaptcha()
+    },
   })
   useEffect(() => {
     if (!me.loading) {
@@ -31,10 +31,11 @@ const RegisterCard = () => {
         //replace used instead of push
         //to prevent /login from being
         //added to history stack
-        // router.replace("/drops")
+        router.replace("/drops")
       }
     }
   }, [me.data])
+
   useEffect(() => {
     if (result.loading) {
       setMessageData({ message: "Registering!", type: "info" })
@@ -42,39 +43,31 @@ const RegisterCard = () => {
   }, [result.loading])
   useEffect(() => {
     if (result.data) {
-      const token = result.data.login.value
-      localStorage.setItem("shootdrop-user-token", token)
-      me.refetch() //To invalidate null "me" in cache
       setFullName("")
       setUsername("")
       setPassword("")
+      setCaptchaToken(null)
     }
   }, [result.data])
 
-  const handleLogin = () => {
+  const handleLogin = (e) => {
+    e.preventDefault()
+    if (!captchaToken) {
+      setMessageData({
+        message: `Please prove you're a human above`,
+        type: "error",
+      })
+      return
+    }
     login({
       variables: {
         fullName,
         username,
         password,
+        captchaToken,
       },
     })
   }
-
-  const handleReCaptchaVerify = useCallback(
-    async (e) => {
-      e.preventDefault()
-      if (executeRecaptcha) {
-        console.log(await executeRecaptcha("createUser"))
-      } else {
-        setMessageData({
-          message: "Unable to ReCaptcha, please try again.",
-          type: "error",
-        })
-      }
-    },
-    [executeRecaptcha]
-  )
 
   return (
     <div className="w-[17rem]">
@@ -85,53 +78,79 @@ const RegisterCard = () => {
             <a className="font-bold underline">login</a>
           </Link>
         </h2>
-        <p className="font-light">
-          Fill in the details below to join early access!
-        </p>
+        {!result.data && (
+          <p className="font-light">
+            Fill in the details below to join early access!
+          </p>
+        )}
       </div>
-      <Card>
-        <form onSubmit={handleReCaptchaVerify}>
-          <input
-            className="bg-transparent"
-            placeholder="Your full name"
-            type="text"
-            value={fullName}
-            autoComplete="name"
-            onChange={({ target }) => setFullName(target.value)}
-            required
-          />
-          <br />
-          <input
-            className="bg-transparent"
-            placeholder="Email"
-            type="email"
-            value={username}
-            autoComplete="email"
-            onChange={({ target }) => setUsername(target.value)}
-            required
-          />
-          <br />
-          <input
-            className="block bg-transparent"
-            placeholder="Password"
-            type="password"
-            onChange={({ target }) => setPassword(target.value)}
-            value={password}
-            autoComplete="current-password"
-            required
-          />
+      {result.data ? (
+        <Card>
+          <div>
+            <h1 className="mb-2 font-bold">Thanks for registering!</h1>
+            <p className="text-sm">
+              We'll send a mail to{" "}
+              <span className="font-semibold">
+                {result.data.createUser.username}
+              </span>{" "}
+              once your account is activated.
+            </p>
+          </div>
+        </Card>
+      ) : (
+        <Card>
+          <form onSubmit={handleLogin} className="flex flex-col gap-1">
+            <input
+              className="bg-transparent"
+              placeholder="Your full name"
+              type="text"
+              value={fullName}
+              autoComplete="name"
+              onChange={({ target }) => setFullName(target.value)}
+              required
+            />
 
-          <Notification
-            messageData={messageData}
-            setMessageData={setMessageData}
-          />
+            <input
+              className="bg-transparent lowercase"
+              placeholder="Email"
+              type="email"
+              value={username}
+              autoComplete="email"
+              onChange={({ target }) => setUsername(target.value)}
+              required
+            />
 
-          <button type="submit" className="mt-4">
-            Register
-          </button>
-          <div id="registerCaptchaContainer"></div>
-        </form>
-      </Card>
+            <input
+              className="block bg-transparent"
+              placeholder="Password"
+              type="password"
+              onChange={({ target }) => setPassword(target.value)}
+              value={password}
+              autoComplete="current-password"
+              required
+            />
+            <div className="mx-auto mt-2">
+              <HCaptcha
+                sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+                onVerify={(token, ekay) => setCaptchaToken(token)}
+                onExpire={() => setCaptchaToken(null)}
+                size="compact"
+                theme="dark"
+                ref={captchaRef}
+              />
+            </div>
+            <Notification
+              messageData={messageData}
+              setMessageData={setMessageData}
+            />
+
+            <button type="submit" className="mt-4">
+              Register
+            </button>
+            <div id="registerCaptchaContainer"></div>
+          </form>
+        </Card>
+      )}
     </div>
   )
 }
@@ -142,27 +161,29 @@ const LoginPage = () => {
   if (loading) return <Loading />
 
   return (
-    <GoogleReCaptchaProvider
-      reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
-      container={{
-        element: "registerCaptchaContainer",
-        parameters: {
-          badge: "inline",
-          theme: "dark",
-        },
-      }}
-    >
+    <>
       <Head>
         <title>Registration | ShootDrop</title>
       </Head>
       <Layout>
-        <div className="flex h-screen ">
+        <div className="flex h-screen flex-col">
           <div className="m-auto text-center">
             <RegisterCard />
+            <p className="mt-5">
+              Made by{" "}
+              <a
+                target="_blank"
+                className="font-semibold"
+                href="https://tomradford.co.za"
+              >
+                Tom
+              </a>{" "}
+              🎥
+            </p>
           </div>
         </div>
       </Layout>
-    </GoogleReCaptchaProvider>
+    </>
   )
 }
 

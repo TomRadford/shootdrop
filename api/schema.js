@@ -161,6 +161,7 @@ const typeDefs = gql`
       password: String!
       fullName: String
       profilePicture: String
+      captchaToken: String!
     ): User!
     editMe(
       username: String
