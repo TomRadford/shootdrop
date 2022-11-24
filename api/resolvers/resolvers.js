@@ -22,6 +22,7 @@ const {
 } = require("../utils/prefs")
 const { generateUploadURL, deleteS3Object } = require("../utils/s3")
 const fetch = require("node-fetch")
+const { sendAccountRequest } = require("../utils/mailer")
 
 const dateScalar = new GraphQLScalarType({
   name: "Date",
@@ -625,7 +626,9 @@ const resolvers = {
         enabled: false,
       })
       try {
-        return newUser.save()
+        await newUser.save()
+        await sendAccountRequest(newUser)
+        return newUser
       } catch (e) {
         throw new UserInputError(e.message, {
           invalidArgs: args,

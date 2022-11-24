@@ -38,7 +38,7 @@ const RegisterCard = () => {
 
   useEffect(() => {
     if (result.loading) {
-      setMessageData({ message: "Registering!", type: "info" })
+      setMessageData({ message: "Registering...", type: "info" })
     }
   }, [result.loading])
   useEffect(() => {
@@ -169,6 +169,14 @@ const LoginPage = () => {
         <div className="flex h-screen flex-col">
           <div className="m-auto text-center">
             <RegisterCard />
+            <div className="mx-auto mt-2 w-[10rem]">
+              <p className="text-[10px] font-light">
+                By registering you agree to our{" "}
+                <Link href="/terms">
+                  <a className="font-semibold">Terms and privacy policy</a>
+                </Link>
+              </p>
+            </div>
             <p className="mt-5">
               Made by{" "}
               <a
