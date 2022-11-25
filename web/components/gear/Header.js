@@ -67,6 +67,7 @@ const GearHeader = ({ gearItem }) => {
         return () => clearTimeout(timeout)
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category, model, manufacturer])
 
   if (!gearItem) {

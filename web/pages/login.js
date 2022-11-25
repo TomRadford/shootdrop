@@ -19,16 +19,16 @@ const LoginCard = () => {
     onError: (e) =>
       setMessageData({ message: e.graphQLErrors[0].message, type: "error" }),
   })
-  useEffect(() => {
-    if (!me.loading) {
-      if (me.data.me) {
-        //replace used instead of push
-        //to prevent /login from being
-        //added to history stack
-        router.replace("/drops")
-      }
+
+  if (!me.loading) {
+    if (me.data.me) {
+      //replace used instead of push
+      //to prevent /login from being
+      //added to history stack
+      router.replace("/drops")
     }
-  }, [me.data])
+  }
+
   useEffect(() => {
     if (result.loading) {
       setMessageData({ message: "Logging in!", type: "info" })
@@ -42,7 +42,7 @@ const LoginCard = () => {
       setUsername("")
       setPassword("")
     }
-  }, [result.data])
+  }, [result, me])
 
   const handleLogin = (e) => {
     e.preventDefault()
@@ -96,6 +96,7 @@ const LoginCard = () => {
           target="_blank"
           className="font-semibold"
           href="https://tomradford.co.za"
+          rel="noreferrer"
         >
           Tom
         </a>{" "}

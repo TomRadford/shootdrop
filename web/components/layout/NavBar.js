@@ -60,6 +60,7 @@ const User = () => {
                 height="30px"
                 className="rounded-full"
                 objectFit="cover"
+                alt={me.fullName}
               />
             </button>
           </Link>

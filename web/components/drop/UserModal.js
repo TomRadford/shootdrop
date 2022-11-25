@@ -17,6 +17,7 @@ const User = ({ user, onClick, userInDrop }) => {
           height="30px"
           className={`rounded-full`}
           objectFit="cover"
+          alt={user.fullName}
         />
         <div className="text-lg font-light">{user.fullName}</div>
         {user.id !== me.id && userInDrop && (
@@ -69,6 +70,7 @@ const UserModal = ({ modalOpen, setModalOpen, drop, userInDrop }) => {
       }
     }, 500)
     return () => clearTimeout(timeout)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchTerm])
 
   const handleRemove = (userIDToRemove) => {

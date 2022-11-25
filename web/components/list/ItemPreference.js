@@ -22,7 +22,8 @@ const PrefOpt = ({
     if (listItem && data) {
       setListItem(data.editListItem)
     }
-  }, [data])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, listItem])
 
   useEffect(() => {
     if (optSelected !== selected) {

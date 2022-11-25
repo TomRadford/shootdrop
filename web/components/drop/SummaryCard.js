@@ -83,13 +83,15 @@ const DropSummaryCard = ({ drop }) => {
               </div>
               <div className="flex items-center justify-end gap-2 pb-0">
                 <p className="text-right text-xs text-gray-300">
-                  Last edited {formatDistance(new Date(drop.updatedAt), new Date())} ago
+                  Last edited{" "}
+                  {formatDistance(new Date(drop.updatedAt), new Date())} ago
                 </p>
                 <div className="flex -space-x-2 self-start ">
                   {drop &&
                     drop.users.map((user) => (
                       <div key={user.id}>
                         <Image
+                          alt={user.fullName}
                           src={user.profilePicture}
                           key={user.id}
                           width="20px"

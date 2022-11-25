@@ -75,8 +75,8 @@ const DropDates = ({ drop, userInDrop }) => {
         })
       }, 2000)
       return () => clearTimeout(timeout)
-    }
-  }, [gearCheckDate, startDate, endDate, wrapDate])
+    } // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gearCheckDate, startDate, endDate, wrapDate, drop])
 
   return (
     <div className="mx-auto w-80 sm:w-96">

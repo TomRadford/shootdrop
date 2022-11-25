@@ -2,7 +2,7 @@ import { useQuery, useLazyQuery } from "@apollo/client"
 import { ALL_GEAR_ITEMS, GET_LIST_ITEMS } from "../../lib/apollo/queries"
 import Image from "next/image"
 import Link from "next/link"
-import { useInView } from "react-intersection-observer"
+import { InView } from "react-intersection-observer"
 import { useEffect, useState } from "react"
 import TagsModal from "./TagsModal"
 import GearFilter from "./Filter"
@@ -54,22 +54,15 @@ const GearBrowser = ({ listToAdd, list }) => {
     }
   )
 
-  const {
-    ref: inViewRef,
-    inView,
-    entry,
-  } = useInView({
-    threshold: 0,
-  })
-
   useEffect(() => {
     //refetch when url query params change from filter
     //getGear not used to prevent issues mismatched queries
     //ToDo: relook at this issue
     refetch()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query])
 
-  useEffect(() => {
+  const handleInView = (inView, entry) => {
     if (
       inView &&
       (list
@@ -87,7 +80,7 @@ const GearBrowser = ({ listToAdd, list }) => {
         },
       })
     }
-  }, [inView])
+  }
 
   return (
     <div className="flex h-full min-h-screen">
@@ -164,8 +157,8 @@ const GearBrowser = ({ listToAdd, list }) => {
 
                 {fetchingMore && <GearListSkeleton length={4} />}
               </div>
-              {/* Empty div at end of list to trigger fetchMore */}
-              <div ref={inViewRef}></div>
+              {/* To trigger fetchMore */}
+              <InView as="div" onChange={handleInView} />
             </div>
           )}
         </div>

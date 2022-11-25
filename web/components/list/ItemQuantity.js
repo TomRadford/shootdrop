@@ -17,6 +17,7 @@ const ItemQuantity = ({ listId, gearListItem, userInDrop }) => {
         },
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quantityInput])
 
   return (

@@ -86,5 +86,6 @@ const ButtonInput = forwardRef(({ value, onClick, className }, ref) => (
     {format(new Date(value), "dd MMMM yyyy")}
   </button>
 ))
+ButtonInput.displayName = "Button Input"
 
 export default DatePickerTailwind
