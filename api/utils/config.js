@@ -1,7 +1,10 @@
 require("dotenv").config()
 
 const SECRET = process.env.SECRET
-const MONGODB_URI = process.env.MONGODB_URI
+const MONGODB_URI =
+  NODE_ENV === "production"
+    ? process.env.PROD_MONGODB_URI
+    : process.env.DEV_MONGODB_URI
 const PORT = process.env.PORT
 const NODE_ENV = process.env.NODE_ENV
 const HCAPTCHASECRET = process.env.HCAPTCHASECRET
