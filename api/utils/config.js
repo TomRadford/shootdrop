@@ -1,15 +1,16 @@
 require("dotenv").config()
 
 const SECRET = process.env.SECRET
-const MONGODB_URI =
-  NODE_ENV === "production"
-    ? process.env.PROD_MONGODB_URI
-    : process.env.DEV_MONGODB_URI
 const PORT = process.env.PORT
 const NODE_ENV = process.env.NODE_ENV
 const HCAPTCHASECRET = process.env.HCAPTCHASECRET
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY
 const SITE_ADMIN = process.env.SITE_ADMIN
+
+const MONGODB_URI =
+  NODE_ENV === "production"
+    ? process.env.PROD_MONGODB_URI
+    : process.env.DEV_MONGODB_URI
 
 const AWS_ACCESS_KEY_ID =
   NODE_ENV === "production"

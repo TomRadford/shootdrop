@@ -51,8 +51,13 @@ const DropListInfo = ({ drop, category, listEntry }) => {
                   <p className="text-left text-sm font-light text-gray-300">
                     {listEntry.comment}
                   </p>
-
-                  {itemsData && itemsData.getListItems.totalDocs === 0 ? (
+                  {itemsLoading ? (
+                    <div className="flex -space-x-3 md:-space-x-2">
+                      {[...new Array(5)].map(() => (
+                        <div className="z-10 flex h-[30px] w-[30px] animate-pulse items-center justify-center rounded-full bg-gray-800 text-[10px]"></div>
+                      ))}
+                    </div>
+                  ) : itemsData && itemsData.getListItems.totalDocs === 0 ? (
                     <p className="mb-2 text-left text-sm font-light text-gray-300">
                       No items yet
                     </p>
