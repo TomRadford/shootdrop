@@ -1,7 +1,4 @@
 import DropHeader from "./Header"
-import Loading from "../Loading"
-import { useState, useEffect } from "react"
-import { useMutation } from "@apollo/client"
 import DropDates from "./Dates"
 import DropInfo from "./Info"
 import DropListInfo from "./List"
