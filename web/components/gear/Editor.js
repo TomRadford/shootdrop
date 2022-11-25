@@ -55,10 +55,18 @@ const GearEditor = ({ children, gearItem }) => {
       const newImage = await makeWEBP(target.files[0], 1920, 1080)
       const uploadUrl = await getGearImageUpload(gearItem.id)
       await axios.put(uploadUrl, newImage)
+      //reformat upload url to use images.shootdrop.com for public access
+      //through cloudflare
+      let publicUrl = ""
+      if (process.env.NODE_ENV === "production") {
+        publicUrl = `https://${uploadUrl.slice(35).split("?")[0]}`
+      } else {
+        publicUrl = `${uploadUrl.split("?")[0]}`
+      }
       addGearImage({
         variables: {
           gearItem: gearItem.id,
-          url: uploadUrl.split("?")[0],
+          url: publicUrl,
         },
       })
       setUploading(false)

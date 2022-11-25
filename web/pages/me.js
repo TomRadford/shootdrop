@@ -54,9 +54,19 @@ const MePage = () => {
     const uploadUrl = await getProfileImageUpload()
     try {
       await axios.put(uploadUrl, newImage)
-      const newProfilePicUrl = `${
-        uploadUrl.split("?")[0]
-      }?t=${new Date().getTime()}`
+      //reformat upload url to use images.shootdrop.com for public access
+      //through cloudflare
+      let newProfilePicUrl = ""
+      if (process.env.NODE_ENV === "production") {
+        newProfilePicUrl = `https://${
+          uploadUrl.slice(35).split("?")[0]
+        }?t=${new Date().getTime()}`
+      } else {
+        newProfilePicUrl = `${
+          uploadUrl.split("?")[0]
+        }?t=${new Date().getTime()}`
+      }
+
       setProfilePicture(newProfilePicUrl) //cache breaker
       //no need to save on profile picture change
       editMe({
