@@ -497,7 +497,6 @@ const resolvers = {
           ? existingGearListItem.prefs
           : null
         existingGearListItem.userThatUpdated = context.currentUser
-        console.log(existingGearListItem)
         return await existingGearListItem.save()
       } else {
         const newGearListItem = new GearListItem({
