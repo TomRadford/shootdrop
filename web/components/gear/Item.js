@@ -15,7 +15,7 @@ const whitePixel =
 
 const GearItem = ({ data, listToAdd, list }) => {
   const gearItem = list ? data.gearItem : data
-  const userInDrop = list ? useUserInDrop(list.drop) : false
+  const userInDrop = useUserInDrop(list ? list.drop : undefined)
   const listItem = useListItemStore((state) => state.listItem)
   const setListItem = useListItemStore((state) => state.setListItem)
   const [
@@ -59,7 +59,7 @@ const GearItem = ({ data, listToAdd, list }) => {
   useEffect(() => {
     if (addListItemData) {
       setListItem(addListItemData.addListItem)
-    }
+    } // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [addListItemData])
 
   return (
@@ -85,6 +85,7 @@ const GearItem = ({ data, listToAdd, list }) => {
                   objectFit="cover"
                   placeholder="blur"
                   blurDataURL={whitePixel}
+                  alt={gearItem.model}
                 />
               </>
             ) : (
@@ -95,6 +96,7 @@ const GearItem = ({ data, listToAdd, list }) => {
                 objectFit="cover"
                 placeholder="blur"
                 blurDataURL={whitePixel}
+                alt={gearItem.model}
               />
             )}
             <div className="absolute bottom-[6px] flex w-full flex-col bg-gradient-to-t from-[#000000b9] to-transparent px-3 pb-2 pt-12 text-left ">
@@ -139,6 +141,7 @@ const GearItem = ({ data, listToAdd, list }) => {
                 src={data.userThatUpdated.profilePicture}
                 height="20px"
                 width="20px"
+                alt={data.userThatUpdated.fullName}
               />
               <div className="absolute top-7 -left-3 z-10 rounded-md bg-black bg-opacity-70 p-1 opacity-0 transition-opacity  group-hover:opacity-100">
                 {data.userThatUpdated.fullName}

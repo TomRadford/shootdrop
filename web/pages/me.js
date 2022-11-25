@@ -31,7 +31,7 @@ const MePage = () => {
         setProfilePicture(data.me.profilePicture)
       }
     }
-  }, [data])
+  }, [data, loading])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -94,6 +94,7 @@ const MePage = () => {
                       className={`rounded-full`}
                       onLoadStart={() => setImageLoading(true)}
                       onLoad={() => setImageLoading(false)}
+                      alt="Profile picture"
                     />
                     <div className="absolute top-0 flex  h-[150px] w-[150px] justify-center rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-50">
                       <ImageInput

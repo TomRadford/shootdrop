@@ -9,7 +9,7 @@ import useListItemStore from "../../lib/hooks/store/listItem"
 const ItemModal = ({ list }) => {
   const listItem = useListItemStore((store) => store.listItem)
   const setListItem = useListItemStore((store) => store.setListItem)
-  const userInDrop = list ? useUserInDrop(list.drop) : false
+  const userInDrop = useUserInDrop(list ? list.drop : undefined)
   const [itemModalOpen, setItemModalOpen] = useState(false)
   useEffect(() => {
     if (listItem) {

@@ -24,6 +24,7 @@ const TagsModal = ({
   //ToDo: refactor into normal useQuery with refetch
   useEffect(() => {
     getTags()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -61,7 +62,7 @@ const TagsModal = ({
         setLoading(false)
       }, 500)
       return () => clearTimeout(timeout)
-    }
+    } // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchTerm, query.category])
 
   const tagIds = gearItem

@@ -55,6 +55,7 @@ const GearFilter = ({
       }, 1200)
       return () => clearTimeout(timeout)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedModel, debouncedManufacturer])
   // console.log(query.category)
 
@@ -80,8 +81,8 @@ const GearFilter = ({
               <div className="w-32 cursor-pointer py-1 px-2 ">
                 {query.category
                   ? `${query.category[0]}${query.category
-                    .slice(1)
-                    .toLowerCase()}`
+                      .slice(1)
+                      .toLowerCase()}`
                   : `All categories`}
               </div>
               <div className="hidden flex-col justify-center gap-1  group-hover:flex">
@@ -89,27 +90,27 @@ const GearFilter = ({
                   (categoryOption) =>
                     query.category
                       ? categoryOption.toUpperCase() !== query.category && (
-                        <button
-                          key={categoryOption}
-                          className="border-t-[1px] border-gray-400 px-2"
-                          onClick={(e) =>
-                            handleCategoryChange(e, categoryOption)
-                          }
-                        >
-                          {categoryOption}
-                        </button>
-                      )
+                          <button
+                            key={categoryOption}
+                            className="border-t-[1px] border-gray-400 px-2"
+                            onClick={(e) =>
+                              handleCategoryChange(e, categoryOption)
+                            }
+                          >
+                            {categoryOption}
+                          </button>
+                        )
                       : categoryOption !== "All categories" && (
-                        <button
-                          key={categoryOption}
-                          className="border-t-[1px] border-gray-400 px-2"
-                          onClick={(e) =>
-                            handleCategoryChange(e, categoryOption)
-                          }
-                        >
-                          {categoryOption}
-                        </button>
-                      )
+                          <button
+                            key={categoryOption}
+                            className="border-t-[1px] border-gray-400 px-2"
+                            onClick={(e) =>
+                              handleCategoryChange(e, categoryOption)
+                            }
+                          >
+                            {categoryOption}
+                          </button>
+                        )
                 )}
               </div>
             </div>
@@ -127,18 +128,26 @@ const GearFilter = ({
               </a>
             </Link>
           </div>
-        ) : <div className="flex flex-col text-left mr-4 mb-4">
-          <h2 className="text-lg capitalize">
-            Add <Link href={`/list/${listToAdd.id}`}><a className="font-semibold">{listToAdd.category.toLowerCase()} gear</a></Link>
-          </h2>
-          <Link href={`/drops/${listToAdd.drop.id}`}>
-            <a>
-              <h4 className="text-sm">
-                for <span className="font-medium">{listToAdd.drop.project}</span>
-              </h4>
-            </a>
-          </Link>
-        </div>}
+        ) : (
+          <div className="mr-4 mb-4 flex flex-col text-left">
+            <h2 className="text-lg capitalize">
+              Add{" "}
+              <Link href={`/list/${listToAdd.id}`}>
+                <a className="font-semibold">
+                  {listToAdd.category.toLowerCase()} gear
+                </a>
+              </Link>
+            </h2>
+            <Link href={`/drops/${listToAdd.drop.id}`}>
+              <a>
+                <h4 className="text-sm">
+                  for{" "}
+                  <span className="font-medium">{listToAdd.drop.project}</span>
+                </h4>
+              </a>
+            </Link>
+          </div>
+        )}
         {list && <ListComment list={list} />}
         {!list ? (
           <div className="flex flex-col gap-1">

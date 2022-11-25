@@ -11,7 +11,7 @@ const useUserInDrop = (drop) => {
     } else {
       setUserInDrop(false)
     }
-  }, [me])
+  }, [me, drop])
   return userInDrop
 }
 

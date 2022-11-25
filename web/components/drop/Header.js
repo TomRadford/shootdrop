@@ -68,8 +68,8 @@ const DropHeader = ({ drop, userInDrop }) => {
         }, 2000)
         return () => clearTimeout(timeout)
       }
-    }
-  }, [dropName, clientName])
+    } // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dropName, clientName, drop])
 
   if (!drop) {
     if (!loading && data) {
@@ -99,6 +99,7 @@ const DropHeader = ({ drop, userInDrop }) => {
                       height="30px"
                       className={`rounded-full`}
                       objectFit="cover"
+                      alt={user.fullName}
                     />
                   </div>
                 ))}

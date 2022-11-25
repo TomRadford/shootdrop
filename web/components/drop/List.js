@@ -28,14 +28,12 @@ const DropListInfo = ({ drop, category, listEntry }) => {
   useEffect(() => {
     if (listEntry) {
       getListItems({ variables: { list: listEntry.id } })
-    }
+    } // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  useEffect(() => {
-    if (data) {
-      router.push(`/list/${data.addList.id}`)
-    }
-  }, [data])
+  if (data) {
+    router.push(`/list/${data.addList.id}`)
+  }
 
   return (
     <>
@@ -53,8 +51,11 @@ const DropListInfo = ({ drop, category, listEntry }) => {
                   </p>
                   {itemsLoading ? (
                     <div className="flex -space-x-3 md:-space-x-2">
-                      {[...new Array(5)].map(() => (
-                        <div className="z-10 flex h-[30px] w-[30px] animate-pulse items-center justify-center rounded-full bg-gray-800 text-[10px]"></div>
+                      {[...new Array(5)].map((a, i) => (
+                        <div
+                          key={i}
+                          className="z-10 flex h-[30px] w-[30px] animate-pulse items-center justify-center rounded-full bg-gray-800 text-[10px]"
+                        ></div>
                       ))}
                     </div>
                   ) : itemsData && itemsData.getListItems.totalDocs === 0 ? (
@@ -68,24 +69,27 @@ const DropListInfo = ({ drop, category, listEntry }) => {
                           (listItem, i) => {
                             if (i < 12) {
                               return (
-                                <div key={listItem.id}>
-                                  <Image
-                                    src={
-                                      listItem.gearItem.images[0]
-                                        ? listItem.gearItem.images[0].url
-                                        : `/img/default_gear.jpg`
-                                    }
-                                    width="30px"
-                                    height="30px"
-                                    objectFit="cover"
-                                    className="rounded-full"
-                                  />
-                                </div>
+                                <Image
+                                  alt={listItem.gearItem.model}
+                                  src={
+                                    listItem.gearItem.images[0]
+                                      ? listItem.gearItem.images[0].url
+                                      : `/img/default_gear.jpg`
+                                  }
+                                  width="30px"
+                                  height="30px"
+                                  objectFit="cover"
+                                  className="rounded-full"
+                                  key={listItem.id}
+                                />
                               )
                             } else {
                               if (i === 12) {
                                 return (
-                                  <div className="z-10 flex h-[30px] w-[30px] items-center justify-center rounded-full bg-gray-800 text-[10px]">
+                                  <div
+                                    key={listItem.id} //ToDo: double check this works okay on rerenders
+                                    className="z-10 flex h-[30px] w-[30px] items-center justify-center rounded-full bg-gray-800 text-[10px]"
+                                  >
                                     +{itemsData.getListItems.totalDocs - 8}
                                   </div>
                                 )

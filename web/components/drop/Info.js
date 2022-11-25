@@ -45,7 +45,8 @@ const DropInfo = ({ drop, userInDrop }) => {
       }, 2000)
       return () => clearTimeout(timeout)
     }
-  }, [director, dop, soundie])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [director, dop, soundie, drop])
 
   return (
     <div className="mx-auto w-80 sm:w-96">

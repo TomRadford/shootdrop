@@ -43,6 +43,7 @@ const AddGearPage = () => {
                             target="_blank"
                             href="https://www.cined.com/databases/"
                             className="font-bold"
+                            rel="noreferrer"
                           >
                             reputable source
                           </a>

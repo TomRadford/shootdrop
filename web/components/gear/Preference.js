@@ -36,7 +36,7 @@ const Opt = ({ opt, gearPrefId }) => {
       }, UPDATE_TIMEOUT)
 
       return () => clearTimeout(timeout)
-    }
+    } // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [optName])
 
   const handleRemove = (e) => {

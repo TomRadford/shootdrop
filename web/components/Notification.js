@@ -8,6 +8,7 @@ const Notification = ({ messageData, setMessageData }) => {
       }, 2000)
       return () => clearTimeout(timeout)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messageData])
   if (messageData.message) {
     return (

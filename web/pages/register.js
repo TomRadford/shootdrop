@@ -34,7 +34,7 @@ const RegisterCard = () => {
         router.replace("/drops")
       }
     }
-  }, [me.data])
+  }, [me, router])
 
   useEffect(() => {
     if (result.loading) {
@@ -183,6 +183,7 @@ const LoginPage = () => {
                 target="_blank"
                 className="font-semibold"
                 href="https://tomradford.co.za"
+                rel="noreferrer"
               >
                 Tom
               </a>{" "}

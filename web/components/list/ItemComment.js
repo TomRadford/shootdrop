@@ -25,6 +25,7 @@ const ItemComment = ({ listId, gearListItem, userInDrop }) => {
       }
     }, 1000)
     return () => clearTimeout(timeout)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [comment])
 
   return (
