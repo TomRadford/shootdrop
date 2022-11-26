@@ -17,8 +17,7 @@ const NavLink = ({ label, link, setShowNav }) => (
   </li>
 )
 
-const User = () => {
-  const me = useGetMe()
+const User = ({ me }) => {
   const handleLogout = () => {
     localStorage.clear()
     window.location.reload()
@@ -76,6 +75,7 @@ const User = () => {
 
 const NavBar = () => {
   const [showNav, setShowNav] = useState(false)
+  const me = useGetMe()
   return (
     <nav
       className="bg-gray-secondary top:0 fixed z-50 flex w-full flex-col py-2 text-center text-white md:left-0 md:h-screen md:w-64 md:py-10"
@@ -117,21 +117,33 @@ const NavBar = () => {
         <div className={`pt-6`}>
           <p className="text-md font-light">Drops</p>
           <ul>
-            <NavLink label="Add" link="/drops/add" setShowNav={setShowNav} />
-            <NavLink label="Browse" link="/drops" setShowNav={setShowNav} />
+            <NavLink
+              label="Add"
+              link={me ? `/drops/add` : `login`}
+              setShowNav={setShowNav}
+            />
+            <NavLink
+              label="Browse"
+              link={me ? `/drops` : `login`}
+              setShowNav={setShowNav}
+            />
           </ul>
         </div>
         <div className={`pt-6`}>
           <p className="text-md font-light">Gear</p>
           <ul>
-            <NavLink label="Add" link="/gear/add" setShowNav={setShowNav} />
+            <NavLink
+              label="Add"
+              link={me ? `/gear/add` : `login`}
+              setShowNav={setShowNav}
+            />
             <NavLink label="Browse" link="/gear" setShowNav={setShowNav} />
           </ul>
         </div>
       </div>
       <div className={`${!showNav && "hidden"} mt-auto md:block`}>
         <ClientOnly>
-          <User />
+          <User me={me} />
         </ClientOnly>
       </div>
     </nav>
