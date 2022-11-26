@@ -9,10 +9,13 @@ const Home = () => {
   return (
     <Layout>
       <Head>
-        <title>ShootDrop</title>
+        <title>ShootDrop: Your next shoot starts here</title>
+        <meta name="description" content="Gear lists simplified." />
+        <meta property="og:type" content="website" />
         <meta
-          name="description"
-          content="Shoot asset organisation simplified."
+          property="og:title"
+          content="ShootDrop: Your next shoot starts here"
+          key="title"
         />
       </Head>
       <div className="flex h-screen bg-gradient-to-t from-gray-900 to-gray-800">
