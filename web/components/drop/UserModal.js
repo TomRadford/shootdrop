@@ -11,7 +11,9 @@ const User = ({ user, onClick, userInDrop }) => {
     return (
       <div className="flex flex-row gap-4">
         <Image
-          src={user.profilePicture}
+          src={
+            user.profilePicture ? user.profilePicture : `/img/default_user.png`
+          }
           key={user.id}
           width="30px"
           height="30px"

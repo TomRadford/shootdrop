@@ -93,7 +93,11 @@ const DropHeader = ({ drop, userInDrop }) => {
                 drop.users.map((user) => (
                   <div key={user.id}>
                     <Image
-                      src={user.profilePicture}
+                      src={
+                        user.profilePicture
+                          ? user.profilePicture
+                          : `/img/default_user.png`
+                      }
                       key={user.id}
                       width="30px"
                       height="30px"
