@@ -21,24 +21,33 @@ const TagsModal = ({
   const [editGearItem, editGearItemResult] = useMutation(EDIT_GEAR_ITEM)
   const [addTag, addTagResult] = useMutation(ADD_TAG)
 
+  const categoryParam = gearItem
+    ? gearItem.category
+    : query.category
+    ? [query.category]
+    : listCategory
+    ? [listCategory]
+    : null //array of categories or empty for Browser
+
   //ToDo: refactor into normal useQuery with refetch
   useEffect(() => {
-    getTags()
+    //filter with categories on initial modal open
+    if (tagsModalOpen) {
+      getTags({
+        variables: {
+          category: categoryParam,
+        },
+      })
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [tagsModalOpen])
 
   useEffect(() => {
     if (searchTerm.length === 0) {
       setLoading(true)
       getTags({
         variables: {
-          category: gearItem
-            ? gearItem.category
-            : query.category
-            ? [query.category]
-            : listCategory
-            ? [listCategory]
-            : null, //array of categories or empty for Browser with
+          category: categoryParam,
         },
       })
       setLoading(false)
@@ -49,13 +58,7 @@ const TagsModal = ({
       const timeout = setTimeout(() => {
         getTags({
           variables: {
-            category: gearItem
-              ? gearItem.category
-              : query.category
-              ? [query.category]
-              : listCategory
-              ? [listCategory]
-              : null, //array of categories or empty for Browser with
+            category: categoryParam,
             tag: searchTerm,
           },
         })
