@@ -6,6 +6,7 @@ const nextConfig = {
     domains: [
       "shootdrop-images.s3.eu-west-1.amazonaws.com",
       "images.shootdrop.com",
+      "s3.eu-west-1.amazonaws.com",
     ],
   },
 }
