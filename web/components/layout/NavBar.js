@@ -119,12 +119,12 @@ const NavBar = () => {
           <ul>
             <NavLink
               label="Add"
-              link={me ? `/drops/add` : `login`}
+              link={me ? `/drops/add` : `/login`}
               setShowNav={setShowNav}
             />
             <NavLink
               label="Browse"
-              link={me ? `/drops` : `login`}
+              link={me ? `/drops` : `/login`}
               setShowNav={setShowNav}
             />
           </ul>
@@ -134,7 +134,7 @@ const NavBar = () => {
           <ul>
             <NavLink
               label="Add"
-              link={me ? `/gear/add` : `login`}
+              link={me ? `/gear/add` : `/login`}
               setShowNav={setShowNav}
             />
             <NavLink label="Browse" link="/gear" setShowNav={setShowNav} />
