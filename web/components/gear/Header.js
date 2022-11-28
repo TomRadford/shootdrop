@@ -34,7 +34,7 @@ const GearHeader = ({ gearItem }) => {
       } else {
         setIsAdding(0)
       }
-      if (category.length > 0 && manufacturer.length > 1 && model.length > 2) {
+      if (category.length > 0 && manufacturer.length > 1 && model.length >= 2) {
         setIsAdding(2)
         const timeout = setTimeout(() => {
           addGearItem({
