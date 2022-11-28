@@ -46,6 +46,7 @@ const GearBrowser = ({ listToAdd, list }) => {
         : listToAdd
         ? { ...query, category: listToAdd.category }
         : query, //use queryParams to filter & list.id if list
+      //ToDo: relook at this fetch policy for fresh results
       fetchPolicy: "cache-and-network",
       onCompleted: () => {
         setFetchingMore(false)

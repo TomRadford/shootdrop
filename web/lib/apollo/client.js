@@ -84,7 +84,7 @@ const cache = new InMemoryCache({
       fields: {
         // To merge fetchMore queries in cache:
         allGearItems: {
-          keyArgs: ["id"], //ToDo: add keys based on filters
+          keyArgs: ["id", "category"], //ToDo: add keys based on filters
           // Prevents concatenation of existing entries in gearItems
           // and rather concats new values to existing while returning
           // the new total docs for incoming
