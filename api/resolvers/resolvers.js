@@ -902,6 +902,7 @@ const resolvers = {
       if (args.fullName) {
         return await User.find({
           fullName: { $regex: args.fullName, $options: "i" },
+          enabled: true,
         })
       } // Implement $search later on if we stick to Atlas
       return User.find({})
