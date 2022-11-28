@@ -17,7 +17,7 @@ const GearHeader = ({ gearItem }) => {
   )
   const [modalOpen, setModalOpen] = useState(false)
   const [addGearItem, { data: addData, loading: addLoading, error: addError }] =
-    useMutation(ADD_GEAR_ITEM, {})
+    useMutation(ADD_GEAR_ITEM)
   const [editGearItem, editGearItemResult] = useMutation(EDIT_GEAR_ITEM)
   const me = useGetMe()
   const router = useRouter()

@@ -26,7 +26,7 @@ const TagsModal = ({
     getTags()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  console.log(listCategory)
+
   useEffect(() => {
     if (searchTerm.length === 0) {
       setLoading(true)
