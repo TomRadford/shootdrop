@@ -428,8 +428,8 @@ export const ALL_TAGS = gql`
 `
 
 export const ADD_TAG = gql`
-  mutation addTag($name: String!) {
-    addTag(name: $name) {
+  mutation addTag($name: String!, $category: [GearCategory]) {
+    addTag(name: $name, category: $category) {
       id
       name
       category

@@ -87,7 +87,9 @@ const GearBrowser = ({ listToAdd, list }) => {
       <div className="mb-10 w-full pt-0 text-center md:mx-0 md:mb-20 md:pt-0">
         <TagsModal
           tagsModalOpen={tagsModalOpen}
-          listCategory={list ? list.category : null}
+          listCategory={
+            list ? list.category : listToAdd ? listToAdd.category : null
+          }
           setTagsModalOpen={setTagsModalOpen}
         />
         <ItemModal list={listToAdd} />

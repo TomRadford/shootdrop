@@ -110,13 +110,14 @@ const resolvers = {
       //specifically for generic tags (ie !category), otherwise tags
       // are generated via the handleTags helper
       checkAuth(context)
-      const { name } = args
+      const { name, category } = args
       const existingTag = await Tag.findOne({ name: name.toLowerCase() })
       if (existingTag) {
         throw new UserInputError("Tag already exists")
       }
       const newTag = new Tag({
         name: name.toLowerCase(),
+        category: args.category ? args.category : [],
       })
       return await newTag.save()
     },

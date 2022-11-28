@@ -26,7 +26,7 @@ const TagsModal = ({
     getTags()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
+  console.log(listCategory)
   useEffect(() => {
     if (searchTerm.length === 0) {
       setLoading(true)
@@ -191,16 +191,24 @@ const TagsModal = ({
                                   onClick={(e) => {
                                     e.preventDefault()
                                     setTagsModalOpen(false)
-                                    editGearItem({
+
+                                    addTag({
                                       variables: {
-                                        id: gearItem.id,
-                                        tags: [
-                                          ...gearItem.tags.map(
-                                            (tag) => tag.name
-                                          ),
-                                          searchTerm,
-                                        ],
+                                        name: searchTerm,
+                                        category: gearItem.category, //array
                                       },
+                                    }).then(() => {
+                                      editGearItem({
+                                        variables: {
+                                          id: gearItem.id,
+                                          tags: [
+                                            ...gearItem.tags.map(
+                                              (tag) => tag.name
+                                            ),
+                                            searchTerm,
+                                          ],
+                                        },
+                                      })
                                     })
                                   }}
                                   className="flex items-center rounded bg-teal-600 px-2 py-1 align-middle text-sm "

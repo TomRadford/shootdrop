@@ -10,6 +10,7 @@ import Loading from "../../../components/Loading"
 import useCheckAuth from "../../../lib/hooks/checkAuth"
 
 const ListAddPage = ({ list }) => {
+  console.log(list)
   const router = useRouter()
   const { id: listId } = router.query
   const listResult = useQuery(GET_LIST, {

@@ -169,7 +169,7 @@ const typeDefs = gql`
       profilePicture: String
       fullName: String
     ): User!
-    addTag(name: String): Tag!
+    addTag(name: String, category: [GearCategory]): Tag!
     addGearItem(
       category: [GearCategory]
       manufacturer: String!
