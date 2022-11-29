@@ -44,7 +44,7 @@ const sendAccountRequest = async (user) => {
 				<br>
 				Account created at ${date.toString()}
 				`,
-        signature: `This mailbox isnt monitored.`,
+        signature: `This mailbox isnt monitored`,
       },
     }
     await sendMail({
@@ -65,4 +65,41 @@ const sendAccountRequest = async (user) => {
   }
 }
 
-module.exports = { sendAccountRequest }
+const sendPasswordReset = async (user, token) => {
+  if (!user || !token) {
+    console.error("User and token needed for password reset mail")
+    return
+  }
+  try {
+    const mailgenMessage = {
+      body: {
+        title: `Password reset on ShootDrop`,
+        intro: `Hi <strong>${user.fullName}</strong>, you've requested a password reset on ShootDrop.
+				Please <a href="https://shootdrop.com/restore?token=${token}">click here</a> to login and set a new password.
+				<br/>
+				You can also copy this into your browser: <strong>https://shootdrop.com/restore?token=${token}</strong>
+				<br/>
+				This link will expire in 10 minutes.
+				`,
+        signature: `This mailbox isnt monitored`,
+      },
+    }
+    await sendMail({
+      to: user.username,
+      from: {
+        email: "no-reply@shootdrop.com",
+        name: "ShootDrop",
+      },
+      subject: `Password Reset for ${user.fullName}`,
+      text: mailGenerator.generatePlaintext(mailgenMessage),
+      html: mailGenerator.generate(mailgenMessage),
+    })
+  } catch (e) {
+    logger.error(e)
+    if (e.response) {
+      logger.error(e.response.body)
+    }
+  }
+}
+
+module.exports = { sendAccountRequest, sendPasswordReset }

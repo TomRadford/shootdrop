@@ -94,6 +94,12 @@ export const LOGIN = gql`
   }
 `
 
+export const PASSWORD_RESET = gql`
+  mutation passwordReset($username: String!) {
+    passwordReset(username: $username)
+  }
+`
+
 export const CREATE_USER = gql`
   mutation createUser(
     $fullName: String!

@@ -156,6 +156,7 @@ const typeDefs = gql`
 
   type Mutation {
     login(username: String!, password: String!): Token!
+    passwordReset(username: String!): Boolean!
     createUser(
       username: String!
       password: String!

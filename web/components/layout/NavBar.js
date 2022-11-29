@@ -20,7 +20,7 @@ const NavLink = ({ label, link, setShowNav }) => (
 const User = ({ me }) => {
   const handleLogout = () => {
     localStorage.clear()
-    window.location.reload()
+    window.location = "/login"
   }
   return (
     <div className="mx-auto flex flex-1 flex-row items-center justify-center gap-4 py-5">

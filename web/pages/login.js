@@ -90,6 +90,13 @@ const LoginCard = () => {
           </button>
         </form>
       </Card>
+      <div className="mx-auto mt-2 w-[10rem]">
+        <p className="text-[10px] font-light">
+          <Link href="/reset">
+            <a className="font-semibold">Forgot your password?</a>
+          </Link>
+        </p>
+      </div>
       <p className="mt-5">
         Made by{" "}
         <a

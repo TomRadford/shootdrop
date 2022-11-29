@@ -14,7 +14,7 @@ const DropsPage = () => {
   useCheckAuth()
 
   if (loading) {
-    return <Loading title="My Drops | ShootDrop" />
+    return <Loading />
   }
 
   return (
@@ -48,15 +48,16 @@ const DropsPage = () => {
                           return 0
                         })
                         .map((drop) => {
-                          if (drop.endDate > new Date().getTime() || !drop.endDate)
+                          if (
+                            drop.endDate > new Date().getTime() ||
+                            !drop.endDate
+                          )
                             return <DropSummaryCard drop={drop} key={drop.id} />
-
                         })}
                     <AddCard href="/drops/add" />
-
                   </section>
                   <div className="w-full  pb-8 pt-16">
-                    <h1 className="text-lg font-semibold mb-10">Past Drops</h1>
+                    <h1 className="mb-10 text-lg font-semibold">Past Drops</h1>
                     <section className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-16">
                       {data.me &&
                         [...data.me.drops]
@@ -73,9 +74,13 @@ const DropsPage = () => {
                             return 0
                           })
                           .map((drop) => {
-                            if (drop.endDate && drop.endDate < new Date().getTime())
-                              return <DropSummaryCard drop={drop} key={drop.id} />
-
+                            if (
+                              drop.endDate &&
+                              drop.endDate < new Date().getTime()
+                            )
+                              return (
+                                <DropSummaryCard drop={drop} key={drop.id} />
+                              )
                           })}
                     </section>
                   </div>

@@ -12,6 +12,7 @@ import { makeWEBP } from "../lib/image/resizer"
 import axios from "axios"
 import { getProfileImageUpload } from "../lib/image/upload"
 import ImageInput from "../components/ImageInput"
+import { useRouter } from "next/router"
 
 const MePage = () => {
   const [newPassword, setNewPassword] = useState("")
@@ -21,7 +22,7 @@ const MePage = () => {
   const [imageLoading, setImageLoading] = useState(false)
   const [messageData, setMessageData] = useState({ message: "", type: "" })
   useCheckAuth()
-  const { data, loading } = useQuery(ME)
+  const { data, loading, refetch: refetchMe } = useQuery(ME)
   const [editMe, editUserResult] = useMutation(EDIT_ME)
   useEffect(() => {
     if (!loading) {
@@ -32,7 +33,8 @@ const MePage = () => {
       }
     }
   }, [data, loading])
-
+  const router = useRouter()
+  const passwordReset = router.query.passwordreset ? true : false
   const handleSubmit = async (e) => {
     e.preventDefault()
     setMessageData({ message: "Profile updated!", type: "info" })
@@ -40,8 +42,14 @@ const MePage = () => {
       variables: {
         username: username,
         fullName: fullName,
+        password: newPassword,
         profilePicture,
       },
+    }).then(() => {
+      if (passwordReset) {
+        localStorage.clear()
+        refetchMe()
+      }
     })
   }
 
@@ -185,6 +193,7 @@ const MePage = () => {
                     autoComplete="new-password"
                     value={newPassword}
                     onChange={({ target }) => setNewPassword(target.value)}
+                    required
                   />
                 </div>
               </Card>
@@ -192,7 +201,7 @@ const MePage = () => {
                 type="submit"
                 className="mt-10 rounded-lg bg-gray-900 px-4 py-2"
               >
-                Save
+                {passwordReset ? "Reset password" : "Save"}
               </button>
             </form>
             <div className="mt-4">

@@ -22,7 +22,7 @@ const {
 } = require("../utils/prefs")
 const { generateUploadURL, deleteS3Object } = require("../utils/s3")
 const fetch = require("node-fetch")
-const { sendAccountRequest } = require("../utils/mailer")
+const { sendAccountRequest, sendPasswordReset } = require("../utils/mailer")
 
 const dateScalar = new GraphQLScalarType({
   name: "Date",
@@ -593,6 +593,25 @@ const resolvers = {
           expiresIn: 60 * 60 * 3,
         }),
       }
+    },
+
+    passwordReset: async (root, args) => {
+      //Mails a token that lasts 60 min to login and change password
+      const user = await User.findOne({ username: args.username })
+      if (!user) {
+        throw new UserInputError("User account does not exist")
+      }
+      const userForToken = {
+        id: user._id,
+        username: user.username,
+      }
+      await sendPasswordReset(
+        user,
+        jwt.sign(userForToken, config.SECRET, {
+          expiresIn: 10 * 60,
+        })
+      )
+      return true
     },
 
     createUser: async (root, args) => {
