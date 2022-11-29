@@ -601,6 +601,9 @@ const resolvers = {
       if (!user) {
         throw new UserInputError("User account does not exist")
       }
+      if (!user.enabled) {
+        throw new UserInputError("Account not activated yet")
+      }
       const userForToken = {
         id: user._id,
         username: user.username,
