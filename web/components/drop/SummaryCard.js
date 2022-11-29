@@ -92,7 +92,11 @@ const DropSummaryCard = ({ drop }) => {
                       <div key={user.id}>
                         <Image
                           alt={user.fullName}
-                          src={user.profilePicture}
+                          src={
+                            user.profilePicture
+                              ? user.profilePicture
+                              : `/img/default_user.png`
+                          }
                           key={user.id}
                           width="20px"
                           height="20px"
