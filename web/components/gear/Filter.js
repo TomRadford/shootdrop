@@ -76,7 +76,7 @@ const GearFilter = ({
     <form className="flex w-full flex-wrap items-center justify-center gap-8 bg-gradient-to-b from-[#121212] to-transparent pb-8 pt-16 md:pt-8">
       <div className="flex flex-col items-center gap-1 px-3 xl:flex-row">
         {!list && !listToAdd ? (
-          <div className="relative z-40 mb-14 flex w-full justify-center sm:justify-start xl:mr-40">
+          <div className="relative z-10 mb-14 flex w-full select-none justify-center sm:justify-start xl:mr-40">
             <div className="group absolute rounded-xl bg-[#191f29]">
               <div className="w-32 cursor-pointer py-1 px-2 ">
                 {query.category

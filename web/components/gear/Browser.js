@@ -56,6 +56,11 @@ const GearBrowser = ({ listToAdd, list }) => {
   )
 
   useEffect(() => {
+    // Fetch on mount
+    getGear()
+  }, [])
+
+  useEffect(() => {
     //refetch when url query params change from filter
     //getGear not used to prevent issues mismatched queries
     //ToDo: relook at this issue
