@@ -9,34 +9,52 @@
   </a>
 </p>
 
-<center><h2>Shoot asset list creation made easy</h2></center>
+<center><h2>Shoot asset list creation made easy 🎥💡🎤🎬</h2></center>
 
 ### ✨Register and try it out at [shootdrop.com](https://shootdrop.com/register)!
 
+## What is this?
+
+During pre-production for video/film projects, making gear lists is time-consuming. I created ShootDrop as <strong>a simple, easy-to-use tool to quickly create gear lists</strong>.
+
 ## Features
+
+### Drops
+
+A drop is tied to a shoot in the real world, it serves as the home for all gear-related info pertaining to the shoot.
+
+- Collaborators can be added here. They can edit any lists attached to the drops they're on.
+- The URL is publically sharable for everyone on the production to stay up to date.
+- Overview of all list items - giving you an idea of the shoot at a glance.
+
+### Lists
+
+A list is tied to a drop, it consists of Gear Items in a particular category (either camera, lighting, grips or sound).
+
+- Comments and preferences can be added for each list item.
+- _Last edited by_ with time and user to keep track of who added what.
 
 ### Gear
 
-- Grouping using categories (grips/lighting/camera/sound)
-- Tagging for easy filtering
--
-- Tag management for both gear items
+- Categories (grips/lighting/camera/sound)
+- Tagging for easy filtering. Tags are either generic (eg: cable) or tied to categories (eg: lens or recorder)
+- Preferences (eg: Lens Mount or Power Solution)
 
 ## Tech
 
-> **Web**
->
-> - NextJS (React)
-> - TailwindCSS
-> - Apollo Client (GraphQL client and state management library)
-> - Zustand (minimal state management where Apollo reactive variables would be overkill)
+**Web**
 
-> **Api**
->
-> - NodeJS
-> - Apollo Server
-> - MongoDB (with Mongoose ODM)
-> - AWS S3
+- NextJS (React)
+- TailwindCSS
+- Apollo Client (GraphQL client and state management library)
+- Zustand (minimal state management where Apollo reactive variables would be overkill)
+
+**Api**
+
+- NodeJS
+- Apollo Server
+- MongoDB (with Mongoose ODM)
+- AWS S3
 
 ## Author
 
