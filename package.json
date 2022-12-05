@@ -1,7 +1,7 @@
 {
   "name": "shootdrop",
   "version": "0.1.0",
-  "description": "Root package for shootdrop",
+  "description": "Shoot asset list creation made easy",
   "main": "index.js",
   "scripts": {
     "postinstall": "(cd api && npm install)",
