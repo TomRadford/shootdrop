@@ -24,11 +24,7 @@
 
 During pre-production for video/film projects, making gear lists is time-consuming. I created ShootDrop as <strong>a simple, easy-to-use tool to quickly create gear lists</strong>.
 
-## Watch the overview video:
-
-<div align="center">
-<iframe width="560" height="315" src="https://www.youtube.com/embed/ou4FlVLowQQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-</div>
+<h2 align="center"><a href="https://www.youtube.com/watch?v=ou4FlVLowQQ">Watch the overview video!</a></h2>
 
 ## Features
 
