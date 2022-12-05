@@ -10,7 +10,7 @@
 </p>
 
 <h1 align="center">Shoot asset list creation made easy 🎥💡🎤🎬</h1>
-<p align="center">A tool to generate and share resource lists for film and televion productions quickly.
+<p align="center">A tool to generate and share resource lists for film and television productions quickly.
 </p>
 
 <div align="center">
@@ -23,6 +23,10 @@
 ## What is this?
 
 During pre-production for video/film projects, making gear lists is time-consuming. I created ShootDrop as <strong>a simple, easy-to-use tool to quickly create gear lists</strong>.
+
+## Watch the overview video:
+
+[![](https://markdown-videos.deta/youtube/ou4FlVLowQQ)](https://youtu.be/ou4FlVLowQQ)
 
 ## Features
 
