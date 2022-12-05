@@ -9,7 +9,7 @@
   </a>
 </p>
 
-<center><h2>Shoot asset list creation made easy 🎥💡🎤🎬</h2></center>
+<h2 align="center">Shoot asset list creation made easy 🎥💡🎤🎬</h2>
 
 ### ✨Register and try it out at [shootdrop.com](https://shootdrop.com/register)!
 
