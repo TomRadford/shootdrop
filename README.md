@@ -42,11 +42,17 @@ A list is tied to a drop, it consists of Gear Items in a particular category (ei
 - Comments and preferences can be added for each list item.
 - _Last edited by_ with time and user to keep track of who added what.
 
+![image](https://user-images.githubusercontent.com/7515754/205616939-e35e5320-ddae-4b81-98b2-42730d6308a5.png)
+
+
 ### Gear
 
 - Categories (grips/lighting/camera/sound)
 - Tagging for easy filtering. Tags are either generic (eg: cable) or tied to categories (eg: lens or recorder)
 - Preferences (eg: Lens Mount or Power Solution)
+
+![image](https://user-images.githubusercontent.com/7515754/205617199-410d19d2-56ad-4f1d-adfb-a96e3ea8e2f9.png)
+
 
 ## Tech
 
