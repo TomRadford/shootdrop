@@ -18,7 +18,6 @@
   <img width="440px" src="https://user-images.githubusercontent.com/7515754/205616635-87b0f23f-fb20-4478-8e8b-6f7f122b7fd0.png"/>
  </div>
 
-
 <h2 align="center"> ✨Register to try it out at <a href="https://shootdrop.com/register">shootdrop.com</a></h2>
 
 ## What is this?
@@ -44,7 +43,6 @@ A list is tied to a drop, it consists of Gear Items in a particular category (ei
 
 ![image](https://user-images.githubusercontent.com/7515754/205616939-e35e5320-ddae-4b81-98b2-42730d6308a5.png)
 
-
 ### Gear
 
 - Categories (grips/lighting/camera/sound)
@@ -52,7 +50,6 @@ A list is tied to a drop, it consists of Gear Items in a particular category (ei
 - Preferences (eg: Lens Mount or Power Solution)
 
 ![image](https://user-images.githubusercontent.com/7515754/205617199-410d19d2-56ad-4f1d-adfb-a96e3ea8e2f9.png)
-
 
 ## Tech
 
@@ -69,6 +66,49 @@ A list is tied to a drop, it consists of Gear Items in a particular category (ei
 - Apollo Server
 - MongoDB (with Mongoose ODM)
 - AWS S3
+
+## Dev Setup
+
+You can give this a spin on your local machine by installing NodeJS version 16 or higher.
+
+Make sure you setup the following **environment variables**
+
+**Web**
+
+.env.local
+
+    NEXT_PUBLIC_API_URI= your api URI
+    NEXT_PUBLIC_RECAPTCHA_SITE_KEY= grab one at https://www.hcaptcha.com/
+
+**API**
+
+.env
+
+    DEV_MONGODB_URI= Spin up a free mongodb at https://www.mongodb.com/cloud/atlas/register
+    PORT= any
+    SECRET= any
+    HCAPTCHASECRET= grab one at https://www.hcaptcha.com/
+    SENDGRID_API_KEY= grab one at https://sendgrid.com/free/
+    SITE_ADMIN= your email
+    DEV_AWS_ACCESS_KEY_ID= Grab one from AWS console
+    DEV_AWS_SECRET_ACCESS_KEY= Grab one from AWS console
+    DEV_S3_BUCKET= S3 bucket name
+
+**Commands for running the app locally**
+
+In root directory of repo, open terminal.
+
+API
+
+    cd api
+    npm install
+    npm run dev
+
+WEB
+
+    cd web
+    npm install
+    npm run dev
 
 ## Author
 
