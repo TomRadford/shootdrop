@@ -12,6 +12,17 @@
 <h1 align="center">Shoot asset list creation made easy 🎥💡🎤🎬</h1>
 <p align="center">A tool to generate and share resource lists for film and televion productions quickly.
 </p>
+
+<div align="center">
+  <img width="500px" src="https://user-images.githubusercontent.com/7515754/205615840-60304e74-5f62-465a-a5d3-31cdefc75fc2.png" />
+
+  <img width="450px" src="https://user-images.githubusercontent.com/7515754/205615439-ba6ae17b-7ae1-488b-ac40-ad8d5e5b6352.png"/>
+
+
+
+ </div>
+
+
 <h2 align="center"> ✨Register to try it out at <a href="https://shootdrop.com/register">shootdrop.com</a></h2>
 
 ## What is this?
