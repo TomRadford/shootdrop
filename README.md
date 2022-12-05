@@ -9,9 +9,9 @@
   </a>
 </p>
 
-<h2 align="center">Shoot asset list creation made easy 🎥💡🎤🎬</h2>
+<h1 align="center">Shoot asset list creation made easy 🎥💡🎤🎬</h1>
 
-### ✨Register and try it out at [shootdrop.com](https://shootdrop.com/register)!
+<h2 align="center"> ✨Register to try it out at <a href="https://shootdrop.com/register">shootdrop.com</a></h2>
 
 ## What is this?
 
