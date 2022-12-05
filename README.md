@@ -10,7 +10,8 @@
 </p>
 
 <h1 align="center">Shoot asset list creation made easy 🎥💡🎤🎬</h1>
-
+<p align="center">A tool to generate and share resource lists for film and televion productions quickly.
+</p>
 <h2 align="center"> ✨Register to try it out at <a href="https://shootdrop.com/register">shootdrop.com</a></h2>
 
 ## What is this?
