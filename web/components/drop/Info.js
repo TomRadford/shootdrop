@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "@apollo/client"
 import { useEffect, useState } from "react"
 import { UPDATE_DROP } from "../../lib/apollo/queries"
+import { UPDATE_TIMEOUT } from "../../lib/config"
 import useGetMe from "../../lib/hooks/getMe"
 import Card from "../Card"
 
@@ -42,7 +43,7 @@ const DropInfo = ({ drop, userInDrop }) => {
             soundie,
           },
         })
-      }, 2000)
+      }, UPDATE_TIMEOUT)
       return () => clearTimeout(timeout)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -4,6 +4,7 @@ import useGetMe from "../../lib/hooks/getMe"
 import { useMutation } from "@apollo/client"
 import { EDIT_GEAR_ITEM } from "../../lib/apollo/queries"
 import { useEffect } from "react"
+import { UPDATE_TIMEOUT } from "../../lib/config"
 
 const GearDescription = ({ gearItem }) => {
   const [description, setDescription] = useState(
@@ -22,7 +23,7 @@ const GearDescription = ({ gearItem }) => {
             description,
           },
         })
-      }, 2000)
+      }, UPDATE_TIMEOUT)
       return () => clearTimeout(timeout)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -8,6 +8,7 @@ import useGetMe from "../../lib/hooks/getMe"
 import UserModal from "./UserModal"
 import { format } from "date-fns"
 import useIsAddingStore from "../../lib/hooks/store/isAdding"
+import { UPDATE_TIMEOUT } from "../../lib/config"
 
 const DropHeader = ({ drop, userInDrop }) => {
   const [modalOpen, setModalOpen] = useState(false)
@@ -51,7 +52,7 @@ const DropHeader = ({ drop, userInDrop }) => {
               client: clientName,
             },
           })
-        }, 2000)
+        }, UPDATE_TIMEOUT)
         return () => clearTimeout(timeout)
       }
     } else {
@@ -65,7 +66,7 @@ const DropHeader = ({ drop, userInDrop }) => {
               client: clientName,
             },
           })
-        }, 2000)
+        }, UPDATE_TIMEOUT)
         return () => clearTimeout(timeout)
       }
     } // eslint-disable-next-line react-hooks/exhaustive-deps

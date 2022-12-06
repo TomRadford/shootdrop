@@ -5,6 +5,7 @@ import { useMutation } from "@apollo/client"
 import { EDIT_LIST } from "../../lib/apollo/queries"
 import { useEffect } from "react"
 import useUserInDrop from "../../lib/hooks/userInDrop"
+import { UPDATE_TIMEOUT } from "../../lib/config"
 
 const ListComment = ({ list }) => {
   const [comment, setComment] = useState(
@@ -27,7 +28,7 @@ const ListComment = ({ list }) => {
             comment,
           },
         })
-      }, 2000)
+      }, UPDATE_TIMEOUT)
       return () => clearTimeout(timeout)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
