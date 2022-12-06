@@ -8,6 +8,7 @@ import { useMutation, useQuery } from "@apollo/client"
 import { ADD_GEAR_ITEM, EDIT_GEAR_ITEM } from "../../lib/apollo/queries"
 import { andFormatter } from "../../lib/text/formatter"
 import useIsAddingStore from "../../lib/hooks/store/isAdding"
+import { UPDATE_TIMEOUT } from "../../lib/config"
 
 const GearHeader = ({ gearItem }) => {
   const [category, setCategory] = useState(gearItem ? gearItem.category : [])
@@ -44,7 +45,7 @@ const GearHeader = ({ gearItem }) => {
               model,
             },
           })
-        }, 2000)
+        }, 2500) //2.5 seconds for user to tweak
         return () => clearTimeout(timeout)
       }
     } else {
@@ -63,7 +64,7 @@ const GearHeader = ({ gearItem }) => {
               model,
             },
           })
-        }, 2000)
+        }, UPDATE_TIMEOUT)
         return () => clearTimeout(timeout)
       }
     }
