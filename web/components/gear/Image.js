@@ -53,14 +53,14 @@ const GearImage = ({ gearImage, alt, gearItemId }) => {
         {me && (
           <button
             onClick={handleRemove}
-            className="absolute right-4 top-1 md:right-1"
+            className="absolute right-4 top-1 mix-blend-difference md:right-1"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth="1.5"
-              stroke="#676767"
+              stroke="#ffffff"
               className="h-6 w-6 "
             >
               <path
