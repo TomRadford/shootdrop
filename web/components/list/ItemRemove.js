@@ -36,13 +36,16 @@ const ItemRemove = ({ list, gearListItemId }) => {
     })
   }
   return (
-    <button onClick={handleRemove} className="absolute right-1 top-1 z-10">
+    <button
+      onClick={handleRemove}
+      className="absolute right-1 top-1 z-10 mix-blend-difference"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
         strokeWidth="1.5"
-        stroke="#1b2240"
+        stroke="#ffffff"
         className="h-6 w-6 "
       >
         <path
