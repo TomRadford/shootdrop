@@ -1,6 +1,7 @@
 import { useMutation } from "@apollo/client"
 import { useEffect, useState } from "react"
 import { UPDATE_DROP } from "../../lib/apollo/queries"
+import { UPDATE_TIMEOUT } from "../../lib/config"
 import useGetMe from "../../lib/hooks/getMe"
 import Card from "../Card"
 import DatePickerTailwind from "../elements/DatePicker"
@@ -61,20 +62,20 @@ const DropDates = ({ drop, userInDrop }) => {
       compareDate(drop.endDate, endDate) ||
       compareDate(drop.wrapDate, wrapDate)
     ) {
-      const timeout = setTimeout(() => {
-        console.log("Updating dates")
+      // const timeout = setTimeout(() => {
+      console.log("Updating dates")
 
-        updateDrop({
-          variables: {
-            id: drop.id,
-            gearCheckDate: gearCheckDate ? gearCheckDate.getTime() : null,
-            startDate: startDate ? startDate.getTime() : null,
-            endDate: endDate ? endDate.getTime() : null,
-            wrapDate: wrapDate ? wrapDate.getTime() : null,
-          },
-        })
-      }, 2000)
-      return () => clearTimeout(timeout)
+      updateDrop({
+        variables: {
+          id: drop.id,
+          gearCheckDate: gearCheckDate ? gearCheckDate.getTime() : null,
+          startDate: startDate ? startDate.getTime() : null,
+          endDate: endDate ? endDate.getTime() : null,
+          wrapDate: wrapDate ? wrapDate.getTime() : null,
+        },
+      })
+      // }, UPDATE_TIMEOUT)
+      // return () => clearTimeout(timeout)
     } // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gearCheckDate, startDate, endDate, wrapDate, drop])
 
