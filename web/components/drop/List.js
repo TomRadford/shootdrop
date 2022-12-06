@@ -111,7 +111,11 @@ const DropListInfo = ({ drop, category, listEntry }) => {
           </a>
         </Link>
       ) : userInDrop && me ? (
-        <AddButton title={category} onClick={handleAdd} />
+        <AddButton
+          title={category}
+          onClick={handleAdd}
+          loading={loading || data}
+        />
       ) : null}
     </>
   )
