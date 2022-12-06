@@ -6,7 +6,14 @@ import useGetMe from "../../lib/hooks/getMe"
 import Card from "../Card"
 import DatePickerTailwind from "../elements/DatePicker"
 
-const DateOption = ({ label, date, setDate, dropDate, userInDrop }) => {
+const DateOption = ({
+  label,
+  date,
+  setDate,
+  dropDate,
+  userInDrop,
+  previousDate,
+}) => {
   const me = useGetMe()
   return (
     <div className="flex justify-between">
@@ -18,11 +25,16 @@ const DateOption = ({ label, date, setDate, dropDate, userInDrop }) => {
             setDate={setDate}
             startOpen={!dropDate}
             disabled={!me || !userInDrop}
+            previousDate={previousDate}
           />
         ) : (
           <button
             onClick={(e) => {
-              me ? setDate(new Date()) : e.preventDefault()
+              const newDate = new Date()
+              if (previousDate) {
+                newDate.setDate(previousDate.getDate() + 1)
+              }
+              me ? setDate(newDate) : e.preventDefault()
             }}
             disabled={!me || !userInDrop}
             className={`text-lg ${!me && `cursor-default`}`}
@@ -62,9 +74,7 @@ const DropDates = ({ drop, userInDrop }) => {
       compareDate(drop.endDate, endDate) ||
       compareDate(drop.wrapDate, wrapDate)
     ) {
-      // const timeout = setTimeout(() => {
       console.log("Updating dates")
-
       updateDrop({
         variables: {
           id: drop.id,
@@ -74,10 +84,8 @@ const DropDates = ({ drop, userInDrop }) => {
           wrapDate: wrapDate ? wrapDate.getTime() : null,
         },
       })
-      // }, UPDATE_TIMEOUT)
-      // return () => clearTimeout(timeout)
-    } // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gearCheckDate, startDate, endDate, wrapDate, drop])
+    }
+  }, [gearCheckDate, startDate, endDate, wrapDate])
 
   return (
     <div className="mx-auto w-80 sm:w-96">
@@ -98,6 +106,7 @@ const DropDates = ({ drop, userInDrop }) => {
             setDate={setStartDate}
             dropDate={drop.startDate}
             userInDrop={userInDrop}
+            previousDate={gearCheckDate}
           />
           <DateOption
             label="Shoot End"
@@ -105,6 +114,7 @@ const DropDates = ({ drop, userInDrop }) => {
             setDate={setEndDate}
             dropDate={drop.endDate}
             userInDrop={userInDrop}
+            previousDate={startDate}
           />
           <DateOption
             label="Gear Wrap"
@@ -112,6 +122,7 @@ const DropDates = ({ drop, userInDrop }) => {
             setDate={setWrapDate}
             dropDate={drop.wrapDate}
             userInDrop={userInDrop}
+            previousDate={endDate}
           />
         </div>
       </Card>

@@ -4,11 +4,18 @@ import { format } from "date-fns"
 
 // Credit: https://github.com/msnegurski/tailwind-react-datepicker
 
-const DatePickerTailwind = ({ date, setDate, startOpen, disabled }) => {
+const DatePickerTailwind = ({
+  date,
+  setDate,
+  startOpen,
+  disabled,
+  previousDate,
+}) => {
   return (
     <DatePicker
       disabled={disabled}
       selected={date}
+      minDate={previousDate}
       onChange={(newDate) => setDate(newDate)}
       selectsStart
       startDate={date}
