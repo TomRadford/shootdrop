@@ -138,7 +138,11 @@ const GearItem = ({ data, listToAdd, list }) => {
             <div className="group relative">
               <Image
                 className="rounded-full"
-                src={data.userThatUpdated.profilePicture}
+                src={
+                  data.userThatUpdated.profilePicture
+                    ? data.userThatUpdated.profilePicture
+                    : "/img/default_user.png"
+                }
                 height="20px"
                 width="20px"
                 alt={data.userThatUpdated.fullName}
