@@ -17,7 +17,7 @@ const ListPage = ({ list }) => {
     // Refresh list on page load to ensure latest
     // data between users
     // ToDo: potentially replace this with subscription
-    fetchPolicy: 'cache-and-network'
+    fetchPolicy: "network-only",
   })
   if (!list) {
     return (
@@ -42,8 +42,9 @@ const ListPage = ({ list }) => {
       <Head>
         <title>
           {listResult.data
-            ? `${listResult.data.getList.category[0]
-            }${listResult.data.getList.category.slice(1).toLowerCase()} gear |
+            ? `${
+                listResult.data.getList.category[0]
+              }${listResult.data.getList.category.slice(1).toLowerCase()} gear |
           ${listResult.data.getList.drop.project} | ShootDrop`
             : `${list.category[0]}${list.category.slice(1).toLowerCase()} gear |
           ${list.drop.project} | ShootDrop`}
