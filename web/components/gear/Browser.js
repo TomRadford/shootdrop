@@ -55,7 +55,6 @@ const GearBrowser = ({ listToAdd, list }) => {
       },
     }
   )
-  console.log(query)
 
   // useEffect(() => {
   //   // Fetch on mount

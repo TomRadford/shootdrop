@@ -103,8 +103,8 @@ const cache = new InMemoryCache({
           },
         },
         getListItems: {
-          keyArgs: ["list"], //ToDo: add keys based on filters
-          // Prevents concatenation of existing entries in gearItems
+          keyArgs: ["list", "tags"], //ToDo: add keys based on filters
+          // Prevents concatenation of existing entries in gearListItems
           // and rather concats new values to existing while returning
           // the new total docs for incoming
           merge(
