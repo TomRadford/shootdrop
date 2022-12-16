@@ -10,6 +10,7 @@ import { useGearQueryParams } from "../../lib/hooks/queryParams"
 import GearItem from "./Item"
 import ItemModal from "../list/ItemModal"
 import useUserInDrop from "../../lib/hooks/userInDrop"
+import { QueryDocumentKeys } from "graphql/language/ast"
 
 const GearListSkeleton = ({ length = 20 }) => (
   <>
@@ -54,11 +55,12 @@ const GearBrowser = ({ listToAdd, list }) => {
       },
     }
   )
+  console.log(query)
 
-  useEffect(() => {
-    // Fetch on mount
-    getGear()
-  }, [])
+  // useEffect(() => {
+  //   // Fetch on mount
+  //   getGear()
+  // }, [])
 
   useEffect(() => {
     //refetch when url query params change from filter
