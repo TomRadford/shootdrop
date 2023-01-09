@@ -3,7 +3,9 @@ import Card from "./Card"
 import LoadingSpinner from "./LoadingSpinner"
 
 export const AddButton = ({ onClick, title, loading }) => (
-  <button className={`relative mx-auto w-80 sm:w-96`}>
+  <button
+    className={`relative mx-auto w-80 transition-transform hover:scale-105 active:scale-95 sm:w-96`}
+  >
     <Card>
       {title && (
         <div className="text-md absolute top-5 left-10 flex font-semibold">{`${

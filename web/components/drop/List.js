@@ -40,7 +40,7 @@ const DropListInfo = ({ drop, category, listEntry }) => {
       {listEntry ? (
         <Link href={`/list/${listEntry.id}`}>
           <a>
-            <div className="mx-auto w-80 sm:w-96">
+            <div className="mx-auto w-80 transition-transform hover:scale-105 active:scale-95 sm:w-96">
               <Card>
                 <div className="pb-13 flex flex-col gap-1 px-4 py-2 ">
                   <h3 className="text-md text-left font-semibold">
