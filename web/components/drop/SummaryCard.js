@@ -6,7 +6,7 @@ const DropSummaryCard = ({ drop }) => {
   return (
     <Link href={`/drops/${drop.id}`} key={drop.id}>
       <a>
-        <button className="mx-auto w-80 sm:w-96">
+        <button className="mx-auto w-80 transition-transform hover:scale-105 active:scale-95 sm:w-96">
           <Card>
             <div className="flex flex-col gap-4 py-2 px-1 sm:px-4">
               <div className="flex flex-col gap-0">
