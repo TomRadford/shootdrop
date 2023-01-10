@@ -716,10 +716,11 @@ const resolvers = {
 				}
 			}
 
-			if (!process.env.NODE_ENV === 'development') {
+			if (process.env.NODE_ENV === 'production') {
 				//placeholder to protect all drops on prod
 				throw new AuthenticationError('Unauthoized')
 			}
+
 			const drops = await Drop.find({}).populate('users').populate('lists')
 
 			return drops

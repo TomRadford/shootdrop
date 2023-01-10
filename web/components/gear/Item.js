@@ -74,7 +74,7 @@ const GearItem = ({ data, listToAdd, list }) => {
         {/* ToDo: Consider target blank to open new tab
 				Disadvantage would be reloading app in new tab
 */}
-        <a target="_blank" rel="noopener noreferrer">
+        <a>
           <div className="relative -mb-2 overflow-hidden rounded-2xl hover:cursor-pointer">
             {gearItem.images.length > 0 ? (
               <>
