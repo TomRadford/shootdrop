@@ -5,7 +5,7 @@ import { useRef, useState } from "react"
 import Card from "../components/Card"
 import Layout from "../components/layout"
 import Loading from "../components/Loading"
-import LoadingSpinner from "../components/LoadingSpinner"
+import LoadingSpinner from "../components/elements/LoadingSpinner"
 import Notification from "../components/Notification"
 const { useQuery, useMutation } = require("@apollo/client")
 const { ME, PASSWORD_RESET } = require("../lib/apollo/queries")

@@ -1,6 +1,6 @@
 import Link from "next/link"
 import Card from "./Card"
-import LoadingSpinner from "./LoadingSpinner"
+import LoadingSpinner from "./elements/LoadingSpinner"
 
 export const AddButton = ({ onClick, title, loading }) => (
   <button
