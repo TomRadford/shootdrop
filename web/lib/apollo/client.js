@@ -31,8 +31,8 @@ const handleError = onError(({ graphQLErrors, networkError }) => {
         `[GraphQL error]: Message ${message}, Location: ${locations}, Path: ${path}`
       )
       if (message === "Context creation failed: jwt expired") {
-        // localStorage.clear()
-        // window.location = "/login"
+        localStorage.clear()
+        window.location = "/login"
       }
     })
 })

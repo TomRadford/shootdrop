@@ -1,5 +1,5 @@
 import Layout from "./layout"
-import LoadingSpinner from "./LoadingSpinner"
+import LoadingSpinner from "./elements/LoadingSpinner"
 const Loading = ({ title }) => {
   return (
     <Layout>

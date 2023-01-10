@@ -10,15 +10,14 @@
 			"rootDir": [
 				"apps/*/",
 				"packages/*/"
-			],
-		},
+			]
+		}
 	},
 	"rules": {
 		"@next/next/no-html-link-for-pages": "off",
 		"@next/next/no-img-element": "off",
 		"react/no-unescaped-entities": "off",
 		"react-hooks/exhaustive-deps": "off"
-
 	},
 	"overrides": [
 		// Only uses Testing Library lint rules in test files
