@@ -23,7 +23,7 @@
 		"next-env.d.ts",
 		"**/*.ts",
 		"**/*.tsx",
-		"components/drop/Pdf.js",
+		"components/drop/pdf/index.js",
 		"pages/drops/[id]/pdf.js"
 	],
 	"exclude": [

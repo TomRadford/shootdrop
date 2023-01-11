@@ -1,11 +1,12 @@
 import { PDFViewer } from '@react-pdf/renderer'
 import NoSsrWrapper from '../../../components/NoSsr'
 import Layout from '../../../components/layout'
-import DropPdf from '../../../components/drop/Pdf'
+import DropPdf from '../../../components/drop/pdf'
 import { useRouter } from 'next/router'
 import { useQuery } from '@apollo/client'
 import Loading from '../../../components/Loading'
 import { ALL_DROPS } from '../../../lib/apollo/queries'
+import LoadingSpinner from '../../../components/elements/LoadingSpinner'
 
 const DropPdfPage = () => {
 	// PDF Viewer Page -- TBC if for dev only?
@@ -17,16 +18,17 @@ const DropPdfPage = () => {
 			drop: dropId,
 		},
 		fetchPolicy: 'cache-first',
-		onError: () => alert('not found'),
 	})
 
-	let dropForPdf = {}
+	let dropForPdf = dropResult.data ? dropResult.data.allDrops[0] : undefined
 
 	return (
 		<Layout>
 			<div className="flex h-screen w-full">
 				{dropResult.loading ? (
-					<Loading title={``} />
+					<div className="mx-auto flex flex-col justify-center">
+						<LoadingSpinner />
+					</div>
 				) : (
 					<>
 						{dropForPdf ? (
@@ -36,7 +38,10 @@ const DropPdfPage = () => {
 								</PDFViewer>
 							</NoSsrWrapper>
 						) : (
-							<>no</>
+							<div className="m-auto text-center">
+								<h1 className="m-5 text-5xl font-bold">404</h1>
+								<p>Unable to find a project to generate a pdf.</p>
+							</div>
 						)}
 					</>
 				)}
