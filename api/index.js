@@ -20,8 +20,6 @@ const resolvers = require('./resolvers/resolvers')
 const logger = require('./utils/logger')
 const config = require('./utils/config')
 
-const pdfRouter = require('./routes/pdf')
-
 logger.info('Connecting to mongoDB')
 mongoose
 	.connect(config.MONGODB_URI)
@@ -68,7 +66,6 @@ const start = async () => {
 			message: 'ShootDrop API',
 		})
 	})
-	app.use('/pdf', pdfRouter)
 	server.applyMiddleware({
 		app,
 		path: '/graphql',
