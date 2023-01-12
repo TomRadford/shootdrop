@@ -4,7 +4,6 @@ import Layout from '../../../components/layout'
 import DropPdf from '../../../components/drop/pdf'
 import { useRouter } from 'next/router'
 import { useQuery } from '@apollo/client'
-import Loading from '../../../components/Loading'
 import { ALL_DROPS } from '../../../lib/apollo/queries'
 import LoadingSpinner from '../../../components/elements/LoadingSpinner'
 

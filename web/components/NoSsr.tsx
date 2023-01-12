@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic'
 import React from 'react'
 
-// Wrapper to disable SSR entirely on a route (like pdfBrowser)
+// Wrapper to disable SSR entirely on children (created for PDFViewer)
 
 const NoSSRWrapper = ({ children }: { children: React.ReactNode }) => (
 	<React.Fragment>{children}</React.Fragment>

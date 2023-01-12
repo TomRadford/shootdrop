@@ -18,11 +18,14 @@ const styles = StyleSheet.create({
 		maxWidth: '130px',
 	},
 	list: {
-		color: 'black',
+		color: 'white',
+		backgroundColor: '#1f1f1f',
 		fontSize: 14,
-		textAlign: 'center',
 		fontWeight: 600,
 		fontFamily: 'Helvetica-Bold',
+		paddingLeft: 5,
+		paddingTop: 3,
+		marginBottom: 8,
 	},
 	details: {
 		flexDirection: 'row',
@@ -49,12 +52,25 @@ const Header = ({
 	director,
 	dop,
 	soundie,
+}: {
+	drop: string
+	client: string
+	gearCheckDate: number
+	startDate: number
+	endDate: number
+	wrapDate: string
+	updatedAt: number
+	director: string
+	dop: string
+	soundie: string
 }) => {
 	return (
 		<>
 			<View style={styles.headerContainer}>
 				<View>
-					<Text style={styles.list}>Gear List</Text>
+					<View style={styles.list}>
+						<Text>Gear List</Text>
+					</View>
 					<View
 						style={{ flexDirection: 'column', justifyContent: 'flex-start' }}
 					>
