@@ -7,7 +7,6 @@ const styles = StyleSheet.create({
 })
 
 
-
 type ListProps = {
 	category: string,
 	comment: string,
