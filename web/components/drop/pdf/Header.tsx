@@ -12,10 +12,10 @@ const styles = StyleSheet.create({
 		color: 'black',
 		fontSize: 14,
 		textAlign: 'center',
-		fontWeight: 600,
+		fontWeight: 300,
 		fontFamily: 'Helvetica-Bold',
 		flexWrap: 'wrap',
-		maxWidth: '130px',
+		maxWidth: 130,
 	},
 	list: {
 		color: 'white',
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
 	detailItem: {
 		flexDirection: 'row',
 		flexWrap: 'wrap',
-		maxWidth: '150px',
+		maxWidth: 150,
 	},
 })
 

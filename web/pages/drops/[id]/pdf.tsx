@@ -1,10 +1,10 @@
 import { PDFViewer } from '@react-pdf/renderer'
 import NoSsrWrapper from '../../../components/NoSsr'
 import Layout from '../../../components/layout'
-import DropPdf from '../../../components/drop/pdf'
+import DropPdf, { DropForPdf } from '../../../components/drop/pdf'
 import { useRouter } from 'next/router'
 import { useQuery } from '@apollo/client'
-import { ALL_DROPS } from '../../../lib/apollo/queries'
+import { ALL_DROPS, GET_LIST_ITEMS } from '../../../lib/apollo/queries'
 import LoadingSpinner from '../../../components/elements/LoadingSpinner'
 
 const DropPdfPage = () => {
@@ -19,7 +19,10 @@ const DropPdfPage = () => {
 		fetchPolicy: 'cache-first',
 	})
 
-	let dropForPdf = dropResult.data ? dropResult.data.allDrops[0] : undefined
+	const dropForPdf: DropForPdf = dropResult.data
+		? dropResult.data.allDrops[0]
+		: undefined
+	// listItems queried within list component
 
 	return (
 		<Layout>

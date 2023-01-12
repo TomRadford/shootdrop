@@ -6,7 +6,16 @@ import {
 	StyleSheet,
 	Font,
 } from '@react-pdf/renderer'
+import { type } from 'os'
+import {
+	Drop,
+	GearCategory,
+	GearList,
+	GearListItem,
+} from '../../../__generated__/graphql'
+import NoSsr from '../../NoSsr'
 import Header from './Header'
+import List from './List'
 // SVC, G & ClipPath to be imported from patches
 
 // PDF Renderer component, requires prefetched dropForPdf
@@ -24,7 +33,23 @@ const styles = StyleSheet.create({
 	},
 })
 
-const DropPdf = ({ dropForPdf: drop }) => {
+type GearListWithItems = GearList & {
+	items: Array<GearListItem>
+}
+
+export type DropForPdf = Omit<Drop, 'lists'> & {
+	lists?: Array<GearListWithItems>
+}
+
+type DropPdfProps = {
+	dropForPdf: DropForPdf
+	// listItems: Array<{
+	// 	category: GearCategory
+	// 	items: Array<GearListItem>
+	// }>
+}
+
+const DropPdf = ({ dropForPdf: drop }: DropPdfProps) => {
 	console.log(drop)
 	return (
 		<Document title={drop.project} author={drop.client}>
@@ -41,6 +66,15 @@ const DropPdf = ({ dropForPdf: drop }) => {
 					dop={drop.dop}
 					soundie={drop.soundie}
 				/>
+
+				{drop.lists.map((list) => (
+					<List
+						key={list.id}
+						category={list.category}
+						comment={list.comment}
+						id={list.id}
+					/>
+				))}
 			</Page>
 		</Document>
 	)
