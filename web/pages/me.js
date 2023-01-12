@@ -23,7 +23,7 @@ const MePage = () => {
 	const [messageData, setMessageData] = useState({ message: '', type: '' })
 	useCheckAuth()
 	const { data, loading, refetch: refetchMe } = useQuery(ME)
-	const [editMe, editUserResult] = useMutation(EDIT_ME)
+	const [editMe, editUserResult] = useMutation(EDIT_ME_2)
 	useEffect(() => {
 		if (!loading) {
 			if (data.me) {

@@ -22,9 +22,7 @@
 	"include": [
 		"next-env.d.ts",
 		"**/*.ts",
-		"**/*.tsx",
-		"components/drop/pdf/index.js",
-		"pages/drops/[id]/pdf.js"
+		"**/*.tsx"
 	],
 	"exclude": [
 		"node_modules"
