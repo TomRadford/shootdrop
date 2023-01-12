@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from '@react-pdf/renderer'
+import { View, Text, StyleSheet, Link } from '@react-pdf/renderer'
 import { format } from 'date-fns'
 
 const styles = StyleSheet.create({
@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
 // Last edited {format(new Date(drop.updatedAt), 'HH:mm d/M/yy')}
 
 const Header = ({
+	id,
 	drop,
 	client,
 	gearCheckDate,
@@ -53,6 +54,7 @@ const Header = ({
 	dop,
 	soundie,
 }: {
+	id: string
 	drop: string
 	client: string
 	gearCheckDate: number
@@ -92,7 +94,9 @@ const Header = ({
 					</View>
 				</View>
 				<View>
-					<Text style={styles.dropTitle}>{drop}</Text>
+					<Link src={`https://shootdrop.com/drops/${id}`}>
+						<Text style={styles.dropTitle}>{drop}</Text>
+					</Link>
 					<View style={{ flexDirection: 'column', alignItems: 'center' }}>
 						<Text>Last updated at:</Text>
 						<Text>{format(new Date(updatedAt), 'HH:mm')}</Text>

@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client'
-
+import { gql2 } from '../../__generated__'
 const USER_DETAILS = gql`
 	fragment UserDetails on User {
 		id

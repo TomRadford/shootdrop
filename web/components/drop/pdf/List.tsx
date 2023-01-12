@@ -6,10 +6,10 @@ import {
 	GearList,
 	GearListItem,
 	GetListItemsDocument,
-	ListItemResults,
 } from '../../../__generated__/graphql'
 import client from '../../../lib/apollo/client'
 import { useEffect, useState } from 'react'
+import { GearListWithItems } from '.'
 
 const styles = StyleSheet.create({
 	container: {
@@ -42,11 +42,13 @@ const styles = StyleSheet.create({
 	},
 })
 
-type ListProps = Pick<GearList, 'id' | 'category' | 'comment'>
+type ListProps = {
+	list: GearListWithItems
+}
 
 GetListItemsDocument
 
-const List = ({ category, comment, id }: ListProps) => {
+const List = ({ list }: ListProps) => {
 	// const [listItemResults, setListItemResults] = useState<GearItemResults>(null)
 
 	// useEffect(() => {
@@ -74,10 +76,10 @@ const List = ({ category, comment, id }: ListProps) => {
 	return (
 		<View style={styles.container}>
 			<View style={styles.header}>
-				<Link src={`https://shootdrop.com/list/${id}`}>
-					<Text style={styles.listTitle}>{category} gear</Text>
+				<Link src={`https://shootdrop.com/list/${list.id}`}>
+					<Text style={styles.listTitle}>{list.category} gear</Text>
 				</Link>
-				<Text style={{ color: 'white' }}>{comment}</Text>
+				<Text style={{ color: 'white' }}>{list.comment}</Text>
 			</View>
 			<View style={styles.sheet}>
 				<View

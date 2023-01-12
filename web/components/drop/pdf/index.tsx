@@ -33,8 +33,8 @@ const styles = StyleSheet.create({
 	},
 })
 
-type GearListWithItems = GearList & {
-	items: Array<GearListItem>
+export type GearListWithItems = GearList & {
+	items?: Array<GearListItem>
 }
 
 export type DropForPdf = Omit<Drop, 'lists'> & {
@@ -50,11 +50,12 @@ type DropPdfProps = {
 }
 
 const DropPdf = ({ dropForPdf: drop }: DropPdfProps) => {
-	console.log(drop)
+	// console.log(drop)
 	return (
 		<Document title={drop.project} author={drop.client}>
 			<Page size="A4" style={styles.page}>
 				<Header
+					id={drop.id}
 					drop={drop.project}
 					client={drop.client}
 					updatedAt={drop.updatedAt}
@@ -68,12 +69,7 @@ const DropPdf = ({ dropForPdf: drop }: DropPdfProps) => {
 				/>
 
 				{drop.lists.map((list) => (
-					<List
-						key={list.id}
-						category={list.category}
-						comment={list.comment}
-						id={list.id}
-					/>
+					<List key={list.id} list={list} />
 				))}
 			</Page>
 		</Document>
