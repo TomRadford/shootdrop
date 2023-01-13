@@ -1,14 +1,5 @@
-import { useQuery } from '@apollo/client'
 import { View, Text, Link, StyleSheet } from '@react-pdf/renderer'
-import { ALL_GEAR_ITEMS, GET_LIST_ITEMS } from '../../../lib/apollo/queries'
-import {
-	GearItemResults,
-	GearList,
-	GearListItem,
-	GetListItemsDocument,
-} from '../../../__generated__/graphql'
-import client from '../../../lib/apollo/client'
-import { useEffect, useState } from 'react'
+import { andFormatter } from '../../../lib/text/formatter'
 import { GearListWithItems } from '.'
 
 const styles = StyleSheet.create({
@@ -16,7 +7,7 @@ const styles = StyleSheet.create({
 		width: '100%',
 	},
 	header: {
-		backgroundColor: '#1e1e1e',
+		backgroundColor: '#12161f',
 		textAlign: 'center',
 		width: '100%',
 	},
@@ -30,7 +21,6 @@ const styles = StyleSheet.create({
 	sheet: {},
 	sheetRow: {
 		flexDirection: 'row',
-		border: 'solid',
 	},
 	cell: {
 		border: 'solid',
@@ -46,53 +36,106 @@ type ListProps = {
 	list: GearListWithItems
 }
 
-GetListItemsDocument
-
 const List = ({ list }: ListProps) => {
-	// const [listItemResults, setListItemResults] = useState<GearItemResults>(null)
-
-	// useEffect(() => {
-	// 	const fetchListItems = async () => {
-	// 		try {
-	// 			const result = await client.query({
-	// 				query: GET_LIST_ITEMS,
-	// 				variables: {
-	// 					list: id,
-	// 				},
-	// 			})
-	// 			setListItemResults(result.data)
-	// 		} catch (e: unknown) {
-	// 			throw new Error(
-	// 				`Error occurred fetching ${category} gear list items for PDF:`,
-	// 				e
-	// 			)
-	// 		}
-	// 	}
-	// 	void fetchListItems()
-	// }, [listItemResults])
-
-	// console.log(listItemResults)
-
 	return (
 		<View style={styles.container}>
 			<View style={styles.header}>
-				<Link src={`https://shootdrop.com/list/${list.id}`}>
-					<Text style={styles.listTitle}>{list.category} gear</Text>
-				</Link>
+				<View
+					style={{
+						flexDirection: 'row',
+						justifyContent: 'center',
+						alignItems: 'center',
+						position: 'relative',
+						width: '100%',
+					}}
+				>
+					<Link src={`https://shootdrop.com/list/${list.id}`}>
+						<Text style={styles.listTitle}>{list.category} gear</Text>
+					</Link>
+					<Text
+						style={{
+							color: 'white',
+							position: 'absolute',
+							right: 8,
+							width: '30%',
+							textAlign: 'right',
+						}}
+					>
+						{list.itemCount} items
+					</Text>
+				</View>
+
 				<Text style={{ color: 'white' }}>{list.comment}</Text>
 			</View>
 			<View style={styles.sheet}>
 				<View
 					style={[
 						styles.sheetRow,
-						{ color: 'white', backgroundColor: '#6f6f6f' },
+						{ color: 'white', backgroundColor: '#1a202c' },
 					]}
 				>
-					<Text style={[styles.cell, { flex: 1 }]}>Item</Text>
-					<Text style={styles.cell}>QTY</Text>
-					<Text style={styles.cell}>Comment</Text>
-					<Text style={styles.cell}>Preferences</Text>
+					<Text
+						style={[
+							styles.cell,
+							{
+								width: '4%',
+								paddingLeft: 0,
+								paddingRight: 0,
+								textAlign: 'center',
+							},
+						]}
+					>
+						#
+					</Text>
+					<Text style={[styles.cell, { width: '50%' }]}>Item</Text>
+					<Text style={[styles.cell, { width: '9%' }]}>QTY</Text>
+					<Text style={[styles.cell, { width: '27%' }]}>Comment</Text>
+					<Text style={[styles.cell, { width: '30%' }]}>Preferences</Text>
 				</View>
+				{list.items.map((item, i) => {
+					return (
+						<View
+							key={item.id}
+							style={[styles.sheetRow, { backgroundColor: 'white' }]}
+						>
+							<Text
+								style={[
+									styles.cell,
+									{
+										width: '4%',
+										paddingLeft: 0,
+										paddingRight: 0,
+										textAlign: 'center',
+									},
+								]}
+							>
+								{i + 1}
+							</Text>
+							<Text style={[styles.cell, { width: '50%' }]}>
+								<Link src={`https://shootdrop.com/gear/${item.gearItem.id}`}>
+									<Text>
+										{item.gearItem?.manufacturer} {item.gearItem?.model}
+									</Text>
+								</Link>
+							</Text>
+							<Text style={[styles.cell, { width: '9%' }]}>
+								{item.quantity}
+							</Text>
+							<Text style={[styles.cell, { width: '27%' }]}>
+								{item?.comment}
+							</Text>
+							<View style={[styles.cell, { width: '30%' }]}>
+								{item.prefs?.map((pref) => (
+									<Text key={pref.pref.id}>
+										{`${pref.pref.name}: ${andFormatter.format(
+											pref.opts.map((opt) => opt.name)
+										)}`}
+									</Text>
+								))}
+							</View>
+						</View>
+					)
+				})}
 			</View>
 		</View>
 	)

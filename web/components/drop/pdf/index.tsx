@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
 		fontFamily: 'Helvetica',
 		fontSize: 11,
 		paddingTop: 10,
+		paddingBottom: 30,
 		paddingLeft: 30,
 		paddingRight: 30,
 		lineHeight: 1.5,
@@ -35,6 +36,7 @@ const styles = StyleSheet.create({
 
 export type GearListWithItems = GearList & {
 	items?: Array<GearListItem>
+	itemCount?: number
 }
 
 export type DropForPdf = Omit<Drop, 'lists'> & {
@@ -50,7 +52,6 @@ type DropPdfProps = {
 }
 
 const DropPdf = ({ dropForPdf: drop }: DropPdfProps) => {
-	// console.log(drop)
 	return (
 		<Document title={drop.project} author={drop.client}>
 			<Page size="A4" style={styles.page}>

@@ -19,13 +19,14 @@ const styles = StyleSheet.create({
 	},
 	list: {
 		color: 'white',
-		backgroundColor: '#1f1f1f',
+		backgroundColor: '#12161f',
 		fontSize: 14,
 		fontWeight: 600,
 		fontFamily: 'Helvetica-Bold',
 		paddingLeft: 5,
 		paddingTop: 3,
 		marginBottom: 8,
+		paddingRight: 6,
 	},
 	details: {
 		flexDirection: 'row',

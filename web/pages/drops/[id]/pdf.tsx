@@ -1,52 +1,41 @@
 import { PDFViewer } from '@react-pdf/renderer'
 import NoSsrWrapper from '../../../components/NoSsr'
 import Layout from '../../../components/layout'
-import DropPdf, {
-	DropForPdf,
-	GearListWithItems,
-} from '../../../components/drop/pdf'
+import DropPdf, { DropForPdf } from '../../../components/drop/pdf'
 import { useRouter } from 'next/router'
 import { useQuery } from '@apollo/client'
 import { ALL_DROPS, GET_LIST_ITEMS } from '../../../lib/apollo/queries'
 import LoadingSpinner from '../../../components/elements/LoadingSpinner'
-import client from '../../../lib/apollo/client'
-import {
-	AllDropsQuery,
-	GearListItem,
-	GetListItemsQuery,
-	DropDetailsFragment,
-	GearList,
-} from '../../../__generated__/graphql'
-import { useEffect, useState } from 'react'
+import { GearList } from '../../../__generated__/graphql'
 
 // Using apollo client over useQuery so we dont have to make 4 verbose queries
 // not elegant but prevents useQuery error on some lists
-const fetchListItems = async (
-	id: string,
-	category: string
-): Promise<Array<GearListItem>> => {
-	try {
-		const result = await client.query<GetListItemsQuery>({
-			query: GET_LIST_ITEMS,
-			variables: {
-				list: id,
-			},
-		})
-		return result.data.getListItems.gearListItems as Array<GearListItem> //ToDo: relook
-	} catch (e: unknown) {
-		throw new Error(
-			`Error occurred fetching ${category} gear list items for PDF:`,
-			e
-		)
-	}
-}
+// const fetchListItems = async (
+// 	id: string,
+// 	category: string
+// ): Promise<Array<GearListItem>> => {
+// 	try {
+// 		const result = await client.query<GetListItemsQuery>({
+// 			query: GET_LIST_ITEMS,
+// 			variables: {
+// 				list: id,
+// 			},
+// 		})
+// 		return result.data.getListItems.gearListItems as Array<GearListItem> //ToDo: relook
+// 	} catch (e: unknown) {
+// 		throw new Error(
+// 			`Error occurred fetching ${category} gear list items for PDF:`,
+// 			e
+// 		)
+// 	}
+// }
 
 const DropPdfPage = () => {
 	// PDF Viewer Page -- TBC if for dev only?
 	// Use https://react-pdf.org/advanced#on-the-fly-rendering for download button
 	const router = useRouter()
 	const dropId = router.query.id
-	const [listLoading, setListLoading] = useState(true)
+	// const [listLoading, setListLoading] = useState(true)
 	const dropResult = useQuery(ALL_DROPS, {
 		variables: {
 			drop: dropId,
@@ -54,47 +43,134 @@ const DropPdfPage = () => {
 		fetchPolicy: 'cache-first',
 	})
 
-	// const cameraList = useQuery(GET_LIST_ITEMS, {
-	// 	variables: {
-	// 		list: dropResult.data.allDrops[0],
-	// 	},
-	// 	skip:
-	// 		dropResult.loading ||
-	// 		!dropResult.data?.allDrops[0]?.lists.find(
-	// 			(list: GearList) => list.category === 'CAMERA'
-	// 		),
-	// })
+	const cameraList = useQuery(GET_LIST_ITEMS, {
+		variables: {
+			list: dropResult.data?.allDrops[0]?.lists.find(
+				(list: GearList) => list.category === 'CAMERA'
+			)?.id,
+			limit: 1000,
+		},
+		skip:
+			dropResult.loading ||
+			!dropResult.data?.allDrops[0]?.lists.find(
+				(list: GearList) => list.category === 'CAMERA'
+			),
+	})
 
-	let dropForPdf: DropForPdf
+	const lightingList = useQuery(GET_LIST_ITEMS, {
+		variables: {
+			list: dropResult.data?.allDrops[0]?.lists.find(
+				(list: GearList) => list.category === 'LIGHTING'
+			)?.id,
+			limit: 1000,
+		},
+		skip:
+			dropResult.loading ||
+			!dropResult.data?.allDrops[0]?.lists.find(
+				(list: GearList) => list.category === 'LIGHTING'
+			),
+	})
+
+	const gripsList = useQuery(GET_LIST_ITEMS, {
+		variables: {
+			list: dropResult.data?.allDrops[0]?.lists.find(
+				(list: GearList) => list.category === 'GRIPS'
+			)?.id,
+			limit: 1000,
+		},
+		skip:
+			dropResult.loading ||
+			!dropResult.data?.allDrops[0]?.lists.find(
+				(list: GearList) => list.category === 'GRIPS'
+			),
+	})
+
+	const soundList = useQuery(GET_LIST_ITEMS, {
+		variables: {
+			list: dropResult.data?.allDrops[0]?.lists.find(
+				(list: GearList) => list.category === 'SOUND'
+			)?.id,
+			limit: 1000,
+		},
+		skip:
+			dropResult.loading ||
+			!dropResult.data?.allDrops[0]?.lists.find(
+				(list: GearList) => list.category === 'SOUND'
+			),
+	})
 
 	// listItems queried within list component
 	//populate missing
 
-	useEffect(() => {
-		if (!dropResult.loading) {
-			dropForPdf = dropResult.data.allDrops[0]
-			dropForPdf.lists.map(async (list, i) => {
-				const listItems = await fetchListItems(list.id, list.category)
-				dropForPdf = {
-					dop: '',
-					director: '',
-					id: 'sdf',
-					project: 'sdf',
-					lists: [],
-				}
-				if (i + 1 === dropForPdf.lists.length) {
-					setListLoading(false)
-				}
-			})
-		}
-	}, [dropResult.loading])
+	// useEffect(() => {
+	// 	if (!dropResult.loading) {
+	// 		dropForPdf = dropResult.data.allDrops[0]
+	// 		dropForPdf.lists.map(async (list, i) => {
+	// 			const listItems = await fetchListItems(list.id, list.category)
+	// 			dropForPdf = {
+	// 				dop: '',
+	// 				director: '',
+	// 				id: 'sdf',
+	// 				project: 'sdf',
+	// 				lists: [],
+	// 			}
+	// 			if (i + 1 === dropForPdf.lists.length) {
+	// 				setListLoading(false)
+	// 			}
+	// 		})
+	// 	}
+	// }, [dropResult.loading])
 
+	let dropForPdf: DropForPdf =
+		dropResult.data &&
+		!cameraList.loading &&
+		!lightingList.loading &&
+		!gripsList.loading &&
+		!soundList.loading
+			? {
+					...dropResult.data.allDrops[0],
+					lists: [
+						{
+							...dropResult.data.allDrops[0].lists.find(
+								(list: GearList) => list.category === 'CAMERA'
+							),
+							items: cameraList.data.getListItems.gearListItems,
+							itemCount: cameraList.data.getListItems.totalDocs,
+						},
+						{
+							...dropResult.data.allDrops[0].lists.find(
+								(list: GearList) => list.category === 'LIGHTING'
+							),
+							items: lightingList.data.getListItems.gearListItems,
+							itemCount: lightingList.data.getListItems.totalDocs,
+						},
+						{
+							...dropResult.data.allDrops[0].lists.find(
+								(list: GearList) => list.category === 'GRIPS'
+							),
+							items: gripsList.data.getListItems.gearListItems,
+							itemCount: gripsList.data.getListItems.totalDocs,
+						},
+						{
+							...dropResult.data.allDrops[0].lists.find(
+								(list: GearList) => list.category === 'SOUND'
+							),
+							items: soundList.data.getListItems.gearListItems,
+							itemCount: soundList.data.getListItems.totalDocs,
+						},
+					],
+			  }
+			: undefined
+	// console.log([cameraList, lightingList, gripsList, soundList])
 	console.log(dropForPdf)
-
 	return (
 		<Layout>
 			<div className="flex h-screen w-full">
-				{dropResult.loading && !listLoading ? (
+				{dropResult.loading ||
+				cameraList.loading ||
+				lightingList.loading ||
+				gripsList.loading ||
+				soundList.loading ? (
 					<div className="mx-auto flex flex-col justify-center">
 						<LoadingSpinner />
 					</div>
