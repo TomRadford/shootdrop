@@ -14,7 +14,7 @@ import {
 	GearListItem,
 } from '../../../__generated__/graphql'
 import NoSsr from '../../NoSsr'
-import Footer from './footer'
+import Footer from './Footer'
 import Header from './Header'
 import List from './List'
 // SVC, G & ClipPath to be imported from patches
