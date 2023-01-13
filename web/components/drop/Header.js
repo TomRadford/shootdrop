@@ -9,6 +9,7 @@ import UserModal from './UserModal'
 import { format } from 'date-fns'
 import useIsAddingStore from '../../lib/hooks/store/isAdding'
 import { UPDATE_TIMEOUT } from '../../lib/config'
+import Link from 'next/link'
 
 const DropHeader = ({ drop, userInDrop }) => {
 	const [modalOpen, setModalOpen] = useState(false)
@@ -138,11 +139,18 @@ const DropHeader = ({ drop, userInDrop }) => {
 						</div>
 					</div>
 				</div>
-				<div className="mr-1 flex items-center text-xs text-gray-300">
+				<div className="mr-1 flex flex-col justify-center gap-3 text-xs text-gray-300">
 					{drop && (
-						<p>
-							Last edited {format(new Date(drop.updatedAt), 'HH:mm d/M/yy')}
-						</p>
+						<>
+							<p className=" top-0 text-gray-600">
+								Last edited {format(new Date(drop.updatedAt), 'HH:mm d/M/yy')}
+							</p>
+							<Link href={`/drops/${drop.id}/pdf`}>
+								<a className=" bg-size-200 bg-pos-0 hover:bg-pos-100 ml-1 rounded bg-gradient-to-r from-sky-700 via-sky-800 to-sky-900 px-3 py-1 font-bold transition-all duration-500">
+									PDF
+								</a>
+							</Link>
+						</>
 					)}
 				</div>
 			</header>

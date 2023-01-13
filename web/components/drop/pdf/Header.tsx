@@ -77,24 +77,24 @@ const Header = ({
 					<View
 						style={{ flexDirection: 'column', justifyContent: 'flex-start' }}
 					>
-						{director && (
+						{director ? (
 							<View style={styles.detailItem}>
 								<Text>Director: {director}</Text>
 							</View>
-						)}
-						{dop && (
+						) : undefined}
+						{dop ? (
 							<View style={styles.detailItem}>
 								<Text>DOP: {dop}</Text>
 							</View>
-						)}
-						{soundie && (
+						) : undefined}
+						{soundie ? (
 							<View style={styles.detailItem}>
 								<Text>Sound: {soundie}</Text>
 							</View>
-						)}
+						) : undefined}
 					</View>
 				</View>
-				<View>
+				<View style={{ alignItems: 'center' }}>
 					<Link src={`https://shootdrop.com/drops/${id}`}>
 						<Text style={styles.dropTitle}>{drop}</Text>
 					</Link>
@@ -104,7 +104,7 @@ const Header = ({
 						<Text>{format(new Date(updatedAt), 'dd MMM yyyy')}</Text>
 					</View>
 				</View>
-				<View>
+				<View style={{ alignItems: 'center' }}>
 					<Text style={styles.dropTitle}>{client}</Text>
 					<View
 						style={{

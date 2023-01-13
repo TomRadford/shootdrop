@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 	},
 	cell: {
-		border: 'solid',
 		borderWidth: 1,
 		paddingBottom: 0,
 		paddingLeft: 10,
@@ -113,7 +112,7 @@ const List = ({ list }: ListProps) => {
 							</Text>
 							<Text style={[styles.cell, { width: '50%' }]}>
 								<Link src={`https://shootdrop.com/gear/${item.gearItem.id}`}>
-									<Text>
+									<Text style={{ color: 'black' }}>
 										{item.gearItem?.manufacturer} {item.gearItem?.model}
 									</Text>
 								</Link>

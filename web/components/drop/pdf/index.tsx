@@ -14,6 +14,7 @@ import {
 	GearListItem,
 } from '../../../__generated__/graphql'
 import NoSsr from '../../NoSsr'
+import Footer from './footer'
 import Header from './Header'
 import List from './List'
 // SVC, G & ClipPath to be imported from patches
@@ -72,6 +73,7 @@ const DropPdf = ({ dropForPdf: drop }: DropPdfProps) => {
 				{drop.lists.map((list) => (
 					<List key={list.id} list={list} />
 				))}
+				<Footer />
 			</Page>
 		</Document>
 	)
