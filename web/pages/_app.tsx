@@ -1,16 +1,16 @@
-import type { AppProps } from "next/app"
-import { ApolloProvider } from "@apollo/client"
-import client from "../lib/apollo/client"
-import "../styles/globals.css"
-import { NextAdapter } from "next-query-params"
-import { QueryParamProvider } from "use-query-params"
-import NextProgress from "next-progress"
-import { ErrorBoundary, FallbackProps } from "react-error-boundary"
-import Button from "../components/elements/Button"
-import { useEffect, useState } from "react"
-import LoadingSpinner from "../components/elements/LoadingSpinner"
+import type { AppProps } from 'next/app'
+import { ApolloProvider } from '@apollo/client'
+import client from '../lib/apollo/client'
+import '../styles/globals.css'
+import { NextAdapter } from 'next-query-params'
+import { QueryParamProvider } from 'use-query-params'
+import NextProgress from 'next-progress'
+import { ErrorBoundary, FallbackProps } from 'react-error-boundary'
+import Button from '../components/elements/Button'
+import { useEffect, useState } from 'react'
+import LoadingSpinner from '../components/elements/LoadingSpinner'
 
-const ErrorFallback = ({error, resetErrorBoundary}: FallbackProps) => {
+const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
 	const [showError, setShowError] = useState<boolean>(false)
 	// Show spinner and then error after 3s
 	// ToDo: implement useErrorHandler() for Apollo Client
@@ -21,27 +21,30 @@ const ErrorFallback = ({error, resetErrorBoundary}: FallbackProps) => {
 		return () => clearTimeout(timeout)
 	}, [showError])
 	return (
-	<main className="flex flex-col justify-center items-center w-full h-screen text-white gap-3">
-		{showError ? 
-		<>
-			<div className="text-sm text-gray-500">{error.message}</div>
-			<Button onClick={resetErrorBoundary}>Try Again</Button>
-		</>
-   : <LoadingSpinner/> }
-	</main>
- )
+		<main className="flex h-screen w-full flex-col items-center justify-center gap-3 text-white">
+			{showError ? (
+				<>
+					<div className="text-sm text-gray-500">{error.message}</div>
+					<Button onClick={resetErrorBoundary}>Try Again</Button>
+				</>
+			) : (
+				<LoadingSpinner />
+			)}
+		</main>
+	)
 }
 
 const App = ({ Component, pageProps }: AppProps) => {
-  return (
+	return (
 		<ErrorBoundary FallbackComponent={ErrorFallback}>
-    <ApolloProvider client={client}>
-      <QueryParamProvider adapter={NextAdapter}>
-        <NextProgress
-          // delay={0} setting higher than 0 triggers endless loader indication on Router.push
-          color="#364667"
-					// 
-          customGlobalCss={`
+			<ApolloProvider client={client}>
+				<QueryParamProvider adapter={NextAdapter}>
+					<NextProgress
+						// delay={0} setting higher than 0 triggers endless loader indication on Router.push
+						color="#364667"
+						//
+						customGlobalCss={
+							`
 				#nprogress {
 					pointer-events: none;
 				}
@@ -73,17 +76,18 @@ const App = ({ Component, pageProps }: AppProps) => {
 									transform: rotate(3deg) translate(0px, -4px);
 				}
 		
-				` as unknown as JSX.Element}  
-		// Waiting for patch on NextProgress  
-          options={{
-            minimum: 0.3,
-          }}
-        />
-        <Component {...pageProps} />
-      </QueryParamProvider>
-    </ApolloProvider>
+				` as unknown as JSX.Element
+						}
+						// Waiting for patch on NextProgress
+						options={{
+							minimum: 0.3,
+						}}
+					/>
+					<Component {...pageProps} />
+				</QueryParamProvider>
+			</ApolloProvider>
 		</ErrorBoundary>
-  )
+	)
 }
 
 export default App
