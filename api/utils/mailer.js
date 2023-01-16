@@ -29,7 +29,7 @@ const sendMail = async (msg) => {
 //Mail functions
 const sendAccountRequest = async (user) => {
 	if (!user) {
-		console.error('User missing for account request mail')
+		logger.error('User missing for account request mail')
 		return
 	}
 	try {
@@ -67,7 +67,7 @@ const sendAccountRequest = async (user) => {
 
 const sendPasswordReset = async (user, token) => {
 	if (!user || !token) {
-		console.error('User and token needed for password reset mail')
+		logger.error('User and token needed for password reset mail')
 		return
 	}
 	try {
