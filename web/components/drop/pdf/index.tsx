@@ -49,11 +49,11 @@ const DropPdf = ({ dropForPdf: drop }: DropPdfProps) => {
 							<List key={list.id} list={list} />
 						) : undefined
 					)}
-					{drop.lists.map((list) => {
+					{drop.lists.map((list) =>
 						list.category === 'GRIPS' ? (
 							<List key={list.id} list={list} />
 						) : undefined
-					})}
+					)}
 					{drop.lists.map((list) =>
 						list.category === 'LIGHTING' ? (
 							<List key={list.id} list={list} />

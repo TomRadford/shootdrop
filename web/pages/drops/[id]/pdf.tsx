@@ -62,15 +62,10 @@ const DropPdfPage = () => {
 											<PDFDownloadLink
 												document={<DropPdf dropForPdf={fullDrop} />}
 												fileName={`GearList_${fullDrop.project}.pdf`}
+												className="bg-size-200 bg-pos-0 hover:bg-pos-100 ml-1 w-min rounded bg-gradient-to-r from-sky-700 via-sky-800 to-sky-900 px-3 py-1 text-sm font-bold transition-all duration-500"
 											>
 												{({ blob, url, loading, error }) =>
-													loading ? (
-														<LoadingSpinner />
-													) : (
-														<a className="bg-size-200 bg-pos-0 hover:bg-pos-100 ml-1 w-min rounded bg-gradient-to-r from-sky-700 via-sky-800 to-sky-900 px-3 py-1 text-sm font-bold transition-all duration-500">
-															Download
-														</a>
-													)
+													loading ? 'Loading' : 'Download'
 												}
 											</PDFDownloadLink>
 										</div>
