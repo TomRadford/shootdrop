@@ -1,6 +1,6 @@
 import { View, Text, Link, StyleSheet } from '@react-pdf/renderer'
 import { andFormatter } from '../../../lib/text/formatter'
-import { GearListWithItems } from '.'
+import { GearListWithItems } from '../../../lib/types'
 
 const styles = StyleSheet.create({
 	container: {

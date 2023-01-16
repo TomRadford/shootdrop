@@ -1,13 +1,5 @@
-import {
-	Page,
-	Text,
-	View,
-	Document,
-	StyleSheet,
-	Font,
-} from '@react-pdf/renderer'
+import { Page, Document, StyleSheet } from '@react-pdf/renderer'
 import { FullDrop } from '../../../lib/types'
-import NoSsr from '../../NoSsr'
 import Footer from './Footer'
 import Header from './Header'
 import List from './List'
@@ -31,34 +23,50 @@ const styles = StyleSheet.create({
 
 type DropPdfProps = {
 	dropForPdf: FullDrop
-	// listItems: Array<{
-	// 	category: GearCategory
-	// 	items: Array<GearListItem>
-	// }>
 }
 
 const DropPdf = ({ dropForPdf: drop }: DropPdfProps) => {
 	return (
 		<Document title={drop.project} author={drop.client}>
 			<Page size="A4" style={styles.page}>
-				<Header
-					id={drop.id}
-					drop={drop.project}
-					client={drop.client}
-					updatedAt={drop.updatedAt}
-					gearCheckDate={drop.gearCheckDate}
-					startDate={drop.startDate}
-					endDate={drop.endDate}
-					wrapDate={drop.wrapDate}
-					director={drop.director}
-					dop={drop.dop}
-					soundie={drop.soundie}
-				/>
+				<>
+					<Header
+						id={drop.id}
+						drop={drop.project}
+						client={drop.client}
+						updatedAt={drop.updatedAt}
+						gearCheckDate={drop.gearCheckDate}
+						startDate={drop.startDate}
+						endDate={drop.endDate}
+						wrapDate={drop.wrapDate}
+						director={drop.director}
+						dop={drop.dop}
+						soundie={drop.soundie}
+					/>
+					{/* Lists in persribed order */}
+					{drop.lists.map((list) =>
+						list.category === 'CAMERA' ? (
+							<List key={list.id} list={list} />
+						) : undefined
+					)}
+					{drop.lists.map((list) => {
+						list.category === 'GRIPS' ? (
+							<List key={list.id} list={list} />
+						) : undefined
+					})}
+					{drop.lists.map((list) =>
+						list.category === 'LIGHTING' ? (
+							<List key={list.id} list={list} />
+						) : undefined
+					)}
+					{drop.lists.map((list) =>
+						list.category === 'SOUND' ? (
+							<List key={list.id} list={list} />
+						) : undefined
+					)}
 
-				{drop.lists.map((list) => (
-					<List key={list.id} list={list} />
-				))}
-				<Footer />
+					<Footer />
+				</>
 			</Page>
 		</Document>
 	)
