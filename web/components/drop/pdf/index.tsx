@@ -6,13 +6,7 @@ import {
 	StyleSheet,
 	Font,
 } from '@react-pdf/renderer'
-import { type } from 'os'
-import {
-	Drop,
-	GearCategory,
-	GearList,
-	GearListItem,
-} from '../../../__generated__/graphql'
+import { FullDrop } from '../../../lib/types'
 import NoSsr from '../../NoSsr'
 import Footer from './Footer'
 import Header from './Header'
@@ -35,17 +29,8 @@ const styles = StyleSheet.create({
 	},
 })
 
-export type GearListWithItems = GearList & {
-	items?: Array<GearListItem>
-	itemCount?: number
-}
-
-export type DropForPdf = Omit<Drop, 'lists'> & {
-	lists?: Array<GearListWithItems>
-}
-
 type DropPdfProps = {
-	dropForPdf: DropForPdf
+	dropForPdf: FullDrop
 	// listItems: Array<{
 	// 	category: GearCategory
 	// 	items: Array<GearListItem>
