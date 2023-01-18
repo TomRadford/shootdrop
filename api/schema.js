@@ -130,6 +130,7 @@ const typeDefs = gql`
 			tags: [String]
 			limit: Int
 			offset: Int
+			Random: Boolean
 		): GearItemResults
 		getList(id: String!): GearList!
 		getListItems(
