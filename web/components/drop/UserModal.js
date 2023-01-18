@@ -3,9 +3,9 @@ import { Fragment, useEffect, useState } from 'react'
 import Image from 'next/image'
 import useGetMe from '../../lib/hooks/getMe'
 import { useMutation, useLazyQuery } from '@apollo/client'
-import { ALL_DROPS, ALL_USERS, UPDATE_DROP } from '../../lib/apollo/queries'
+import { ALL_USERS, UPDATE_DROP } from '../../lib/apollo/queries'
 
-const User = ({ user, onClick, userInDrop }) => {
+export const User = ({ user, onClick, userInDrop }) => {
 	const me = useGetMe()
 	if (me) {
 		return (
