@@ -249,9 +249,11 @@ const Home = ({ drop }: { drop: FullDrop }) => {
 				<div className="relative flex bg-gradient-to-t from-black to-gray-900 pb-56 pt-40">
 					<div className=" m-auto text-center">
 						<p className=" 2xl:text-xl">Heard enough?</p>
-						<a className="cursor-pointer text-5xl font-bold transition-all duration-500 hover:drop-shadow-[0_2px_3px_rgba(255,255,255,0.8)] 2xl:text-6xl">
-							Make a Drop!
-						</a>
+						<Link href="/drops/add">
+							<a className="cursor-pointer text-5xl font-bold transition-all duration-500 hover:drop-shadow-[0_2px_3px_rgba(255,255,255,0.8)] 2xl:text-6xl">
+								Make a Drop!
+							</a>
+						</Link>
 					</div>
 					<a
 						href="https://tomradford.co.za"

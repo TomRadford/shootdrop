@@ -876,6 +876,29 @@ const resolvers = {
 				// .populate("images")
 				return { gearItems: [gearItem] }
 			}
+			if (args.random) {
+				// Randomise gear items returned,
+				// no pagination
+				//pagination values will return null
+				const gearItems = await GearItem.aggregate([
+					{
+						$addFields: {
+							id: '$_id',
+						},
+					},
+					{
+						$lookup: {
+							from: 'gearitems',
+							localField: 'gearItem',
+							foreignField: '_id',
+							as: 'gearItem',
+						},
+					},
+				]).sample(3)
+
+				console.log(gearItems)
+				return { gearItems: gearItems }
+			}
 			try {
 				const searchTerms = {}
 				if (args.manufacturer) {
