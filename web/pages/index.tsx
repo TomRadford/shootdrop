@@ -1,9 +1,18 @@
 import Head from 'next/head'
 import Layout from '../components/layout'
 import useGetMe from '../lib/hooks/getMe'
-import { Drop, GearList, User } from '../__generated__/graphql'
+import {
+	Drop,
+	GearItem as GearItemType,
+	GearList,
+	User,
+} from '../__generated__/graphql'
 import DropSummaryCard from '../components/drop/SummaryCard'
-import { ALL_DROPS, GET_LIST_ITEMS } from '../lib/apollo/queries'
+import {
+	ALL_DROPS,
+	GET_LIST_ITEMS,
+	RANDOM_GEAR_ITEMS,
+} from '../lib/apollo/queries'
 import ssgClient from '../lib/apollo/ssgClient'
 import ModalUser from '../components/landing/ModalUser'
 import { TypeAnimation } from 'react-type-animation'
@@ -12,6 +21,8 @@ import LandingList from '../components/landing/List'
 import GearItem from '../components/gear/Item'
 import Image from 'next/image'
 import Link from 'next/link'
+import { gql } from '@apollo/client'
+import MarqueeSection from '../components/landing/Marquee'
 
 // Faux data for landing
 
@@ -39,9 +50,15 @@ const users: User[] = [
 	},
 ]
 
-const Home = ({ drop }: { drop: FullDrop }) => {
-	const me = useGetMe()
-	console.log(drop)
+const Home = ({
+	drop,
+	randomGearItems,
+}: {
+	drop: FullDrop
+	randomGearItems: GearItemType[]
+}) => {
+	// const me = useGetMe()
+	console.log(randomGearItems)
 	const cameraList = drop.lists.find((list) => list.category === 'CAMERA')
 	const listItems = [
 		cameraList.items.find(
@@ -65,16 +82,16 @@ const Home = ({ drop }: { drop: FullDrop }) => {
 			</Head>
 
 			<Layout>
-				<div className="flex h-[98vh] bg-gradient-to-t from-gray-900 to-gray-800">
-					<div className=" m-auto text-center">
-						<div className="relative  ">
+				<div className="relative flex h-screen overflow-y-hidden bg-gradient-to-t from-gray-900 to-black">
+					<div className="m-auto text-center">
+						<div className="relative ">
 							<img
 								alt=""
 								src="/img/landing-glow.png"
-								className="absolute  z-0 -mt-16  h-[180%] w-[150%] blur-2xl"
+								className="absolute  z-10 -mt-16  h-[180%] w-[150%] blur-2xl"
 								draggable={false}
 							/>
-							<div className=" relative z-10 mx-12 rounded-xl bg-[#171923] px-8 py-8 shadow-lg md:mx-16">
+							<div className=" relative z-20 mx-12 rounded-xl bg-[#171923] px-8 py-8 shadow-lg md:mx-16">
 								<h1 className="text-5xl font-bold 2xl:text-6xl">
 									Your next shoot starts here.
 								</h1>
@@ -84,8 +101,60 @@ const Home = ({ drop }: { drop: FullDrop }) => {
 							</div>
 						</div>
 					</div>
+					<div className="absolute bottom-10 z-50 flex w-full justify-center mix-blend-soft-light">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							strokeWidth={2}
+							stroke="white"
+							className="h-12 w-12 "
+						>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								d="M19.5 5.25l-7.5 7.5-7.5-7.5m15 6l-7.5 7.5-7.5-7.5"
+							/>
+						</svg>
+					</div>
+					<div className="absolute z-[5] mt-36 h-full w-full bg-gradient-to-b from-transparent to-gray-900 "></div>
+					<div className="absolute w-full ">
+						{/* Targeting displays up to UHD */}
+						<div className="relative -mt-10 flex h-full flex-col gap-4 overflow-x-hidden  opacity-25">
+							{[1, 2, 3, 4, 5, 6, 1].map((indexStart, i) => (
+								<div key={i} className="relative  flex flex-row gap-4">
+									<div
+										className="flex animate-[marquee_100s_linear_infinite] gap-4"
+										style={{
+											animationDirection: i % 2 === 0 ? 'reverse' : 'normal',
+										}}
+									>
+										<MarqueeSection
+											items={randomGearItems.slice(
+												(indexStart - 1) * 8,
+												indexStart * 8 - 1
+											)}
+										/>
+									</div>
+									<div
+										className="absolute top-0 ml-4 flex animate-[marquee2_100s_linear_infinite] gap-4"
+										style={{
+											animationDirection: i % 2 === 0 ? 'reverse' : 'normal',
+										}}
+									>
+										<MarqueeSection
+											items={randomGearItems.slice(
+												(indexStart - 1) * 8,
+												indexStart * 8 - 1
+											)}
+										/>
+									</div>
+								</div>
+							))}
+						</div>
+					</div>
 				</div>
-				<div className="flex flex-col items-center bg-gradient-to-t from-gray-800 to-gray-900 px-2 pb-2 text-center">
+				<div className="flex flex-col items-center bg-gradient-to-t from-gray-800 to-gray-900 px-2 pb-2 pt-52 text-center">
 					<h1 className="text-5xl font-bold 2xl:text-6xl">
 						It all starts with a Drop.
 					</h1>
@@ -298,9 +367,20 @@ export const getStaticProps = async () => {
 
 		const drop = { ...baseDrop, lists: listsForDrop }
 
+		const randomGearItems: GearItemType[] = (
+			await ssgClient.query({
+				query: RANDOM_GEAR_ITEMS,
+				variables: {
+					limit: 48,
+					random: true,
+				},
+			})
+		).data.allGearItems.gearItems
+
 		return {
 			props: {
 				drop,
+				randomGearItems,
 			},
 		}
 	} catch {
