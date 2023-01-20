@@ -58,7 +58,6 @@ const Home = ({
 	randomGearItems: GearItemType[]
 }) => {
 	// const me = useGetMe()
-	console.log(randomGearItems)
 	const cameraList = drop.lists.find((list) => list.category === 'CAMERA')
 	const listItems = [
 		cameraList.items.find(
