@@ -143,11 +143,11 @@ const Home = ({ drop }: { drop: FullDrop }) => {
 											1200,
 											'The AC',
 											1000,
-											'The grip!',
+											'The grip',
 											1000,
-											'Drone op!',
+											'Drone op',
 											1000,
-											'Steadicam op!',
+											'Steadicam op',
 											2000,
 										]}
 										repeat={Infinity}
@@ -227,7 +227,7 @@ const Home = ({ drop }: { drop: FullDrop }) => {
 							tagged.
 						</p>
 					</div>
-					<div className="h-[20rem] w-9/12 rounded-2xl bg-gray-200"></div>
+					{/* <div className="h-[20rem] w-9/12 rounded-2xl bg-gray-200"></div> */}
 				</div>
 				<div className="flex flex-col items-center justify-center bg-gradient-to-t from-gray-900 to-gray-800 px-2 pb-20 text-center">
 					<div className="mt-16 flex w-11/12 max-w-2xl flex-col-reverse items-center gap-10 lg:flex-row lg:justify-between 2xl:max-w-3xl">

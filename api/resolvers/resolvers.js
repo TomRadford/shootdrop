@@ -57,7 +57,6 @@ const resolvers = {
 			const gearItemPrefs = await GearPref.find({
 				gearItem: root,
 			}).populate('allOpts')
-
 			return gearItemPrefs
 		},
 		//Populates tags/images if they're queried
@@ -66,8 +65,12 @@ const resolvers = {
 			return gearItemWithTags.tags
 		},
 		images: async (root, args, context) => {
-			const gearItemWithImages = await root.populate('images')
-			return gearItemWithImages.images
+			// Skip populate on agregated requests (used for randomised request with agregate)
+			if (!root.images.toString().includes('[object Object]')) {
+				const gearItemWithImages = await root.populate('images')
+				return gearItemWithImages.images
+			}
+			return root.images
 		},
 	},
 	Drop: {
@@ -879,7 +882,9 @@ const resolvers = {
 			if (args.random) {
 				// Randomise gear items returned,
 				// no pagination
-				//pagination values will return null
+				// pagination values will return null
+				// only populates images not tags/allPrefs
+				// limit used to set amount of random items
 				const gearItems = await GearItem.aggregate([
 					{
 						$addFields: {
@@ -888,15 +893,14 @@ const resolvers = {
 					},
 					{
 						$lookup: {
-							from: 'gearitems',
-							localField: 'gearItem',
+							from: 'gearimages',
+							localField: 'images',
 							foreignField: '_id',
-							as: 'gearItem',
+							as: 'images',
 						},
 					},
-				]).sample(3)
+				]).sample(args.limit ? args.limit : 16)
 
-				console.log(gearItems)
 				return { gearItems: gearItems }
 			}
 			try {
