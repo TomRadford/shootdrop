@@ -100,14 +100,14 @@ const Home = ({
 							</div>
 						</div>
 					</div>
-					<div className="absolute bottom-10 z-50 flex w-full justify-center mix-blend-soft-light">
+					<div className="absolute bottom-24 z-50 flex w-full justify-center mix-blend-soft-light">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							fill="none"
 							viewBox="0 0 24 24"
-							strokeWidth={2}
+							strokeWidth={1.5}
 							stroke="white"
-							className="h-12 w-12 "
+							className="h-10 w-10 "
 						>
 							<path
 								strokeLinecap="round"
@@ -116,7 +116,7 @@ const Home = ({
 							/>
 						</svg>
 					</div>
-					<div className="absolute z-[5] mt-36 h-full w-full bg-gradient-to-b from-transparent to-gray-900 "></div>
+					<div className="absolute z-[10] mt-0 h-full w-full bg-gradient-to-b from-transparent to-gray-900"></div>
 					<div className="absolute w-full ">
 						{/* Targeting displays up to UHD */}
 						<div className="relative -mt-10 flex h-full flex-col gap-4 overflow-x-hidden  opacity-25">
