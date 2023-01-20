@@ -292,6 +292,45 @@ export const ALL_GEAR_ITEMS = gql`
 	${GEAR_ITEM_DETAILS}
 `
 
+export const RANDOM_GEAR_ITEMS = gql`
+	query randomGearItems(
+		$id: String
+		$category: GearCategory
+		$manufacturer: String
+		$model: String
+		$tags: [String]
+		$offset: Int
+		$limit: Int
+		$random: Boolean
+	) {
+		allGearItems(
+			id: $id
+			category: $category
+			manufacturer: $manufacturer
+			model: $model
+			tags: $tags
+			offset: $offset
+			limit: $limit
+			random: $random
+		) {
+			gearItems {
+				id
+				category
+				manufacturer
+				model
+				description
+				productURL
+				images {
+					id
+					url
+					width
+					height
+				}
+			}
+		}
+	}
+`
+
 export const ADD_GEAR_ITEM = gql`
 	mutation addGearItem(
 		$category: [GearCategory!]
