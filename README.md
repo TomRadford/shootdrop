@@ -35,6 +35,7 @@ A drop is tied to a shoot in the real world, it serves as the home for all gear-
 - Collaborators can be added here. They can edit any lists attached to the drops they're on.
 - The URL is publically sharable for everyone on the production to stay up to date.
 - Overview of all list items - giving you an idea of the shoot at a glance.
+- PDF Generation to easily print and share with production teams. 
 
 ### Lists
 

@@ -271,6 +271,7 @@ export const ALL_GEAR_ITEMS = gql`
 		$tags: [String]
 		$offset: Int
 		$limit: Int
+		$random: Boolean
 	) {
 		allGearItems(
 			id: $id
@@ -280,6 +281,7 @@ export const ALL_GEAR_ITEMS = gql`
 			tags: $tags
 			offset: $offset
 			limit: $limit
+			random: $random
 		) {
 			totalDocs
 			gearItems {

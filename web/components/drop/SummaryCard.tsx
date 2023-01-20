@@ -1,8 +1,9 @@
-import Card from '../../components/Card'
+import Card from '../Card'
 import { formatDistance, format } from 'date-fns'
 import Image from 'next/image'
 import Link from 'next/link'
-const DropSummaryCard = ({ drop }) => {
+import { Drop } from '../../__generated__/graphql'
+const DropSummaryCard = ({ drop }: { drop: Drop }) => {
 	return (
 		<Link href={`/drops/${drop.id}`} key={drop.id}>
 			<a>

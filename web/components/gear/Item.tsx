@@ -10,10 +10,19 @@ import { useMutation } from '@apollo/client'
 import { ADD_LIST_ITEM, GET_LIST_ITEMS } from '../../lib/apollo/queries'
 import useListItemStore from '../../lib/hooks/store/listItem'
 import { useEffect } from 'react'
+import { GearList, GearListItem } from '../../__generated__/graphql'
 const whitePixel =
 	'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII='
 
-const GearItem = ({ data, listToAdd, list }) => {
+const GearItem = ({
+	data,
+	listToAdd,
+	list,
+}: {
+	data: any
+	listToAdd?: GearList
+	list: GearList
+}) => {
 	const gearItem = list ? data.gearItem : data
 	const userInDrop = useUserInDrop(list ? list.drop : undefined)
 	const listItem = useListItemStore((state) => state.listItem)
