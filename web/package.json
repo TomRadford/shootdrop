@@ -18,6 +18,7 @@
 	},
 	"dependencies": {
 		"@apollo/client": "^3.7.0",
+		"@formkit/auto-animate": "^1.0.0-beta.5",
 		"@hcaptcha/react-hcaptcha": "^1.4.4",
 		"@headlessui/react": "^1.7.3",
 		"@react-pdf/renderer": "^3.0.2",

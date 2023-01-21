@@ -23,6 +23,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { gql } from '@apollo/client'
 import MarqueeSection from '../components/landing/Marquee'
+import MiniGearItem from '../components/landing/MiniGearItem'
 
 // Faux data for landing
 
@@ -100,7 +101,7 @@ const Home = ({
 							</div>
 						</div>
 					</div>
-					<div className="absolute bottom-24 z-50 flex w-full justify-center mix-blend-soft-light">
+					<div className="absolute bottom-24 z-20 flex w-full justify-center mix-blend-soft-light">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							fill="none"
@@ -160,7 +161,7 @@ const Home = ({
 					<p className="mt-3 2xl:text-xl">
 						The home for all gear-related info pertaining to your shoot.
 					</p>
-					<div className="mt-16 flex w-11/12 max-w-4xl flex-col items-center gap-4 lg:flex-row lg:justify-between 2xl:max-w-5xl">
+					<div className="mt-16 flex w-11/12 max-w-4xl flex-col items-center gap-4 lg:flex-row lg:justify-evenly 2xl:max-w-5xl">
 						<div className="flex w-72 flex-col gap-4 ">
 							<div className="flex gap-2 rounded-xl bg-black bg-opacity-30 py-1  px-3 text-sm shadow-lg">
 								<svg
@@ -229,7 +230,7 @@ const Home = ({
 						<div className="max-w-sm">
 							<p className="font-bold">Collaborate with the team</p>
 							<p>
-								Whether it&#39;s the soundie, AC or even grip you can invite
+								Whether it&#39;s the soundie, AC or even grip, you can invite
 								anyone to add gear to the drop.
 							</p>
 						</div>
@@ -295,10 +296,19 @@ const Home = ({
 							tagged.
 						</p>
 					</div>
-					{/* <div className="h-[20rem] w-9/12 rounded-2xl bg-gray-200"></div> */}
+
+					<div className=" relative h-[36rem] w-9/12 overflow-hidden rounded-2xl">
+						<div className="pointer-events-none absolute  bottom-0 z-10 h-1/5 w-full bg-gradient-to-t from-gray-900 to-transparent"></div>
+						<div className="pointer-events-none absolute  top-0 z-10 h-1/5 w-full bg-gradient-to-b from-gray-900 to-transparent"></div>
+						<div className="mx-auto flex max-w-7xl animate-[scrollMiniGearItems_30s_ease-in-out_infinite_alternate] flex-wrap justify-center gap-4">
+							{randomGearItems.map((item) => (
+								<MiniGearItem key={item.id} gearItem={item} />
+							))}
+						</div>
+					</div>
 				</div>
 				<div className="flex flex-col items-center justify-center bg-gradient-to-t from-gray-900 to-gray-800 px-2 pb-20 text-center">
-					<div className="mt-16 flex w-11/12 max-w-2xl flex-col-reverse items-center gap-10 lg:flex-row lg:justify-between 2xl:max-w-3xl">
+					<div className="mt-10 flex w-11/12 max-w-2xl flex-col-reverse items-center gap-10 lg:flex-row lg:justify-between 2xl:max-w-3xl">
 						<Link href="/gear/add">
 							<a className=" h-72 w-11/12 overflow-hidden rounded-3xl transition-transform will-change-transform hover:scale-105 active:scale-95 sm:w-96">
 								<video autoPlay muted loop>
@@ -338,8 +348,8 @@ const Home = ({
 								className="h-6 w-6 fill-white"
 							>
 								<path
-									fill-rule="evenodd"
-									clip-rule="evenodd"
+									fillRule="evenodd"
+									clipRule="evenodd"
 									d="M12 2C6.477 2 2 6.463 2 11.97c0 4.404 2.865 8.14 6.839 9.458.5.092.682-.216.682-.48 0-.236-.008-.864-.013-1.695-2.782.602-3.369-1.337-3.369-1.337-.454-1.151-1.11-1.458-1.11-1.458-.908-.618.069-.606.069-.606 1.003.07 1.531 1.027 1.531 1.027.892 1.524 2.341 1.084 2.91.828.092-.643.35-1.083.636-1.332-2.22-.251-4.555-1.107-4.555-4.927 0-1.088.39-1.979 1.029-2.675-.103-.252-.446-1.266.098-2.638 0 0 .84-.268 2.75 1.022A9.607 9.607 0 0 1 12 6.82c.85.004 1.705.114 2.504.336 1.909-1.29 2.747-1.022 2.747-1.022.546 1.372.202 2.386.1 2.638.64.696 1.028 1.587 1.028 2.675 0 3.83-2.339 4.673-4.566 4.92.359.307.678.915.678 1.846 0 1.332-.012 2.407-.012 2.734 0 .267.18.577.688.48 3.97-1.32 6.833-5.054 6.833-9.458C22 6.463 17.522 2 12 2Z"
 								></path>
 							</svg>
