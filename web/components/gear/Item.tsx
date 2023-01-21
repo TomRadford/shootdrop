@@ -67,7 +67,6 @@ const GearItemComponent = ({
 	if (isGearItem(data)) {
 		gearItem = data
 	}
-	console.log(gearItem)
 	// const gearItem = list ? data.gearItem : data
 
 	const handleAddListItem = (e: { preventDefault: () => void }) => {
