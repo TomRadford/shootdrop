@@ -10,20 +10,21 @@ import { useMutation } from '@apollo/client'
 import { ADD_LIST_ITEM, GET_LIST_ITEMS } from '../../lib/apollo/queries'
 import useListItemStore from '../../lib/hooks/store/listItem'
 import { useEffect } from 'react'
-import { GearList, GearListItem } from '../../__generated__/graphql'
+import { GearItem, GearList, GearListItem } from '../../__generated__/graphql'
+import { isGearItem, isGearListItem } from '../../lib/utils'
+import { isGeneratorObject } from 'util/types'
 const whitePixel =
 	'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII='
 
-const GearItem = ({
+const GearItemComponent = ({
 	data,
 	listToAdd,
 	list,
 }: {
-	data: any
+	data: GearListItem | GearItem
 	listToAdd?: GearList
-	list: GearList
+	list?: GearList
 }) => {
-	const gearItem = list ? data.gearItem : data
 	const userInDrop = useUserInDrop(list ? list.drop : undefined)
 	const listItem = useListItemStore((state) => state.listItem)
 	const setListItem = useListItemStore((state) => state.setListItem)
@@ -59,7 +60,16 @@ const GearItem = ({
 	})
 	// ToDo: cache update
 
-	const handleAddListItem = (e) => {
+	let gearItem: GearItem
+	if (list && isGearListItem(data)) {
+		gearItem = data.gearItem
+	}
+	if (isGearItem(data)) {
+		gearItem = data
+	}
+	// const gearItem = list ? data.gearItem : data
+
+	const handleAddListItem = (e: { preventDefault: () => void }) => {
 		e.preventDefault()
 		//Adds new GearListItem then opens ListItem modal to edit prefs
 		addListItem({ variables: { list: listToAdd.id, gearItem: gearItem.id } })
@@ -120,7 +130,7 @@ const GearItem = ({
 					Add Item
 				</button>
 			)}
-			{list && (
+			{list && isGearListItem(data) && (
 				<div className="mx-4 my-2 flex flex-col ">
 					<ItemQuantity
 						listId={list.id}
@@ -167,4 +177,4 @@ const GearItem = ({
 	)
 }
 
-export default GearItem
+export default GearItemComponent
