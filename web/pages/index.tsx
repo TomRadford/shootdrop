@@ -297,7 +297,7 @@ const Home = ({
 						</p>
 					</div>
 
-					<div className=" relative h-[36rem] w-9/12 overflow-hidden rounded-2xl">
+					<div className=" relative h-[36rem] w-11/12 overflow-hidden rounded-2xl sm:w-9/12">
 						<div className="pointer-events-none absolute  bottom-0 z-10 h-1/5 w-full bg-gradient-to-t from-gray-900 to-transparent"></div>
 						<div className="pointer-events-none absolute  top-0 z-10 h-1/5 w-full bg-gradient-to-b from-gray-900 to-transparent"></div>
 						<div className="mx-auto flex max-w-7xl animate-[scrollMiniGearItems_30s_ease-in-out_infinite_alternate] flex-wrap justify-center gap-4">
