@@ -118,6 +118,15 @@ const typeDefs = gql`
 		nextPage: Int
 	}
 
+	type NewGearResult {
+		sku: String!
+		manufacturer: String!
+		model: String!
+		description: String
+		imageUrls: [String]
+		productURL: String
+	}
+
 	type Query {
 		me: User
 		allDrops(drop: String): [Drop!]
@@ -142,6 +151,7 @@ const typeDefs = gql`
 		getProfileImageUpload: String!
 		getGearImageUpload(gearItem: String!): String!
 		allUsers(fullName: String): [User]
+		findNewGear(searchTerm: String!): [NewGearResult]
 	}
 
 	input GearPrefInput {
