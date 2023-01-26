@@ -6,6 +6,7 @@ const { executablePath } = require('puppeteer')
 // WILL NOT FIX
 // Scraping/Api requests has been made unreliable as a result
 // of target site's anti-scraping/anti-bot measures
+// ToDo: relook at a later stage
 
 const startBrowser = async () => {
 	let browser

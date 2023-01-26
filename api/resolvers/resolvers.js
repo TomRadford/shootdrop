@@ -960,6 +960,7 @@ const resolvers = {
 
 		findNewGear: async (root, args, context) => {
 			checkAuth(context)
+			// Scraping disabled for now
 			// const { searchTerm } = args
 			// const allCategories = ['Camera', 'Grips', 'Lighting', 'Sound']
 			// try {
