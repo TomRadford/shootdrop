@@ -957,6 +957,44 @@ const resolvers = {
 			} // Implement $search later on if we stick to Atlas
 			return User.find({})
 		},
+
+		findNewGear: async (root, args, context) => {
+			checkAuth(context)
+			// Scraping disabled for now
+			// const { searchTerm } = args
+			// const allCategories = ['Camera', 'Grips', 'Lighting', 'Sound']
+			// try {
+			// const res = await puppeteerFetch(
+			// 	`${config.GEAR_SOURCE}/navigation/search`,
+			// 	{
+			// 		headers: {
+			// 			'x-cors-api-key': config.GEAR_SOURCE_KEY,
+			// 			'Content-Type': 'application/json',
+			// 		},
+			// 		method: 'POST',
+			// 		body: JSON.stringify({
+			// 			pageNumber: 1,
+			// 			filters: [],
+			// 			searchTerm,
+			// 		}),
+			// 	}
+			// )
+			// console.log(res)
+
+			// const res = await getNewGearResults(searchTerm)
+			// if (res.data?.items) {
+			// 	const newGearResult = res.data.items.map((item) => {
+			// 		return {
+			// 			sku: item.itemKey.skuNo,
+			// 		}
+			// 	})
+			// 	return newGearResult
+			// }
+			return []
+			// } catch (e) {
+			// 	throw new UserInputError(`Error finding new gear: ${e}`)
+			// }
+		},
 	},
 }
 

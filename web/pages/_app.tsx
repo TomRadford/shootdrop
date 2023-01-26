@@ -9,6 +9,7 @@ import { ErrorBoundary, FallbackProps } from 'react-error-boundary'
 import Button from '../components/elements/Button'
 import { useEffect, useState } from 'react'
 import LoadingSpinner from '../components/elements/LoadingSpinner'
+import { Analytics } from '@vercel/analytics/react'
 
 const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
 	const [showError, setShowError] = useState<boolean>(false)
@@ -84,6 +85,7 @@ const App = ({ Component, pageProps }: AppProps) => {
 						}}
 					/>
 					<Component {...pageProps} />
+					<Analytics />
 				</QueryParamProvider>
 			</ApolloProvider>
 		</ErrorBoundary>
