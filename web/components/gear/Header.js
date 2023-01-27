@@ -35,7 +35,11 @@ const GearHeader = ({ gearItem }) => {
 			} else {
 				setIsAdding(0)
 			}
-			if (category.length > 0 && manufacturer.length > 1 && model.length >= 2) {
+			if (
+				category.length > 0 &&
+				manufacturer.length >= 2 &&
+				model.length >= 2
+			) {
 				setIsAdding(2)
 				const timeout = setTimeout(() => {
 					addGearItem({
@@ -51,8 +55,8 @@ const GearHeader = ({ gearItem }) => {
 		} else {
 			if (
 				gearItem.category !== category ||
-				gearItem.model !== model ||
-				gearItem.manufacturer !== manufacturer
+				(gearItem.model !== model && model.length >= 2) ||
+				(gearItem.manufacturer !== manufacturer && manufacturer.length >= 2)
 			) {
 				const timeout = setTimeout(() => {
 					console.log('updating headers')
