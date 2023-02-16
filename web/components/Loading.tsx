@@ -1,6 +1,6 @@
 import Layout from './layout'
 import LoadingSpinner from './elements/LoadingSpinner'
-const Loading = ({ title }) => {
+const Loading = ({ title }: { title: string }) => {
 	return (
 		<Layout>
 			<div className="flex h-screen ">
