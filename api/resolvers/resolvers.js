@@ -389,12 +389,14 @@ const resolvers = {
 				throw new UserInputError('Drop not found')
 			}
 
-			const canRemove = drop.users.find(
-				(user) => user._id.toString() === currentUser._id.toString()
-			)
-			if (!canRemove) {
-				throw new AuthenticationError('User not authorized to delete')
-			}
+			checkDropPermissions(context, drop)
+
+			// const canRemove = drop.users.find(
+			// 	(user) => user._id.toString() === currentUser._id.toString()
+			// )
+			// if (!canRemove) {
+			// 	throw new AuthenticationError('User not authorized to delete')
+			// }
 			try {
 				await Drop.findByIdAndDelete(args.drop)
 				drop.lists.map(async (list) => {

@@ -124,6 +124,11 @@ const cache = new InMemoryCache({
 						}
 					},
 				},
+				me: {
+					merge(existing, incoming) {
+						return incoming
+					},
+				},
 			},
 		},
 		Drop: {
@@ -162,6 +167,15 @@ const cache = new InMemoryCache({
 					merge(existing, incoming) {
 						return incoming
 					},
+				},
+			},
+		},
+	},
+	User: {
+		fields: {
+			drops: {
+				merge(existing, incoming) {
+					return incoming
 				},
 			},
 		},
