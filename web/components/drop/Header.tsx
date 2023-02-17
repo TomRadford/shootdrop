@@ -11,8 +11,7 @@ import { UPDATE_TIMEOUT } from '../../lib/config'
 import Link from 'next/link'
 
 import { Drop } from '../../__generated__/graphql'
-import Menu from './Menu'
-import DeleteDropModal from './DeleteModal'
+import DeleteModal from './DeleteModal'
 
 const DropHeader = ({
 	drop,
@@ -209,11 +208,12 @@ const DropHeader = ({
 				drop={drop}
 				userInDrop={userInDrop}
 			/>
-			<DeleteDropModal
+			<DeleteModal
 				deleteModalOpen={deleteModalOpen}
 				setDeleteModalOpen={setDeleteModalOpen}
 				drop={drop}
 			/>
+			{/* HERE: WORK OUT HOW TO HANDLE MODAL SET FOR EITHER DROP OR LIST */}
 		</>
 	)
 }

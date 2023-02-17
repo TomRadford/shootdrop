@@ -382,7 +382,7 @@ const resolvers = {
 
 		removeDrop: async (root, args, context) => {
 			checkAuth(context)
-			const { currentUser } = context
+
 			const drop = await Drop.findById(args.drop)
 
 			if (!drop) {
@@ -391,12 +391,6 @@ const resolvers = {
 
 			checkDropPermissions(context, drop)
 
-			// const canRemove = drop.users.find(
-			// 	(user) => user._id.toString() === currentUser._id.toString()
-			// )
-			// if (!canRemove) {
-			// 	throw new AuthenticationError('User not authorized to delete')
-			// }
 			try {
 				await Drop.findByIdAndDelete(args.drop)
 				drop.lists.map(async (list) => {

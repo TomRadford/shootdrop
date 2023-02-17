@@ -108,6 +108,7 @@ const GearBrowser = ({ listToAdd, list }) => {
 					list={list}
 					listToAdd={listToAdd}
 				/>
+
 				<div className="mb-10">
 					{allGearLoading || refetching ? (
 						<div className="mx-2 ">

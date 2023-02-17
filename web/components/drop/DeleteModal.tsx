@@ -1,19 +1,21 @@
 import { Fragment, useState } from 'react'
 import { Transition, Dialog } from '@headlessui/react'
 import { Dispatch, SetStateAction } from 'react'
-import { Drop } from '../../__generated__/graphql'
+import { Drop, GearList } from '../../__generated__/graphql'
 import { useMutation } from '@apollo/client'
 import { ME_DROPS, REMOVE_DROP } from '../../lib/apollo/queries'
 import { User } from '../../__generated__/graphql'
 import { useRouter } from 'next/router'
-const DeleteDropModal = ({
+const DeleteModal = ({
 	deleteModalOpen,
 	setDeleteModalOpen,
 	drop,
+	list,
 }: {
 	deleteModalOpen: boolean
 	setDeleteModalOpen: Dispatch<SetStateAction<boolean>>
-	drop: Drop
+	drop?: Drop
+	list?: GearList
 }) => {
 	const router = useRouter()
 	const [removeDrop, removeDropResult] = useMutation(REMOVE_DROP, {
@@ -81,10 +83,15 @@ const DeleteDropModal = ({
 									as="div"
 									className="leading-2 text-md text-center font-medium"
 								>
-									<h2>Delete Drop</h2>
+									<h2>Delete {drop ? `Drop` : `List`}</h2>
 									<h4 className="text-sm font-light">
 										Are you sure you want to delete{' '}
-										<span className="font-bold">{drop.project}</span>?
+										<span className="font-bold">
+											{drop
+												? drop.project
+												: `the ${list.category.toLowerCase()} list`}
+										</span>
+										?
 									</h4>
 								</Dialog.Title>
 								<div className="mx-4 my-2 flex flex-col items-center">
@@ -109,4 +116,4 @@ const DeleteDropModal = ({
 	)
 }
 
-export default DeleteDropModal
+export default DeleteModal
