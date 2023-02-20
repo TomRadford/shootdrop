@@ -3,7 +3,12 @@ import { Transition, Dialog } from '@headlessui/react'
 import { Dispatch, SetStateAction } from 'react'
 import { Drop, GearList } from '../../__generated__/graphql'
 import { useMutation } from '@apollo/client'
-import { ME_DROPS, REMOVE_DROP } from '../../lib/apollo/queries'
+import {
+	ALL_DROPS,
+	ME_DROPS,
+	REMOVE_DROP,
+	REMOVE_LIST,
+} from '../../lib/apollo/queries'
 import { User } from '../../__generated__/graphql'
 import { useRouter } from 'next/router'
 const DeleteModal = ({
@@ -11,11 +16,13 @@ const DeleteModal = ({
 	setDeleteModalOpen,
 	drop,
 	list,
+	setListToDelete,
 }: {
 	deleteModalOpen: boolean
 	setDeleteModalOpen: Dispatch<SetStateAction<boolean>>
-	drop?: Drop
+	drop: Drop
 	list?: GearList
+	setListToDelete: Dispatch<SetStateAction<GearList>>
 }) => {
 	const router = useRouter()
 	const [removeDrop, removeDropResult] = useMutation(REMOVE_DROP, {
@@ -34,10 +41,37 @@ const DeleteModal = ({
 			router.replace('/drops')
 		},
 	})
+	const [removeList, removeListResult] = useMutation(REMOVE_LIST, {
+		update: (cache, response) => {
+			cache.updateQuery(
+				{ query: ALL_DROPS, variables: { drop: drop.id } },
+				({ allDrops }: { allDrops: Drop[] }) => {
+					const dropToUpdate = allDrops[0]
+					return {
+						allDrops: [
+							{
+								...dropToUpdate,
+								lists: dropToUpdate.lists.filter(
+									(listInstance) => listInstance.id !== list.id
+								),
+							},
+						],
+					}
+				}
+			)
+		},
+		onCompleted: () => {
+			setDeleteModalOpen(false)
+		},
+	})
 
 	const handleRemove = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault()
-		removeDrop({ variables: { drop: drop.id } })
+		if (list) {
+			removeList({ variables: { id: list.id } })
+		} else {
+			removeDrop({ variables: { drop: drop.id } })
+		}
 	}
 
 	if (!drop) return null
@@ -47,7 +81,9 @@ const DeleteModal = ({
 			appear
 			show={deleteModalOpen}
 			as={Fragment}
-			afterLeave={() => {}}
+			afterLeave={() => {
+				setListToDelete(undefined)
+			}}
 		>
 			<Dialog
 				as="div"
@@ -83,11 +119,11 @@ const DeleteModal = ({
 									as="div"
 									className="leading-2 text-md text-center font-medium"
 								>
-									<h2>Delete {drop ? `Drop` : `List`}</h2>
+									<h2>Delete {!list ? `Drop` : `List`}</h2>
 									<h4 className="text-sm font-light">
 										Are you sure you want to delete{' '}
 										<span className="font-bold">
-											{drop
+											{!list
 												? drop.project
 												: `the ${list.category.toLowerCase()} list`}
 										</span>
@@ -95,11 +131,13 @@ const DeleteModal = ({
 									</h4>
 								</Dialog.Title>
 								<div className="mx-4 my-2 flex flex-col items-center">
-									{removeDropResult.error && (
+									{(removeDropResult.error || removeListResult.error) && (
 										<p className="mb-5 text-red-600">
-											{removeDropResult.error.message}
+											{removeDropResult.error?.message ||
+												removeListResult.error.message}
 										</p>
 									)}
+
 									<button
 										onClick={handleRemove}
 										className="w-min rounded bg-red-600 py-1 px-2 transition-colors hover:bg-red-800"

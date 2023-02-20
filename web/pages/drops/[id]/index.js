@@ -56,7 +56,7 @@ const DropPage = ({ drop }) => {
 							<ClientOnly>
 								<DropEditor
 									drop={dropResult.data && dropResult.data.allDrops[0]}
-								></DropEditor>
+								/>
 							</ClientOnly>
 						</div>
 					</div>

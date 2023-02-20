@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import TextareaAutosize from 'react-textarea-autosize'
 import { useQuery, useMutation } from '@apollo/client'
-import { useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { ADD_DROP, UPDATE_DROP, ME_DROPS } from '../../lib/apollo/queries'
 import { useRouter } from 'next/router'
 import UserModal from './UserModal'
@@ -9,19 +9,19 @@ import { format } from 'date-fns'
 import useIsAddingStore from '../../lib/hooks/store/isAdding'
 import { UPDATE_TIMEOUT } from '../../lib/config'
 import Link from 'next/link'
-
 import { Drop } from '../../__generated__/graphql'
-import DeleteModal from './DeleteModal'
 
 const DropHeader = ({
 	drop,
 	userInDrop,
+	setDeleteModalOpen,
 }: {
 	drop: Drop
 	userInDrop: boolean
+	setDeleteModalOpen: Dispatch<SetStateAction<boolean>>
 }) => {
 	const [modalOpen, setModalOpen] = useState(false)
-	const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+
 	const [dropName, setDropName] = useState(drop ? drop.project : '')
 	const [clientName, setClientName] = useState(drop ? drop.client : '')
 	const setIsAdding = useIsAddingStore((state) => state.setIsAdding)
@@ -208,12 +208,6 @@ const DropHeader = ({
 				drop={drop}
 				userInDrop={userInDrop}
 			/>
-			<DeleteModal
-				deleteModalOpen={deleteModalOpen}
-				setDeleteModalOpen={setDeleteModalOpen}
-				drop={drop}
-			/>
-			{/* HERE: WORK OUT HOW TO HANDLE MODAL SET FOR EITHER DROP OR LIST */}
 		</>
 	)
 }

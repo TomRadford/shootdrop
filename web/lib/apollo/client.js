@@ -129,6 +129,11 @@ const cache = new InMemoryCache({
 						return incoming
 					},
 				},
+				allDrops: {
+					merge(existing, incoming) {
+						return incoming
+					},
+				},
 			},
 		},
 		Drop: {
@@ -136,6 +141,11 @@ const cache = new InMemoryCache({
 				users: {
 					// To solve 'Cannot automatically merge arrays' error
 					// https://github.com/apollographql/apollo-client/issues/6868
+					merge(existing, incoming) {
+						return incoming
+					},
+				},
+				lists: {
 					merge(existing, incoming) {
 						return incoming
 					},
