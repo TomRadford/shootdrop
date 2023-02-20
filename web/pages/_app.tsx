@@ -85,7 +85,7 @@ const App = ({ Component, pageProps }: AppProps) => {
 						}}
 					/>
 					<Component {...pageProps} />
-					<Analytics />
+					<Analytics debug={false} />
 				</QueryParamProvider>
 			</ApolloProvider>
 		</ErrorBoundary>

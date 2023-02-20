@@ -1,4 +1,4 @@
-import create from 'zustand'
+import { create } from 'zustand'
 
 //Note: because Zustand lives outside of apollo, any mutations to data
 // will not reflect in this store without manually setting them

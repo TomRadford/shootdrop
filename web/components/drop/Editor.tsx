@@ -4,15 +4,37 @@ import DropInfo from './Info'
 import DropListInfo from './List'
 import useGetMe from '../../lib/hooks/getMe'
 import useUserInDrop from '../../lib/hooks/userInDrop'
-
-const DropEditor = ({ children, drop }) => {
+import React, { useState } from 'react'
+import DeleteModal from './DeleteModal'
+import { Drop, GearList } from '../../__generated__/graphql'
+const DropEditor = ({
+	children,
+	drop,
+}: {
+	children: React.ReactNode
+	drop: Drop
+}) => {
 	const userInDrop = useUserInDrop(drop)
 	const me = useGetMe()
+	const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+	const [listToDelete, setListToDelete] = useState<GearList>(undefined)
 	return (
 		<div className="flex h-full min-h-screen">
 			<div className="mb-10 w-full pt-16 text-center md:mx-3 md:pt-6">
+				<DeleteModal
+					deleteModalOpen={deleteModalOpen}
+					setDeleteModalOpen={setDeleteModalOpen}
+					drop={drop}
+					list={listToDelete}
+					setListToDelete={setListToDelete}
+				/>
+				{/* HERE: WORK OUT HOW TO HANDLE MODAL SET FOR EITHER DROP OR LIST */}
 				<form>
-					<DropHeader drop={drop} userInDrop={userInDrop} />
+					<DropHeader
+						drop={drop}
+						userInDrop={userInDrop}
+						setDeleteModalOpen={setDeleteModalOpen}
+					/>
 					{drop && (
 						<div className="flex">
 							<div className="m-auto text-center">
@@ -36,6 +58,8 @@ const DropEditor = ({ children, drop }) => {
 													(list) => list.category === 'CAMERA'
 												)[0]
 											}
+											setDeleteModalOpen={setDeleteModalOpen}
+											setListToDelete={setListToDelete}
 											category="CAMERA"
 										/>
 										<DropListInfo
@@ -45,6 +69,8 @@ const DropEditor = ({ children, drop }) => {
 													(list) => list.category === 'SOUND'
 												)[0]
 											}
+											setDeleteModalOpen={setDeleteModalOpen}
+											setListToDelete={setListToDelete}
 											category="SOUND"
 										/>
 										<DropListInfo
@@ -54,6 +80,8 @@ const DropEditor = ({ children, drop }) => {
 													(list) => list.category === 'LIGHTING'
 												)[0]
 											}
+											setDeleteModalOpen={setDeleteModalOpen}
+											setListToDelete={setListToDelete}
 											category="LIGHTING"
 										/>
 										<DropListInfo
@@ -63,6 +91,8 @@ const DropEditor = ({ children, drop }) => {
 													(list) => list.category === 'GRIPS'
 												)[0]
 											}
+											setDeleteModalOpen={setDeleteModalOpen}
+											setListToDelete={setListToDelete}
 											category="GRIPS"
 										/>
 									</section>

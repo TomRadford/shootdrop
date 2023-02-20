@@ -225,6 +225,12 @@ export const ADD_DROP = gql`
 	${DROP_DETAILS}
 `
 
+export const REMOVE_DROP = gql`
+	mutation removeDrop($drop: String!) {
+		removeDrop(drop: $drop)
+	}
+`
+
 export const UPDATE_DROP = gql`
 	mutation updateDrop(
 		$id: String!
@@ -509,6 +515,12 @@ export const ADD_LIST = gql`
 		}
 	}
 	${LIST_DETAILS}
+`
+
+export const REMOVE_LIST = gql`
+	mutation removeList($id: String!) {
+		removeList(id: $id)
+	}
 `
 
 const GEAR_LIST_ITEM_DETAILS = gql`

@@ -382,21 +382,21 @@ const resolvers = {
 
 		removeDrop: async (root, args, context) => {
 			checkAuth(context)
-			const { currentUser } = context
+
 			const drop = await Drop.findById(args.drop)
+
 			if (!drop) {
 				throw new UserInputError('Drop not found')
 			}
-			//change to includes method?
-			const canRemove = drop.users.find(
-				(user) => user._id.toString() === currentUser._id.toString()
-			)
-			if (!canRemove) {
-				throw new AuthenticationError('User not authorized to delete')
-			}
+
+			checkDropPermissions(context, drop)
+
 			try {
 				await Drop.findByIdAndDelete(args.drop)
-				//ToDo: delete attached lists
+				drop.lists.map(async (list) => {
+					await GearListItem.deleteMany({ gearList: list })
+				})
+				await GearList.deleteMany({ drop: args.drop })
 			} catch (e) {
 				throw new UserInputError('Delete error:', e)
 			}
