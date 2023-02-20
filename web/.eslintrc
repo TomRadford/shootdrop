@@ -27,18 +27,6 @@
 				"singleQuote": true,
 				"semi": false,
 				"endOfLine": "auto"
-			},
-			{
-				"overrides": [
-					{
-						"options": {
-							"typescript": {
-								"explicitFunctionReturnType": false,
-								"typeAssertionStyle": "angle-bracket"
-							}
-						}
-					}
-				]
 			}
 		]
 	},

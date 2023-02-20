@@ -12,5 +12,11 @@
 	"eslint.workingDirectories": [
 		"./web",
 		"./api"
-	]
+	],
+	{
+		"css.lint.unknownAtRules": "ignore",
+		"[css]": {
+			"editor.defaultFormatter": "bradlc.vscode-tailwindcss"
+		}
+	}
 }

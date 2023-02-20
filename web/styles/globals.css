@@ -1,169 +1,186 @@
+/* eslint no-use-before-define: 2 */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* For scrollbar hide */
 .scrollbar-hide::-webkit-scrollbar {
-  display: none;
+	display: none;
 }
 
 /* For IE, Edge and Firefox */
 .scrollbar-hide {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+	-ms-overflow-style: none;
+	/* IE and Edge */
+	scrollbar-width: none;
+	/* Firefox */
 }
 
 /* For custom DatePickerTailwind component */
 .react-datepicker__input-container input {
-  @apply form-input block w-full rounded border;
+	@apply form-input block w-full rounded border;
 }
 
 .react-datepicker-popper {
-  @apply z-40 w-72 rounded  bg-black  px-3 py-2 text-sm shadow;
+	@apply z-40 w-72 rounded bg-black px-3 py-2 text-sm shadow;
 }
 
 .react-datepicker-left {
-  @apply absolute left-0 right-auto top-11 transform-none !important;
+	@apply absolute left-0 right-auto top-11 transform-none !important;
 }
 
 .react-datepicker-right {
-  @apply absolute right-0 left-auto top-11 transform-none !important;
+	@apply absolute right-0 left-auto top-11 transform-none !important;
 }
 
 .react-datepicker__portal {
-  @apply absolute top-12 right-0 z-10 w-72 transform-none rounded border-2 border-gray-200 bg-white px-3 py-2 text-sm shadow;
+	@apply absolute top-12 right-0 z-10 w-72 transform-none rounded border-2 border-gray-200 bg-white px-3 py-2 text-sm shadow;
 }
 
 .react-datepicker__month-container {
-  @apply flex flex-col;
+	@apply flex flex-col;
 }
 
 .react-datepicker__month {
-  @apply flex flex-col;
+	@apply flex flex-col;
 }
 
 .react-datepicker__current-month {
-  @apply ml-2.5 text-lg font-semibold text-gray-200;
+	@apply ml-2.5 text-lg font-semibold text-gray-200;
 }
 
 .react-datepicker__week {
-  @apply flex justify-around;
+	@apply flex justify-around;
 }
 
 .react-datepicker__day-names {
-  @apply flex justify-around text-center text-xs font-medium text-gray-400;
+	@apply flex justify-around text-center text-xs font-medium text-gray-400;
 }
 
 .react-datepicker__day-name {
-  @apply flex h-8 w-8 items-center justify-center rounded-full py-1;
+	@apply flex h-8 w-8 items-center justify-center rounded-full py-1;
 }
 
 .react-datepicker__navigation {
-  @apply absolute top-2;
+	@apply absolute top-2;
 }
 
 .react-datepicker__navigation--previous {
-  @apply right-12 flex h-8 w-8 items-center justify-center rounded transition hover:bg-gray-200;
+	@apply right-12 flex h-8 w-8 items-center justify-center rounded transition hover:bg-gray-200;
 }
 
 .react-datepicker__navigation--next {
-  @apply right-4 flex h-8 w-8 items-center justify-center rounded transition hover:bg-gray-200;
+	@apply right-4 flex h-8 w-8 items-center justify-center rounded transition hover:bg-gray-200;
 }
 
 .react-datepicker__day {
-  @apply mb-1 flex h-8 w-8 items-center justify-center rounded py-1 text-sm leading-loose text-gray-100 transition hover:cursor-pointer;
+	@apply mb-1 flex h-8 w-8 items-center justify-center rounded py-1 text-sm leading-loose text-gray-100 transition hover:cursor-pointer;
 }
 
 .react-datepicker__day--disabled {
-  @apply cursor-not-allowed opacity-40 hover:bg-transparent;
+	@apply cursor-not-allowed opacity-40 hover:bg-transparent;
 }
 
 .react-datepicker__day--outside-month {
-  @apply text-gray-700;
+	@apply text-gray-700;
 }
 
 .react-datepicker__day--in-range {
-  @apply bg-gray-200;
+	@apply bg-gray-200;
 }
 
 .react-datepicker__day--in-selecting-range {
-  @apply bg-blue-200;
+	@apply bg-blue-200;
 }
 
 .react-datepicker__day--selecting-range-start {
-  @apply border-2 border-blue-500 bg-white;
+	@apply border-2 border-blue-500 bg-white;
 }
 
 .react-datepicker__day--selecting-range-end {
-  @apply border-2 border-blue-500 bg-white;
+	@apply border-2 border-blue-500 bg-white;
 }
 
 .react-datepicker__day--selected {
-  @apply bg-gray-main text-white;
+	@apply bg-gray-main text-white;
 }
 
 .react-datepicker__day--range-start {
-  @apply bg-blue-500 text-white hover:bg-white hover:text-gray-700;
+	@apply bg-blue-500 text-white hover:bg-white hover:text-gray-700;
 }
 
 .react-datepicker__day--range-end {
-  @apply bg-blue-500 text-white hover:bg-white hover:text-gray-700;
+	@apply bg-blue-500 text-white hover:bg-white hover:text-gray-700;
+}
+
+/* https://github.com/Hacker0x01/react-datepicker/issues/3924 */
+.react-datepicker__aria-live {
+  position: absolute;
+  clip-path: circle(0);
+  border: 0;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  width: 1px;
+  white-space: nowrap;
 }
 
 /* Custom global checkbox styling 
 https://moderncss.dev/pure-css-custom-checkbox-style/
 */
 input[type="checkbox"] {
-  appearance: none;
-  margin: 0;
-  background-color: #fff;
-  font: inherit;
-  color: currentColor;
-  width: 1.15em;
-  height: 1.15em;
-  border: 0.15em solid currentColor;
-  border-radius: 0.15em;
-  transform: translateY(-0.075em);
-  display: grid;
-  place-content: center;
+	appearance: none;
+	margin: 0;
+	background-color: #fff;
+	font: inherit;
+	color: currentColor;
+	width: 1.15em;
+	height: 1.15em;
+	border: 0.15em solid currentColor;
+	border-radius: 0.15em;
+	transform: translateY(-0.075em);
+	display: grid;
+	place-content: center;
 }
 
 input[type="checkbox"]::before {
-  content: "";
-  width: 0.65em;
-  height: 0.65em;
-  transform: scale(0);
-  transition: 120ms transform ease-in-out;
-  box-shadow: inset 1em 1em #1f2529;
-  transform-origin: bottom left;
-  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+	content: "";
+	width: 0.65em;
+	height: 0.65em;
+	transform: scale(0);
+	transition: 120ms transform ease-in-out;
+	box-shadow: inset 1em 1em #1f2529;
+	transform-origin: bottom left;
+	clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
 }
 
 input[type="checkbox"]:checked::before {
-  transform: scale(1);
+	transform: scale(1);
 }
 
 input[type="checkbox"]:focus {
-  outline: max(2px, 0.15em) solid currentColor;
-  outline-offset: max(2px, 0.15em);
+	outline: max(2px, 0.15em) solid currentColor;
+	outline-offset: max(2px, 0.15em);
 }
 
-.form-control + .form-control {
-  margin-top: 1em;
+.form-control+.form-control {
+	margin-top: 1em;
 }
 
 :root {
-  --form-control-disabled: #959495;
+	--form-control-disabled: #959495;
 }
 
 input[type="checkbox"]:disabled {
-  --form-control-color: var(--form-control-disabled);
+	--form-control-color: var(--form-control-disabled);
 
-  color: var(--form-control-disabled);
-  cursor: not-allowed;
+	color: var(--form-control-disabled);
+	cursor: not-allowed;
 }
 
 .form-control--disabled {
-  color: var(--form-control-disabled);
-  cursor: not-allowed;
+	color: var(--form-control-disabled);
+	cursor: not-allowed;
 }
