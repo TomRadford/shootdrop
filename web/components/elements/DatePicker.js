@@ -16,10 +16,7 @@ const DatePickerTailwind = ({
 			disabled={disabled}
 			selected={date}
 			minDate={previousDate}
-			onChange={(newDate) => {
-				console.log(newDate)
-				setDate(newDate)
-			}}
+			onChange={(newDate) => setDate(newDate)}
 			selectsStart
 			startDate={date}
 			nextMonthButtonLabel=">"

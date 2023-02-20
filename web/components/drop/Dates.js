@@ -20,15 +20,13 @@ const DateOption = ({
 			<p className="text-left font-light text-gray-300">{label}</p>
 			<div>
 				{date ? (
-					<>
-						<DatePickerTailwind
-							date={date}
-							setDate={setDate}
-							startOpen={!dropDate}
-							disabled={!me || !userInDrop}
-							previousDate={previousDate}
-						/>
-					</>
+					<DatePickerTailwind
+						date={date}
+						setDate={setDate}
+						startOpen={!dropDate}
+						disabled={!me || !userInDrop}
+						previousDate={previousDate}
+					/>
 				) : (
 					<button
 						onClick={(e) => {
