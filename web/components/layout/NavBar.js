@@ -6,7 +6,6 @@ import ClientOnly from '../ClientOnly'
 import { ME } from '../../lib/apollo/queries'
 import useCheckAuth from '../../lib/hooks/checkAuth'
 import useGetMe from '../../lib/hooks/getMe'
-import { handleLogout } from '../../lib/utils'
 
 const NavLink = ({ label, link, setShowNav }) => (
 	<li className="py-2 font-bold">
@@ -19,7 +18,10 @@ const NavLink = ({ label, link, setShowNav }) => (
 )
 
 const User = ({ me }) => {
-
+	const handleLogout = () => {
+		localStorage.clear()
+		window.location = '/login'
+	}
 	return (
 		<div className="mx-auto flex flex-1 flex-row items-center justify-center gap-4 py-5">
 			{me ? (
