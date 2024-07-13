@@ -88,7 +88,7 @@ const PasswordResetPage = () => {
 
 	if (me.loading) return <Loading />
 	if (!me.loading) {
-		if (me.data.me) {
+		if (me.data?.me) {
 			//replace used instead of push
 			//to prevent /login from being
 			//added to history stack

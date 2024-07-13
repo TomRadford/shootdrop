@@ -8,7 +8,7 @@ const useCheckAuth = () => {
 	if (loading) {
 		return null
 	}
-	if (!data.me) {
+	if (!data?.me) {
 		router.push('/login')
 	}
 }

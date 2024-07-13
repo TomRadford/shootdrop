@@ -26,7 +26,7 @@ const MePage = () => {
 	const [editMe, editUserResult] = useMutation(EDIT_ME)
 	useEffect(() => {
 		if (!loading) {
-			if (data.me) {
+			if (data?.me) {
 				setUsername(data.me.username)
 				setFullName(data.me.fullName ? data.me.fullName : '')
 				setProfilePicture(data.me.profilePicture)

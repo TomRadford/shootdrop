@@ -34,7 +34,7 @@ const DropsPage = () => {
 									<section className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-16">
 										{/* ToDo: Abstract this ordering function to not be repeated for previous drops */}
 										{data.me &&
-											[...data.me.drops]
+											[...data.me?.drops]
 												.sort((a, b) => {
 													if (!a.endDate) {
 														return -1
@@ -60,7 +60,7 @@ const DropsPage = () => {
 										<h1 className="mb-10 text-lg font-semibold">Past Drops</h1>
 										<section className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-16">
 											{data.me &&
-												[...data.me.drops]
+												[...data.me?.drops]
 													.sort((a, b) => {
 														if (!a.endDate) {
 															return -1
