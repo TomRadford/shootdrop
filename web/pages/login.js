@@ -16,8 +16,18 @@ const LoginCard = () => {
 	const router = useRouter()
 	const me = useQuery(ME)
 	const [login, result] = useMutation(LOGIN, {
-		onError: (e) =>
-			setMessageData({ message: e.graphQLErrors[0].message, type: 'error' }),
+		onError: (e) => {
+			// Fix a bug caused by old bearer token sitting in existing client's local storage
+			if (
+				e.networkError?.result?.errors[0].message.includes(
+					'Context creation failed: invalid signature'
+				)
+			) {
+				localStorage.clear()
+				location.reload()
+			}
+			setMessageData({ message: e.graphQLErrors[0]?.message, type: 'error' })
+		},
 	})
 
 	if (!me.loading) {
@@ -34,6 +44,7 @@ const LoginCard = () => {
 			setMessageData({ message: 'Logging in!', type: 'info' })
 		}
 	}, [result.loading])
+
 	useEffect(() => {
 		if (result.data) {
 			const token = result.data.login.value
