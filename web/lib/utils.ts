@@ -25,3 +25,9 @@ export const isGearListItem = (
 ): gearListItem is GearListItem => {
 	return Boolean(isGearItem(gearListItem.gearItem) || gearListItem.gearList)
 }
+
+// Logout util
+export const handleLogout = () => {
+	localStorage.clear()
+	window.location = '/login'
+}
