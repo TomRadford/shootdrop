@@ -59,6 +59,12 @@ const GearItemComponent = ({
 	})
 	// ToDo: cache update
 
+	useEffect(() => {
+		if (addListItemData) {
+			setListItem(addListItemData.addListItem)
+		} // eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [addListItemData])
+
 	let gearItem: GearItem
 	if (list && isGearListItem(data)) {
 		gearItem = data.gearItem
@@ -77,12 +83,6 @@ const GearItemComponent = ({
 		//Adds new GearListItem then opens ListItem modal to edit prefs
 		addListItem({ variables: { list: listToAdd.id, gearItem: gearItem.id } })
 	}
-
-	useEffect(() => {
-		if (addListItemData) {
-			setListItem(addListItemData.addListItem)
-		} // eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [addListItemData])
 
 	return (
 		<div
