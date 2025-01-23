@@ -12,7 +12,6 @@ import useListItemStore from '../../lib/hooks/store/listItem'
 import { useEffect } from 'react'
 import { GearItem, GearList, GearListItem } from '../../__generated__/graphql'
 import { isGearItem, isGearListItem } from '../../lib/utils'
-import { isGeneratorObject } from 'util/types'
 const whitePixel =
 	'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII='
 
@@ -66,6 +65,10 @@ const GearItemComponent = ({
 	}
 	if (isGearItem(data)) {
 		gearItem = data
+	} else {
+		// Catch "empty" gear items that cause this component to throw
+		// ToDo prevent these empty items from making it this far
+		return null
 	}
 	// const gearItem = list ? data.gearItem : data
 
