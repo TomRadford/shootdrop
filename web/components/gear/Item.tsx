@@ -68,14 +68,14 @@ const GearItemComponent = ({
 	let gearItem: GearItem
 	if (list && isGearListItem(data)) {
 		gearItem = data.gearItem
-	}
-	if (isGearItem(data)) {
+	} else if (isGearItem(data)) {
 		gearItem = data
 	} else {
 		// Catch "empty" gear items that cause this component to throw
 		// ToDo prevent these empty items from making it this far
 		return null
 	}
+
 	// const gearItem = list ? data.gearItem : data
 
 	const handleAddListItem = (e: { preventDefault: () => void }) => {
