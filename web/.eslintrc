@@ -1,45 +1,38 @@
 {
-	"extends": [
-		"next/core-web-vitals",
-		"plugin:prettier/recommended"
-	],
-	"plugins": [
-		"testing-library"
-	],
-	"settings": {
-		"next": {
-			"rootDir": [
-				"apps/*/",
-				"packages/*/"
-			]
-		}
-	},
-	"rules": {
-		"@next/next/no-html-link-for-pages": "off",
-		"@next/next/no-img-element": "off",
-		"react/no-unescaped-entities": "off",
-		"react-hooks/exhaustive-deps": "off",
-		"prettier/prettier": [
-			"error",
-			{
-				"useTabs": true,
-				"tabWidth": 2,
-				"singleQuote": true,
-				"semi": false,
-				"endOfLine": "auto"
-			}
-		]
-	},
-	"overrides": [
-		// Only uses Testing Library lint rules in test files
-		{
-			"files": [
-				"**/__tests__/**/*.[jt]s?(x)",
-				"**/?(*.)+(spec|test).[jt]s?(x)"
-			],
-			"extends": [
-				"plugin:testing-library/react"
-			]
-		}
-	]
+  "extends": [
+    "next/core-web-vitals"
+    // "plugin:prettier/recommended"
+  ],
+  "plugins": ["testing-library"],
+  "settings": {
+    "next": {
+      "rootDir": ["apps/*/", "packages/*/"]
+    }
+  },
+  "rules": {
+    "@next/next/no-html-link-for-pages": "off",
+    "@next/next/no-img-element": "off",
+    "react/no-unescaped-entities": "off",
+    "react-hooks/exhaustive-deps": "off"
+    // "prettier/prettier": [
+    //   "error",
+    //   {
+    //     "useTabs": true,
+    //     "tabWidth": 2,
+    //     "singleQuote": true,
+    //     "semi": false,
+    //     "endOfLine": "auto"
+    //   }
+    // ]
+  },
+  "overrides": [
+    // Only uses Testing Library lint rules in test files
+    {
+      "files": [
+        "**/__tests__/**/*.[jt]s?(x)",
+        "**/?(*.)+(spec|test).[jt]s?(x)"
+      ],
+      "extends": ["plugin:testing-library/react"]
+    }
+  ]
 }
