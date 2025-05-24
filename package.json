@@ -1,22 +1,21 @@
 {
-	"name": "shootdrop",
-	"version": "1.0.0",
-	"description": "Shoot asset list creation made easy",
-	"main": "index.js",
-	"scripts": {
-		"postinstall": "(cd api && npm install)",
-		"api-lint": "(cd api && eslint .)",
-		"api-dev": "(cd api && npm run dev)",
-		"web-dev": " (cd web && npm run dev)"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/TomRadford/shootdrop.git"
-	},
-	"author": "",
-	"license": "ISC",
-	"bugs": {
-		"url": "https://github.com/TomRadford/shootdrop/issues"
-	},
-	"homepage": "https://github.com/TomRadford/shootdrop#readme"
+  "name": "shootdrop",
+  "version": "1.0.0",
+  "description": "Shoot asset list creation made easy",
+  "scripts": {
+    "postinstall": "(cd api && npm install)",
+    "api-lint": "(cd api && eslint .)",
+    "api-dev": "(cd api && npm run dev)",
+    "web-dev": " (cd web && npm run dev)"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TomRadford/shootdrop.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TomRadford/shootdrop/issues"
+  },
+  "homepage": "https://github.com/TomRadford/shootdrop#readme"
 }
