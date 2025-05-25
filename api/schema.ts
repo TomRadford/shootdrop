@@ -1,4 +1,4 @@
-const { gql } = require('apollo-server-core')
+import gql from 'graphql-tag'
 
 const typeDefs = gql`
 	scalar Date

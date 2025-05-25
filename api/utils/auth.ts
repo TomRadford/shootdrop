@@ -1,20 +1,32 @@
-import { AuthenticationError, UserInputError } from 'apollo-server-core'
+import { GraphQLError } from 'graphql'
 
 const checkAuth = (context) => {
 	const { currentUser } = context
 	if (!currentUser) {
-		throw new AuthenticationError('User not authenticated')
+		throw new GraphQLError('User not authenticated', {
+			extensions: {
+				code: 'UNAUTHENTICATED',
+			},
+		})
 	}
 }
 
 const checkDropPermissions = (context, existingDrop) => {
 	const { currentUser } = context
 	if (!existingDrop) {
-		throw new UserInputError('Drop does not exist')
+		throw new GraphQLError('Drop does not exist', {
+			extensions: {
+				code: 'BAD_USER_INPUT',
+			},
+		})
 	}
 	const canAdd = existingDrop.users.includes(currentUser._id)
 	if (!canAdd) {
-		throw new UserInputError('User is not part of this drop')
+		throw new GraphQLError('User is not part of this drop', {
+			extensions: {
+				code: 'BAD_USER_INPUT',
+			},
+		})
 	}
 }
 

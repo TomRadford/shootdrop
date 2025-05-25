@@ -1,5 +1,5 @@
-import { UserInputError, AuthenticationError } from 'apollo-server-core'
-import { GraphQLScalarType, Kind } from 'graphql'
+import { GraphQLScalarType, GraphQLError, Kind } from 'graphql'
+import { ApolloServerErrorCode } from '@apollo/server/errors'
 import mongoose from 'mongoose'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
@@ -111,7 +111,11 @@ const resolvers = {
 			const { name, category } = args
 			const existingTag = await Tag.findOne({ name: name.toLowerCase() })
 			if (existingTag) {
-				throw new UserInputError('Tag already exists')
+				throw new GraphQLError('Tag already exists', {
+					extensions: {
+						code: ApolloServerErrorCode.BAD_USER_INPUT,
+					},
+				})
 			}
 			const newTag = new Tag({
 				name: name.toLowerCase(),
@@ -182,7 +186,11 @@ const resolvers = {
 					.populate('tags')
 					.populate('images')
 			} catch (e) {
-				throw new UserInputError('Editing Gear Item failed with error: ' + e)
+				throw new GraphQLError('Editing Gear Item failed with error: ' + e, {
+					extensions: {
+						code: ApolloServerErrorCode.BAD_USER_INPUT,
+					},
+				})
 			}
 		},
 		addGearPref: async (root, args, context) => {
@@ -205,7 +213,11 @@ const resolvers = {
 					{ returnDocument: 'after' }
 				)
 			} catch (e) {
-				throw new UserInputError(e)
+				throw new GraphQLError('Editing Gear Pref failed with error: ' + e, {
+					extensions: {
+						code: ApolloServerErrorCode.BAD_USER_INPUT,
+					},
+				})
 			}
 		},
 		removeGearPref: async (root, args, context) => {
@@ -229,7 +241,11 @@ const resolvers = {
 
 				return prefToDelete.id
 			} catch (e) {
-				throw new UserInputError(e)
+				throw new GraphQLError('Removing Gear Pref failed with error: ' + e, {
+					extensions: {
+						code: ApolloServerErrorCode.BAD_USER_INPUT,
+					},
+				})
 			}
 		},
 
@@ -253,7 +269,11 @@ const resolvers = {
 					{ returnDocument: 'after' }
 				).populate('allOpts')
 			} catch (e) {
-				throw new UserInputError(e)
+				throw new GraphQLError('Adding Gear Pref Opt failed with error: ' + e, {
+					extensions: {
+						code: ApolloServerErrorCode.BAD_USER_INPUT,
+					},
+				})
 			}
 		},
 		editGearPrefOpt: async (root, args, context) => {
@@ -273,7 +293,14 @@ const resolvers = {
 					{ returnDocument: 'after' }
 				)
 			} catch (e) {
-				throw new UserInputError(e)
+				throw new GraphQLError(
+					'Editing Gear Pref Opt failed with error: ' + e,
+					{
+						extensions: {
+							code: ApolloServerErrorCode.BAD_USER_INPUT,
+						},
+					}
+				)
 			}
 		},
 		removeGearPrefOpt: async (root, args, context) => {
@@ -307,7 +334,14 @@ const resolvers = {
 					{ returnDocument: 'after' }
 				).populate('allOpts')
 			} catch (e) {
-				throw new UserInputError(e)
+				throw new GraphQLError(
+					'Removing Gear Pref Opt failed with error: ' + e,
+					{
+						extensions: {
+							code: ApolloServerErrorCode.BAD_USER_INPUT,
+						},
+					}
+				)
 			}
 		},
 		addGearImage: async (root, args, context) => {
@@ -332,7 +366,11 @@ const resolvers = {
 			checkAuth(context)
 			const gearImage = await GearImage.findById(args.id)
 			if (!gearImage) {
-				throw new UserInputError('Gear image does not exist')
+				throw new GraphQLError('Gear image does not exist', {
+					extensions: {
+						code: ApolloServerErrorCode.BAD_USER_INPUT,
+					},
+				})
 			}
 			await deleteS3Object(
 				`gear/${args.gearItem}`,
@@ -381,7 +419,11 @@ const resolvers = {
 			const drop = await Drop.findById(args.drop)
 
 			if (!drop) {
-				throw new UserInputError('Drop not found')
+				throw new GraphQLError('Drop not found', {
+					extensions: {
+						code: ApolloServerErrorCode.BAD_USER_INPUT,
+					},
+				})
 			}
 
 			checkDropPermissions(context, drop)
@@ -393,7 +435,11 @@ const resolvers = {
 				})
 				await GearList.deleteMany({ drop: args.drop })
 			} catch (e) {
-				throw new UserInputError('Delete error:', e)
+				throw new GraphQLError('Delete error: ' + e, {
+					extensions: {
+						code: ApolloServerErrorCode.BAD_USER_INPUT,
+					},
+				})
 			}
 			return true
 		},
@@ -420,7 +466,11 @@ const resolvers = {
 			checkAuth(context)
 			const existingGearList = await GearList.findById(args.id)
 			if (!existingGearList) {
-				throw new UserInputError('List does not exist')
+				throw new GraphQLError('List does not exist', {
+					extensions: {
+						code: ApolloServerErrorCode.BAD_USER_INPUT,
+					},
+				})
 			}
 			const parentDrop = await Drop.findOne({ lists: existingGearList })
 			checkDropPermissions(context, parentDrop)
@@ -439,7 +489,11 @@ const resolvers = {
 			checkAuth(context)
 			const listToDelete = await GearList.findById(args.id)
 			if (!listToDelete) {
-				throw new UserInputError('List does not exist')
+				throw new GraphQLError('List does not exist', {
+					extensions: {
+						code: ApolloServerErrorCode.BAD_USER_INPUT,
+					},
+				})
 			}
 			const parentDrop = await Drop.findOne({ lists: listToDelete })
 			checkDropPermissions(context, parentDrop)
@@ -451,10 +505,11 @@ const resolvers = {
 				await listToDelete.delete()
 				return true
 			} catch (e) {
-				throw new UserInputError(
-					'Failed to remove list with error: ',
-					e.message
-				)
+				throw new GraphQLError('Failed to remove list with error: ' + e, {
+					extensions: {
+						code: ApolloServerErrorCode.BAD_USER_INPUT,
+					},
+				})
 			}
 		},
 
@@ -464,7 +519,11 @@ const resolvers = {
 			checkAuth(context)
 			const listToAdd = await GearList.findById(args.list)
 			if (!listToAdd) {
-				throw new UserInputError('List does not exist')
+				throw new GraphQLError('List does not exist', {
+					extensions: {
+						code: ApolloServerErrorCode.BAD_USER_INPUT,
+					},
+				})
 			}
 			const parentDrop = await Drop.findOne({ lists: listToAdd })
 			checkDropPermissions(context, parentDrop)
@@ -522,7 +581,11 @@ const resolvers = {
 			checkAuth(context)
 			const listToEdit = await GearList.findById(args.list)
 			if (!listToEdit) {
-				throw new UserInputError('List does not exist')
+				throw new GraphQLError('List does not exist', {
+					extensions: {
+						code: ApolloServerErrorCode.BAD_USER_INPUT,
+					},
+				})
 			}
 			const parentDrop = await Drop.findOne({ lists: listToEdit })
 			checkDropPermissions(context, parentDrop)
@@ -549,7 +612,11 @@ const resolvers = {
 				}
 				return await listItem.save()
 			} catch {
-				throw new UserInputError('List item does not exist')
+				throw new GraphQLError('List item does not exist', {
+					extensions: {
+						code: ApolloServerErrorCode.BAD_USER_INPUT,
+					},
+				})
 			}
 		},
 
@@ -557,7 +624,11 @@ const resolvers = {
 			checkAuth(context)
 			const listToEdit = await GearList.findById(args.list)
 			if (!listToEdit) {
-				throw new UserInputError('List does not exist')
+				throw new GraphQLError('List does not exist', {
+					extensions: {
+						code: ApolloServerErrorCode.BAD_USER_INPUT,
+					},
+				})
 			}
 			const parentDrop = await Drop.findOne({ lists: listToEdit })
 			checkDropPermissions(context, parentDrop)
@@ -566,7 +637,11 @@ const resolvers = {
 				await gearListItem.delete()
 				return gearListItem.id
 			} catch {
-				throw new UserInputError('List item does not exist')
+				throw new GraphQLError('List item does not exist', {
+					extensions: {
+						code: ApolloServerErrorCode.BAD_USER_INPUT,
+					},
+				})
 			}
 		},
 
@@ -577,17 +652,25 @@ const resolvers = {
 					? false
 					: await bcrypt.compare(args.password, user.passwordHash)
 			if (!passwordCorrect) {
-				throw new UserInputError('Incorrect password')
+				throw new GraphQLError('Incorrect password', {
+					extensions: {
+						code: ApolloServerErrorCode.BAD_USER_INPUT,
+					},
+				})
 			}
 			if (!user.enabled) {
-				throw new UserInputError('Account not activated yet')
+				throw new GraphQLError('Account not activated yet', {
+					extensions: {
+						code: ApolloServerErrorCode.BAD_USER_INPUT,
+					},
+				})
 			}
 			const userForToken = {
 				id: user._id,
 				username: user.username,
 			}
 			return {
-				value: jwt.sign(userForToken, config.SECRET, {
+				value: jwt.sign(userForToken, config.SECRET as any, {
 					expiresIn: 60 * 60 * 12,
 				}),
 			}
@@ -597,10 +680,18 @@ const resolvers = {
 			//Mails a token that lasts 60 min to login and change password
 			const user = await User.findOne({ username: args.username })
 			if (!user) {
-				throw new UserInputError('User account does not exist')
+				throw new GraphQLError('User account does not exist', {
+					extensions: {
+						code: ApolloServerErrorCode.BAD_USER_INPUT,
+					},
+				})
 			}
 			if (!user.enabled) {
-				throw new UserInputError('Account not activated yet')
+				throw new GraphQLError('Account not activated yet', {
+					extensions: {
+						code: ApolloServerErrorCode.BAD_USER_INPUT,
+					},
+				})
 			}
 			const userForToken = {
 				id: user._id,
@@ -608,7 +699,7 @@ const resolvers = {
 			}
 			await sendPasswordReset(
 				user,
-				jwt.sign(userForToken, config.SECRET, {
+				jwt.sign(userForToken, config.SECRET as any, {
 					expiresIn: 10 * 60,
 				})
 			)
@@ -626,9 +717,10 @@ const resolvers = {
 				})
 				const hCaptchaResult = await hcaptchaRes.json()
 				if (!hCaptchaResult.success) {
-					throw new UserInputError('Captcha invalid please try again', {
-						invalidArgs: args.captchaToken,
-						errorCodes: hCaptchaResult['error-codes'],
+					throw new GraphQLError('Captcha invalid please try again', {
+						extensions: {
+							code: ApolloServerErrorCode.BAD_USER_INPUT,
+						},
 					})
 				}
 			}
@@ -637,7 +729,11 @@ const resolvers = {
 				username: args.username.toLowerCase(),
 			})
 			if (existingUser) {
-				return new UserInputError('Account already exists')
+				throw new GraphQLError('Account already exists', {
+					extensions: {
+						code: ApolloServerErrorCode.BAD_USER_INPUT,
+					},
+				})
 			}
 			const passwordHash = await bcrypt.hash(args.password, 10)
 			const newUser = new User({
@@ -652,8 +748,10 @@ const resolvers = {
 				await sendAccountRequest(newUser)
 				return newUser
 			} catch (e) {
-				throw new UserInputError(e.message, {
-					invalidArgs: args,
+				throw new GraphQLError('Error creating user: ' + e, {
+					extensions: {
+						code: ApolloServerErrorCode.BAD_USER_INPUT,
+					},
 				})
 			}
 		},
@@ -676,8 +774,10 @@ const resolvers = {
 			try {
 				return await currentUser.save()
 			} catch (e) {
-				throw new UserInputError(e.message, {
-					invalidArgs: args,
+				throw new GraphQLError('Error editing user: ' + e, {
+					extensions: {
+						code: ApolloServerErrorCode.BAD_USER_INPUT,
+					},
 				})
 			}
 		},
@@ -710,15 +810,21 @@ const resolvers = {
 					// console.log(drop.lists[0].items)
 					return [drop]
 				} catch (e) {
-					throw new UserInputError('Error finding drop', {
-						error: e,
+					throw new GraphQLError('Error finding drop', {
+						extensions: {
+							code: ApolloServerErrorCode.BAD_USER_INPUT,
+						},
 					})
 				}
 			}
 
 			if (process.env.NODE_ENV === 'production') {
 				//placeholder to protect all drops on prod
-				throw new AuthenticationError('Unauthoized')
+				throw new GraphQLError('Unauthoized', {
+					extensions: {
+						code: 'UNAUTHENTICATED',
+					},
+				})
 			}
 
 			const drops = await Drop.find({}).populate('users').populate('lists')
@@ -730,8 +836,10 @@ const resolvers = {
 			try {
 				return await GearList.findById(args.id)
 			} catch (e) {
-				throw new UserInputError('Error finding list', {
-					error: e,
+				throw new GraphQLError('Error finding list', {
+					extensions: {
+						code: ApolloServerErrorCode.BAD_USER_INPUT,
+					},
 				})
 			}
 		},
@@ -802,7 +910,11 @@ const resolvers = {
 					nextPage,
 				}
 			} catch (e) {
-				throw new UserInputError(`Error searching: ${e}`)
+				throw new GraphQLError(`Error searching: ${e}`, {
+					extensions: {
+						code: ApolloServerErrorCode.BAD_USER_INPUT,
+					},
+				})
 			}
 		},
 
@@ -863,7 +975,11 @@ const resolvers = {
 				const tagSearch = await Tag.find(findParams).sort('name').limit(20)
 				return tagSearch
 			} catch {
-				throw new UserInputError(`Error searching for tag: ${args.tag}`)
+				throw new GraphQLError(`Error searching for tag: ${args.tag}`, {
+					extensions: {
+						code: 'INTERNAL_SERVER_ERROR',
+					},
+				})
 			}
 		},
 
@@ -940,7 +1056,11 @@ const resolvers = {
 					nextPage,
 				}
 			} catch (e) {
-				throw new UserInputError(`Error searching: ${e}`)
+				throw new GraphQLError(`Error searching: ${e}`, {
+					extensions: {
+						code: ApolloServerErrorCode.BAD_USER_INPUT,
+					},
+				})
 			}
 		},
 

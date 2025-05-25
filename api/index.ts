@@ -1,5 +1,7 @@
-import { ApolloServer } from 'apollo-server-express'
-import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core'
+import { ApolloServer } from '@apollo/server'
+import { expressMiddleware } from '@as-integrations/express5'
+import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
+
 import { makeExecutableSchema } from '@graphql-tools/schema'
 
 import { WebSocketServer } from 'ws'
@@ -38,14 +40,6 @@ const start = async () => {
 	const server = new ApolloServer({
 		schema,
 		cache: 'bounded',
-		context: async ({ req }) => {
-			const auth = req ? req.headers.authorization : null
-			if (auth && auth.toLowerCase().startsWith('bearer ')) {
-				const decodedToken = jwt.verify(auth.substring(7), config.SECRET)
-				const currentUser = await User.findById(decodedToken.id)
-				return { currentUser }
-			}
-		},
 		plugins: [
 			ApolloServerPluginDrainHttpServer({ httpServer }),
 			{
@@ -66,10 +60,24 @@ const start = async () => {
 			message: 'ShootDrop API',
 		})
 	})
-	server.applyMiddleware({
-		app,
-		path: '/graphql',
-	})
+	app.use(
+		'/graphql',
+		express.json(),
+		expressMiddleware(server, {
+			context: async ({ req }) => {
+				const auth = req ? req.headers.authorization : null
+				if (auth && auth.toLowerCase().startsWith('bearer ')) {
+					const decodedToken = jwt.verify(
+						auth.substring(7),
+						config.SECRET as any
+					) as any
+					const currentUser = await User.findById(decodedToken.id)
+					return { currentUser }
+				}
+				return {}
+			},
+		})
+	)
 	httpServer.listen(config.PORT, () => {
 		logger.info(`Server now listening on ${config.PORT}`)
 	})
