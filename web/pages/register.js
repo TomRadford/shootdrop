@@ -14,7 +14,9 @@ const RegisterCard = () => {
 	const [fullName, setFullName] = useState('')
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
-	const [captchaToken, setCaptchaToken] = useState(null)
+	const [captchaToken, setCaptchaToken] = useState(
+		process.env.NODE_ENV === 'production' ? null : 'test'
+	)
 	const captchaRef = useRef(null)
 	const [messageData, setMessageData] = useState({ message: '', type: '' })
 	const router = useRouter()
@@ -130,14 +132,16 @@ const RegisterCard = () => {
 							required
 						/>
 						<div className="mx-auto mt-2">
-							<HCaptcha
-								sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
-								onVerify={(token, ekay) => setCaptchaToken(token)}
-								onExpire={() => setCaptchaToken(null)}
-								size="compact"
-								theme="dark"
-								ref={captchaRef}
-							/>
+							{process.env.NODE_ENV === 'production' && (
+								<HCaptcha
+									sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+									onVerify={(token, ekay) => setCaptchaToken(token)}
+									onExpire={() => setCaptchaToken(null)}
+									size="compact"
+									theme="dark"
+									ref={captchaRef}
+								/>
+							)}
 						</div>
 						<Notification
 							messageData={messageData}
