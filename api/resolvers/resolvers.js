@@ -621,19 +621,21 @@ const resolvers = {
 		},
 
 		createUser: async (root, args) => {
-			const hcaptchaRes = await fetch('https://hcaptcha.com/siteverify', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded',
-				},
-				body: `response=${args.captchaToken}&secret=${config.HCAPTCHASECRET}`,
-			})
-			const hCaptchaResult = await hcaptchaRes.json()
-			if (!hCaptchaResult.success) {
-				throw new UserInputError('Captcha invalid please try again', {
-					invalidArgs: args.captchaToken,
-					errorCodes: hCaptchaResult['error-codes'],
+			if (process.env.NODE_ENV === 'production') {
+				const hcaptchaRes = await fetch('https://hcaptcha.com/siteverify', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded',
+					},
+					body: `response=${args.captchaToken}&secret=${config.HCAPTCHASECRET}`,
 				})
+				const hCaptchaResult = await hcaptchaRes.json()
+				if (!hCaptchaResult.success) {
+					throw new UserInputError('Captcha invalid please try again', {
+						invalidArgs: args.captchaToken,
+						errorCodes: hCaptchaResult['error-codes'],
+					})
+				}
 			}
 
 			const existingUser = await User.findOne({

@@ -76,28 +76,7 @@ You need [pnpm](https://pnpm.io/) as your package manager. Install it globally w
 
 You can give this a spin on your local machine by installing NodeJS version 16 or higher.
 
-Make sure you setup the following **environment variables**
-
-**Web**
-
-.env.local
-
-    NEXT_PUBLIC_API_URI= your api URI
-    NEXT_PUBLIC_RECAPTCHA_SITE_KEY= grab one at https://www.hcaptcha.com/
-
-**API**
-
-.env
-
-    DEV_MONGODB_URI= Spin up a free mongodb at https://www.mongodb.com/cloud/atlas/register
-    PORT= any
-    SECRET= any
-    HCAPTCHASECRET= grab one at https://www.hcaptcha.com/
-    SENDGRID_API_KEY= grab one at https://sendgrid.com/free/
-    SITE_ADMIN= your email
-    DEV_AWS_ACCESS_KEY_ID= Grab one from AWS console
-    DEV_AWS_SECRET_ACCESS_KEY= Grab one from AWS console
-    DEV_S3_BUCKET= S3 bucket name
+Make sure you setup the **environment variables** in .example env files
 
 **Commands for running the app locally**
 
@@ -105,16 +84,19 @@ In root directory of repo, open terminal.
 
 ```
 pnpm install
+
+pnpm dev:services
+
+# Setup local bucket
+
+chmod +x minio-setup.sh
+
+./minio-setup.sh
+
+pnpm dev:api
+
+pnpm dev:web
 ```
-
-API
-
-    pnpm dev
-
-WEB
-
-    pnpm install
-    pnpm dev
 
 ## Author
 
@@ -138,8 +120,8 @@ Give a ⭐️ if this project helped you!
 
 ## 📝 License
 
-Copyright © 2022 [Tom Radford](https://github.com/TomRadford).<br />
-This project is [GPL--3.0--only](https://github.com/TomRadford/shootdrop/blob/master/LICENSE) licensed.
+Copyright © 2025 [Tom Radford](https://github.com/TomRadford).<br />
+See license.
 
 ---
 

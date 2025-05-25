@@ -20,6 +20,11 @@ const client = new S3Client({
     accessKeyId: config.AWS_ACCESS_KEY_ID,
     secretAccessKey: config.AWS_SECRET_ACCESS_KEY,
   },
+  ...(config.IS_DEV && {
+    endpoint: "http://localhost:9000",
+    forcePathStyle: true,
+    checksumValidation: false,
+  }),
 })
 
 const generateUploadURL = async (dir, filename) => {

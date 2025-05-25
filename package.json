@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "Shoot asset list creation made easy",
   "scripts": {
-    "api-dev": "pnpm --filter api dev",
-    "web-dev": "pnpm --filter web dev"
+    "dev:api": "pnpm --filter shootdrop-api dev",
+    "dev:web": "pnpm --filter shootdrop-web dev",
+    "dev:services": "docker compose up -d",
+    "dev:down": "docker compose down"
   },
   "repository": {
     "type": "git",
