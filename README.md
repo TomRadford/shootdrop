@@ -35,7 +35,7 @@ A drop is tied to a shoot in the real world, it serves as the home for all gear-
 - Collaborators can be added here. They can edit any lists attached to the drops they're on.
 - The URL is publically sharable for everyone on the production to stay up to date.
 - Overview of all list items - giving you an idea of the shoot at a glance.
-- PDF Generation to easily print and share with production teams. 
+- PDF Generation to easily print and share with production teams.
 
 ### Lists
 
@@ -72,6 +72,8 @@ A list is tied to a drop, it consists of Gear Items in a particular category (ei
 
 ## Dev Setup
 
+You need [pnpm](https://pnpm.io/) as your package manager. Install it globally with `npm install -g pnpm` if you don't have it already.
+
 You can give this a spin on your local machine by installing NodeJS version 16 or higher.
 
 Make sure you setup the following **environment variables**
@@ -101,17 +103,18 @@ Make sure you setup the following **environment variables**
 
 In root directory of repo, open terminal.
 
+```
+pnpm install
+```
+
 API
 
-    cd api
-    npm install
-    npm run dev
+    pnpm dev
 
 WEB
 
-    cd web
-    npm install
-    npm run dev
+    pnpm install
+    pnpm dev
 
 ## Author
 
