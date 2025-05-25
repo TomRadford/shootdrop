@@ -1,8 +1,7 @@
-const config = require('./config')
-const sgMail = require('@sendgrid/mail')
-const logger = require('./logger')
-const Mailgen = require('mailgen')
-const date = new Date()
+import config from './config'
+import sgMail from '@sendgrid/mail'
+import logger from './logger'
+import Mailgen from 'mailgen'
 
 //Mailgen setup
 const mailGenerator = new Mailgen({
@@ -27,7 +26,7 @@ const sendMail = async (msg) => {
 }
 
 //Mail functions
-const sendAccountRequest = async (user) => {
+export const sendAccountRequest = async (user) => {
 	if (!user) {
 		logger.error('User missing for account request mail')
 		return
@@ -42,7 +41,7 @@ const sendAccountRequest = async (user) => {
 					user.username
 				}</strong> which requires activation.
 				<br>
-				Account created at ${date.toString()}
+				Account created at ${new Date().toString()}
 				`,
 				signature: `This mailbox isnt monitored`,
 			},
@@ -65,7 +64,7 @@ const sendAccountRequest = async (user) => {
 	}
 }
 
-const sendPasswordReset = async (user, token) => {
+export const sendPasswordReset = async (user, token) => {
 	if (!user || !token) {
 		logger.error('User and token needed for password reset mail')
 		return
@@ -101,5 +100,3 @@ const sendPasswordReset = async (user, token) => {
 		}
 	}
 }
-
-module.exports = { sendAccountRequest, sendPasswordReset }

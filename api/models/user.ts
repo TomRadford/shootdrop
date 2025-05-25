@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+import mongoose from 'mongoose'
 
 const schema = new mongoose.Schema({
 	//NB: doubles as email address
@@ -29,4 +29,7 @@ schema.set('toJSON', {
 		delete returnedObject.passwordHash
 	},
 })
-module.exports = mongoose.model('User', schema)
+
+const User = mongoose.model<typeof schema>('User', schema)
+
+export default User

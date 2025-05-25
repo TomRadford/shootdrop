@@ -1,6 +1,6 @@
-const mongoose = require('mongoose')
+import { Schema, model } from 'mongoose'
 
-const schema = new mongoose.Schema(
+const schema = new Schema(
 	{
 		project: String,
 		client: String,
@@ -11,10 +11,10 @@ const schema = new mongoose.Schema(
 		startDate: Date,
 		endDate: Date,
 		wrapDate: Date,
-		users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+		users: [{ type: Schema.Types.ObjectId, ref: 'User' }],
 		lists: [
 			{
-				type: mongoose.Schema.Types.ObjectId,
+				type: Schema.Types.ObjectId,
 				ref: 'GearList',
 			},
 		],
@@ -22,4 +22,6 @@ const schema = new mongoose.Schema(
 	{ timestamps: true }
 )
 
-module.exports = mongoose.model('Drop', schema)
+const Drop = model<typeof schema>('Drop', schema)
+
+export default Drop

@@ -1,37 +1,31 @@
-/* eslint-disable no-unused-vars */
-const { UserInputError, AuthenticationError } = require('apollo-server-core')
-const { GraphQLScalarType, Kind } = require('graphql')
-const mongoose = require('mongoose')
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcrypt')
-const { nanoid } = require('nanoid/async')
-const User = require('../models/user')
-const Drop = require('../models/drop')
-const Tag = require('../models/gear/tag')
-const { GearList, GearListItem } = require('../models/gear/list')
-const GearItem = require('../models/gear/item')
-const GearImage = require('../models/gear/image')
-const config = require('../utils/config')
-const { checkAuth, checkDropPermissions } = require('../utils/auth')
-const { handleTags } = require('../utils/tags')
-const { GearPref, GearPrefOpt } = require('../models/gear/pref')
-const {
-	handlePrefs,
-	handleEditPrefs,
-	createNewPref,
-} = require('../utils/prefs')
-const { generateUploadURL, deleteS3Object } = require('../utils/s3')
-const fetch = require('node-fetch')
-const { sendAccountRequest, sendPasswordReset } = require('../utils/mailer')
+import { UserInputError, AuthenticationError } from 'apollo-server-core'
+import { GraphQLScalarType, Kind } from 'graphql'
+import mongoose from 'mongoose'
+import jwt from 'jsonwebtoken'
+import bcrypt from 'bcrypt'
+import { nanoid } from 'nanoid/async'
+import User from '../models/user'
+import Drop from '../models/drop'
+import Tag from '../models/gear/tag'
+import { GearList, GearListItem } from '../models/gear/list'
+import GearItem from '../models/gear/item'
+import GearImage from '../models/gear/image'
+import config from '../utils/config'
+import { checkAuth, checkDropPermissions } from '../utils/auth'
+import { handleTags } from '../utils/tags'
+import { GearPref, GearPrefOpt } from '../models/gear/pref'
+import { handlePrefs, handleEditPrefs } from '../utils/prefs'
+import { generateUploadURL, deleteS3Object } from '../utils/s3'
+import { sendAccountRequest, sendPasswordReset } from '../utils/mailer'
 
 const dateScalar = new GraphQLScalarType({
 	name: 'Date',
 	description: 'Date scalar type',
 	serialize(value) {
-		return value.getTime()
+		return (value as Date).getTime()
 	},
 	parseValue(value) {
-		return new Date(value)
+		return new Date(value as string)
 	},
 	parseLiteral(ast) {
 		if (ast.kind === Kind.INT) {
@@ -83,6 +77,7 @@ const resolvers = {
 	GearList: {
 		drop: async (root, args, context) => {
 			const drop = await Drop.findById(root.drop)
+
 			return drop
 		},
 	},
@@ -1000,4 +995,4 @@ const resolvers = {
 	},
 }
 
-module.exports = resolvers
+export default resolvers

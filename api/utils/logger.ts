@@ -1,14 +1,13 @@
-/* eslint-disable no-console */
-const info = (...params) => {
+const info = (...params: any[]) => {
 	if (process.env.NODE_ENV === 'development') {
 		console.log(...params)
 	}
 }
 
-const error = (...params) => {
+const error = (...params: any[]) => {
 	if (process.env.NODE_ENV) {
 		console.error(...params)
 	}
 }
 
-module.exports = { info, error }
+export default { info, error }

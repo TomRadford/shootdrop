@@ -1,28 +1,28 @@
-const { ApolloServer } = require('apollo-server-express')
-const { ApolloServerPluginDrainHttpServer } = require('apollo-server-core')
-const { makeExecutableSchema } = require('@graphql-tools/schema')
+import { ApolloServer } from 'apollo-server-express'
+import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core'
+import { makeExecutableSchema } from '@graphql-tools/schema'
 
-const { WebSocketServer } = require('ws')
-const { useServer } = require('graphql-ws/lib/use/ws')
+import { WebSocketServer } from 'ws'
+import { useServer } from 'graphql-ws/lib/use/ws'
 
-const express = require('express')
-const http = require('http')
-const cors = require('cors')
+import express from 'express'
+import http from 'http'
+import cors from 'cors'
 
-const jwt = require('jsonwebtoken')
+import jwt from 'jsonwebtoken'
 
-const mongoose = require('mongoose')
-const User = require('./models/user')
+import mongoose from 'mongoose'
+import User from './models/user'
 
-const typeDefs = require('./schema')
-const resolvers = require('./resolvers/resolvers')
+import typeDefs from './schema'
+import resolvers from './resolvers/resolvers'
 
-const logger = require('./utils/logger')
-const config = require('./utils/config')
+import logger from './utils/logger'
+import config from './utils/config'
 
 logger.info('Connecting to mongoDB')
 mongoose
-	.connect(config.MONGODB_URI)
+	.connect(config.MONGODB_URI as string)
 	.then(() => logger.info('Connected to MongoDB'))
 	.catch((e) => logger.error('Error connecting to MongoDB: ', e.message))
 

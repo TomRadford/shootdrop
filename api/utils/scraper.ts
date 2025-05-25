@@ -1,12 +1,14 @@
-const puppeteer = require('puppeteer-extra')
-const StealthPlugin = require('puppeteer-extra-plugin-stealth')
-puppeteer.use(StealthPlugin())
-const { executablePath } = require('puppeteer')
+//@ts-nocheck
 
 // WILL NOT FIX
 // Scraping/Api requests has been made unreliable as a result
 // of target site's anti-scraping/anti-bot measures
 // ToDo: relook at a later stage
+
+import puppeteer from 'puppeteer-extra'
+import StealthPlugin from 'puppeteer-extra-plugin-stealth'
+puppeteer.use(StealthPlugin())
+import { executablePath } from 'puppeteer'
 
 const startBrowser = async () => {
 	let browser
@@ -39,4 +41,4 @@ const getNewGearResults = async (searchTerm) => {
 	}
 }
 
-// module.exports = { getNewGearResults }
+// export default { getNewGearResults }

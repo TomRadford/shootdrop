@@ -1,5 +1,5 @@
-const mongoose = require('mongoose')
-const mongoosePaginate = require('mongoose-paginate-v2')
+import mongoose from 'mongoose'
+import mongoosePaginate from 'mongoose-paginate-v2'
 
 const schema = new mongoose.Schema({
 	category: [String],
@@ -27,4 +27,6 @@ const schema = new mongoose.Schema({
 
 schema.plugin(mongoosePaginate)
 
-module.exports = mongoose.model('GearItem', schema)
+const GearItem = mongoose.model<typeof schema>('GearItem', schema)
+
+export default GearItem

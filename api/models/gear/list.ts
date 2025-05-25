@@ -1,6 +1,6 @@
-const mongoose = require('mongoose')
-const aggregatePaginate = require('mongoose-aggregate-paginate-v2')
-//GearListItem
+import mongoose from 'mongoose'
+import aggregatePaginate from 'mongoose-aggregate-paginate-v2'
+
 const GearListItemSchema = new mongoose.Schema(
 	{
 		gearList: {
@@ -63,7 +63,12 @@ const GearListSchema = new mongoose.Schema(
 	}
 )
 
-module.exports = {
-	GearList: mongoose.model('GearList', GearListSchema),
-	GearListItem: mongoose.model('GearListItem', GearListItemSchema),
-}
+export const GearList = mongoose.model<typeof GearListSchema>(
+	'GearList',
+	GearListSchema
+)
+
+export const GearListItem = mongoose.model<typeof GearListItemSchema>(
+	'GearListItem',
+	GearListItemSchema
+)

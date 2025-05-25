@@ -1,4 +1,4 @@
-const { AuthenticationError, UserInputError } = require('apollo-server-core')
+import { AuthenticationError, UserInputError } from 'apollo-server-core'
 
 const checkAuth = (context) => {
 	const { currentUser } = context
@@ -18,4 +18,4 @@ const checkDropPermissions = (context, existingDrop) => {
 	}
 }
 
-module.exports = { checkAuth, checkDropPermissions }
+export { checkAuth, checkDropPermissions }
