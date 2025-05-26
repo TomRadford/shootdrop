@@ -98,6 +98,24 @@ pnpm dev:api
 pnpm dev:web
 ```
 
+### Seed db
+
+Get prod dump and then:
+
+```
+mongorestore --uri="mongodb://root:example@localhost:27017" dumps/240501_02-00
+
+# open shell
+db.createUser({
+     user: "appuser",
+     pwd: "yourpassword",
+     roles: [ { role: "readWrite", db: "shootdrop" } ]
+})
+
+DEV_MONGODB_URI=mongodb://appuser:yourpassword@localhost:27017/shootdrop
+
+```
+
 ## Author
 
 👤 **Tom Radford**
