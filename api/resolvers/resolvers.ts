@@ -53,11 +53,12 @@ const resolvers = {
 			}).populate('allOpts')
 			return gearItemPrefs
 		},
-		//Populates tags/images if they're queried
+		//Populates tags if they're queried
 		tags: async (root, args, context) => {
 			const gearItemWithTags = await root.populate('tags')
 			return gearItemWithTags.tags
 		},
+		//Populates images if they're queried
 		images: async (root, args, context) => {
 			// Skip populate on agregated requests (used for randomised request with agregate)
 			if (!root.images.toString().includes('[object Object]')) {
@@ -166,6 +167,7 @@ const resolvers = {
 				//ToDo: relook using name as tag ref on mutation
 				const tagObjects = tags ? await handleTags(tags, category) : undefined
 				if (prefs) {
+					//@ts-expect-error TODO: Mongoose upgrade
 					await handleEditPrefs(prefs, mongoose.Types.ObjectId(args.id))
 				}
 				return await GearItem.findByIdAndUpdate(
@@ -224,10 +226,12 @@ const resolvers = {
 			checkAuth(context)
 			try {
 				const prefToDelete = await GearPref.findById(args.id)
+				//@ts-expect-error TODO: Mongoose upgrade
 				await GearPrefOpt.deleteMany({ _id: { $in: prefToDelete.opts } })
 				await prefToDelete.delete()
 				//Also delete refs in GearListItem
 				const listItemsWithPref = await GearListItem.find({
+					//@ts-expect-error TODO: Mongoose upgrade
 					'prefs.pref': mongoose.Types.ObjectId(prefToDelete.id),
 				})
 
@@ -311,6 +315,7 @@ const resolvers = {
 
 				//Delete opt refs in GearListItem
 				const listItemsWithPref = await GearListItem.find({
+					//@ts-expect-error TODO: Mongoose upgrade
 					'prefs.pref': mongoose.Types.ObjectId(args.gearPref),
 				})
 				listItemsWithPref.forEach(async (listItem) => {
@@ -318,6 +323,7 @@ const resolvers = {
 						return {
 							pref: pref.pref,
 							opts: pref.opts.filter((opt) => opt.toString() !== args.id),
+							//@ts-expect-error TODO: Mongoose upgrade
 							_id: pref._id,
 						}
 					})
@@ -456,6 +462,7 @@ const resolvers = {
 				drop: existingDrop, //List page
 			})
 
+			//@ts-expect-error TODO: Mongoose upgrade
 			existingDrop.lists.push(newGearList)
 			await existingDrop.save()
 
@@ -499,6 +506,7 @@ const resolvers = {
 			checkDropPermissions(context, parentDrop)
 			try {
 				parentDrop.lists = parentDrop.lists.filter(
+					//@ts-expect-error TODO: Mongoose upgrade
 					(list) => list !== listToDelete
 				)
 				await parentDrop.save()
@@ -547,7 +555,9 @@ const resolvers = {
 							//ToDo: relook at pref getting added here as existing would be overriten
 							//for now client does not alter prefs on add so can be ignored
 							return {
+								//@ts-expect-error TODO: Mongoose upgrade
 								pref: mongoose.Types.ObjectId(pref.id),
+								//@ts-expect-error TODO: Mongoose upgrade
 								opts: pref.opts.map((opt) => mongoose.Types.ObjectId(opt)),
 							}
 					  })
@@ -566,7 +576,9 @@ const resolvers = {
 					prefs: prefs
 						? prefs.map((pref) => {
 								return {
+									//@ts-expect-error TODO: Mongoose upgrade
 									pref: mongoose.Types.ObjectId(pref.id),
+									//@ts-expect-error TODO: Mongoose upgrade
 									opts: pref.opts.map((opt) => mongoose.Types.ObjectId(opt)),
 								}
 						  })
@@ -605,7 +617,9 @@ const resolvers = {
 				if (prefs) {
 					listItem.prefs = prefs.map((pref) => {
 						return {
+							//@ts-expect-error TODO: Mongoose upgrade
 							pref: mongoose.Types.ObjectId(pref.id),
+							//@ts-expect-error TODO: Mongoose upgrade
 							opts: pref.opts.map((opt) => mongoose.Types.ObjectId(opt)),
 						}
 					})
@@ -849,11 +863,14 @@ const resolvers = {
 				let options = {}
 
 				if (args.limit) {
+					//@ts-expect-error TODO: Mongoose upgrade
 					options.limit = args.limit
 				} else {
+					//@ts-expect-error TODO: Mongoose upgrade
 					options.limit = 16
 				}
 				if (args.offset) {
+					//@ts-expect-error TODO: Mongoose upgrade
 					options.offset = args.offset
 				}
 
@@ -875,6 +892,7 @@ const resolvers = {
 
 				if (args.list) {
 					aggregateParams.push({
+						//@ts-expect-error TODO: Mongoose upgrade
 						$match: {
 							gearList: new mongoose.Types.ObjectId(args.list),
 						},
@@ -883,17 +901,21 @@ const resolvers = {
 
 				if (args.tags) {
 					aggregateParams.push({
+						//@ts-expect-error TODO: Mongoose upgrade
 						$match: {
 							'gearItem.tags': {
+								//@ts-expect-error TODO: Mongoose upgrade
 								$all: args.tags.map((tag) => mongoose.Types.ObjectId(tag)),
 							},
 						},
 					})
 				}
 
+				//@ts-expect-error TODO: Mongoose upgrade
 				options.sort = { _id: -1 }
 				const gearListItemAggregate = GearListItem.aggregate(aggregateParams)
 
+				//@ts-expect-error TODO: Mongoose upgrade
 				const paginatedResults = await GearListItem.aggregatePaginate(
 					gearListItemAggregate,
 					options
@@ -924,6 +946,7 @@ const resolvers = {
 				// in that array in order of request array
 				// using mongodb aggregation pipeline
 				if (args.tags) {
+					//@ts-expect-error TODO: Mongoose upgrade
 					const tags = args.tags.map((tag) => mongoose.Types.ObjectId(tag))
 					const res = await Tag.aggregate([
 						{
@@ -1019,31 +1042,40 @@ const resolvers = {
 			try {
 				const searchTerms = {}
 				if (args.manufacturer) {
+					//@ts-expect-error TODO: Mongoose upgrade
 					searchTerms.manufacturer = {
 						$regex: args.manufacturer,
 						$options: 'i',
 					}
 				}
 				if (args.model) {
+					//@ts-expect-error TODO: Mongoose upgrade
 					searchTerms.model = { $regex: args.model, $options: 'i' }
 				}
 				if (args.category) {
+					//@ts-expect-error TODO: Mongoose upgrade
 					searchTerms.category = { $in: [args.category] }
 				}
 				if (args.tags) {
+					//@ts-expect-error TODO: Mongoose upgrade
 					searchTerms.tags = { $all: args.tags }
 				}
 				let options = {}
 				if (args.limit) {
+					//@ts-expect-error TODO: Mongoose upgrade
 					options.limit = args.limit
 				} else {
+					//@ts-expect-error TODO: Mongoose upgrade
 					options.limit = 16
 				}
 				if (args.offset) {
+					//@ts-expect-error TODO: Mongoose upgrade
 					options.offset = args.offset
 				}
 				//Sort by most recently added
+				//@ts-expect-error TODO: Mongoose upgrade
 				options.sort = { _id: -1 }
+				//@ts-expect-error TODO: Mongoose upgrade
 				const paginatedResults = await GearItem.paginate(searchTerms, options)
 				const { totalDocs, totalPages, page, prevPage, nextPage } =
 					paginatedResults
