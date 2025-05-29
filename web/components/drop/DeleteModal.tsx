@@ -1,7 +1,7 @@
 import { Fragment, useState } from 'react'
 import { Transition, Dialog } from '@headlessui/react'
 import { Dispatch, SetStateAction } from 'react'
-import { Drop, GearList } from '../../__generated__/graphql'
+import { Drop, GearList, Maybe } from '../../__generated__/graphql'
 import { useMutation } from '@apollo/client'
 import {
 	ALL_DROPS,
@@ -22,16 +22,21 @@ const DeleteModal = ({
 	setDeleteModalOpen: Dispatch<SetStateAction<boolean>>
 	drop: Drop
 	list?: GearList
-	setListToDelete: Dispatch<SetStateAction<GearList>>
+	setListToDelete: Dispatch<SetStateAction<GearList | undefined>>
 }) => {
 	const router = useRouter()
 	const [removeDrop, removeDropResult] = useMutation(REMOVE_DROP, {
 		update: (cache, response) => {
-			cache.updateQuery({ query: ME_DROPS }, ({ me }: { me: User }) => {
+			cache.updateQuery({ query: ME_DROPS }, (data: { me: User } | null) => {
+				if (!data) return null
+
 				return {
 					me: {
-						...me,
-						drops: me.drops.filter((userDrop) => userDrop.id !== drop.id),
+						...data.me,
+						drops:
+							data.me?.drops?.filter(
+								(userDrop: Maybe<Drop>) => userDrop?.id !== drop?.id
+							) ?? [],
 					},
 				}
 			})
@@ -45,14 +50,16 @@ const DeleteModal = ({
 		update: (cache, response) => {
 			cache.updateQuery(
 				{ query: ALL_DROPS, variables: { drop: drop.id } },
-				({ allDrops }: { allDrops: Drop[] }) => {
-					const dropToUpdate = allDrops[0]
+				(data: { allDrops: Drop[] } | null) => {
+					if (!data) return null
+					const dropToUpdate = data.allDrops[0]
 					return {
 						allDrops: [
 							{
 								...dropToUpdate,
-								lists: dropToUpdate.lists.filter(
-									(listInstance) => listInstance.id !== list.id
+								lists: dropToUpdate?.lists?.filter(
+									(listInstance: Maybe<GearList>) =>
+										listInstance?.id !== list?.id
 								),
 							},
 						],
@@ -125,7 +132,7 @@ const DeleteModal = ({
 										<span className="font-bold">
 											{!list
 												? drop.project
-												: `the ${list.category.toLowerCase()} list`}
+												: `the ${list?.category?.toLowerCase()} list`}
 										</span>
 										?
 									</h4>
@@ -134,7 +141,7 @@ const DeleteModal = ({
 									{(removeDropResult.error || removeListResult.error) && (
 										<p className="mb-5 text-red-600">
 											{removeDropResult.error?.message ||
-												removeListResult.error.message}
+												removeListResult.error?.message}
 										</p>
 									)}
 
