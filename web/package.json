@@ -20,9 +20,8 @@
 		"@apollo/client": "^3.7.0",
 		"@hcaptcha/react-hcaptcha": "^1.4.4",
 		"@headlessui/react": "^1.7.3",
-		"@react-pdf/renderer": "^3.0.2",
+		"@react-pdf/renderer": "^4.3.0",
 		"@tailwindcss/forms": "^0.5.3",
-		"@types/react-pdf": "^6.2.0",
 		"@vercel/analytics": "^0.1.8",
 		"axios": "^1.1.2",
 		"date-fns": "^2.29.3",
@@ -47,6 +46,7 @@
 	"devDependencies": {
 		"@graphql-codegen/cli": "^2.16.4",
 		"@graphql-codegen/client-preset": "^1.2.6",
+		"@graphql-typed-document-node/core": "^3.2.0",
 		"@types/node": "18.11.18",
 		"@types/react": "18.0.26",
 		"@types/react-datepicker": "^4.8.0",
