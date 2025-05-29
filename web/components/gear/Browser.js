@@ -136,8 +136,11 @@ const GearBrowser = ({ listToAdd, list }) => {
 											{userInDrop ? (
 												<>
 													No items yet,
-													<Link href={`/list/${list.id}/add`}>
-														<a className="font-bold"> add something! </a>
+													<Link
+														href={`/list/${list.id}/add`}
+														className="font-bold"
+													>
+														add something!
 													</Link>
 												</>
 											) : (
@@ -177,51 +180,47 @@ const GearBrowser = ({ listToAdd, list }) => {
 						<div className="flex w-full max-w-4xl justify-between py-16 px-4 pb-4 md:pb-10">
 							<div>
 								{list ? (
-									<Link href={`/drops/${list.drop.id}`}>
-										<a className="flex gap-2">
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												fill="none"
-												viewBox="0 0 24 24"
-												strokeWidth={2}
-												stroke="currentColor"
-												className="h-6 w-6"
-											>
-												<path
-													strokeLinecap="round"
-													strokeLinejoin="round"
-													d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
-												/>
-											</svg>
-											Back to Drop
-										</a>
+									<Link href={`/drops/${list.drop.id}`} className="flex gap-2">
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											fill="none"
+											viewBox="0 0 24 24"
+											strokeWidth={2}
+											stroke="currentColor"
+											className="h-6 w-6"
+										>
+											<path
+												strokeLinecap="round"
+												strokeLinejoin="round"
+												d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
+											/>
+										</svg>
+										Back to Drop
 									</Link>
 								) : (
-									<Link href={`/list/${listToAdd.id}`}>
-										<a className="flex gap-2">
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												fill="none"
-												viewBox="0 0 24 24"
-												strokeWidth={2}
-												stroke="currentColor"
-												className="h-6 w-6"
-											>
-												<path
-													strokeLinecap="round"
-													strokeLinejoin="round"
-													d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
-												/>
-											</svg>
-											Back to List
-										</a>
+									<Link href={`/list/${listToAdd.id}`} className="flex gap-2">
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											fill="none"
+											viewBox="0 0 24 24"
+											strokeWidth={2}
+											stroke="currentColor"
+											className="h-6 w-6"
+										>
+											<path
+												strokeLinecap="round"
+												strokeLinejoin="round"
+												d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
+											/>
+										</svg>
+										Back to List
 									</Link>
 								)}
 							</div>
 							{list && userInDrop ? (
 								<div>
-									<Link href={`/list/${list.id}/add`}>
-										<a className="flex gap-2">Add Items +</a>
+									<Link href={`/list/${list.id}/add`} className="flex gap-2">
+										Add Items +
 									</Link>
 								</div>
 							) : null}

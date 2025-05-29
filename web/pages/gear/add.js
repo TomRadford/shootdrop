@@ -31,8 +31,8 @@ const AddGearPage = () => {
 											<ul className="mt-2 flex flex-col gap-2">
 												<li>
 													<span>1.</span> The gear doesn't{' '}
-													<Link href="/gear">
-														<a className="font-bold">already exist</a>
+													<Link href="/gear" className="font-bold">
+														already exist
 													</Link>
 													.
 												</li>
@@ -57,10 +57,8 @@ const AddGearPage = () => {
 													<br />
 													<span className="font-light">
 														We're hoping to build up an{' '}
-														<Link href="/gear">
-															<a className="font-medium">
-																awesome database of cine gear
-															</a>
+														<Link href="/gear" className="font-bold">
+															awesome database of cine gear
 														</Link>
 														, making gear-listing easier. Know that it wouldn't
 														be possible without you, awesome person!

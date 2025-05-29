@@ -92,72 +92,70 @@ const DropListInfo = ({
 							</button>
 						)}
 						<Link href={`/list/${listEntry.id}`}>
-							<a>
-								<div className="pb-13 flex flex-col gap-1 px-4 py-2 ">
-									<h3 className="text-md text-left font-semibold">
-										{`${category[0]}${category.slice(1).toLowerCase()}`}
-									</h3>
-									<p className="text-left text-sm font-light text-gray-300">
-										{listEntry.comment}
+							<div className="pb-13 flex flex-col gap-1 px-4 py-2 ">
+								<h3 className="text-md text-left font-semibold">
+									{`${category[0]}${category.slice(1).toLowerCase()}`}
+								</h3>
+								<p className="text-left text-sm font-light text-gray-300">
+									{listEntry.comment}
+								</p>
+								{itemsLoading ? (
+									<div className="flex -space-x-3 md:-space-x-2">
+										{[...new Array(5)].map((a, i) => (
+											<div
+												key={i}
+												className="z-10 flex h-[30px] w-[30px] animate-pulse items-center justify-center rounded-full bg-gray-800 text-[10px]"
+											></div>
+										))}
+									</div>
+								) : itemsData && itemsData.getListItems.totalDocs === 0 ? (
+									<p className="mb-2 text-left text-sm font-light text-gray-300">
+										No items yet
 									</p>
-									{itemsLoading ? (
+								) : (
+									itemsData && (
 										<div className="flex -space-x-3 md:-space-x-2">
-											{[...new Array(5)].map((a, i) => (
-												<div
-													key={i}
-													className="z-10 flex h-[30px] w-[30px] animate-pulse items-center justify-center rounded-full bg-gray-800 text-[10px]"
-												></div>
-											))}
-										</div>
-									) : itemsData && itemsData.getListItems.totalDocs === 0 ? (
-										<p className="mb-2 text-left text-sm font-light text-gray-300">
-											No items yet
-										</p>
-									) : (
-										itemsData && (
-											<div className="flex -space-x-3 md:-space-x-2">
-												{itemsData.getListItems.gearListItems.map(
-													(listItem: GearListItem, i) => {
-														if (i < 12) {
+											{itemsData.getListItems.gearListItems.map(
+												(listItem: GearListItem, i) => {
+													if (i < 12) {
+														return (
+															<Image
+																alt={listItem.gearItem.model}
+																src={
+																	listItem.gearItem.images[0]
+																		? listItem.gearItem.images[0].url
+																		: `/img/default_gear.jpg`
+																}
+																width="30"
+																height="30"
+																objectFit="cover"
+																className="rounded-full"
+																key={listItem.id}
+															/>
+														)
+													} else {
+														if (i === 12) {
 															return (
-																<Image
-																	alt={listItem.gearItem.model}
-																	src={
-																		listItem.gearItem.images[0]
-																			? listItem.gearItem.images[0].url
-																			: `/img/default_gear.jpg`
-																	}
-																	width="30px"
-																	height="30px"
-																	objectFit="cover"
-																	className="rounded-full"
-																	key={listItem.id}
-																/>
+																<div
+																	key={listItem.id} //ToDo: double check this works okay on rerenders
+																	className="z-10 flex h-[30px] w-[30px] items-center justify-center rounded-full bg-gray-800 text-[10px]"
+																>
+																	+{itemsData.getListItems.totalDocs - 8}
+																</div>
 															)
-														} else {
-															if (i === 12) {
-																return (
-																	<div
-																		key={listItem.id} //ToDo: double check this works okay on rerenders
-																		className="z-10 flex h-[30px] w-[30px] items-center justify-center rounded-full bg-gray-800 text-[10px]"
-																	>
-																		+{itemsData.getListItems.totalDocs - 8}
-																	</div>
-																)
-															}
 														}
 													}
-												)}
-											</div>
-										)
-									)}
-									<p className="text-right text-[8px] font-light">
-										Last edited{' '}
-										{formatDistance(new Date(listEntry.updatedAt), new Date())}{' '}
-										ago
-									</p>
-								</div>
-							</a>
+												}
+											)}
+										</div>
+									)
+								)}
+								<p className="text-right text-[8px] font-light">
+									Last edited{' '}
+									{formatDistance(new Date(listEntry.updatedAt), new Date())}{' '}
+									ago
+								</p>
+							</div>
 						</Link>
 					</Card>
 				</div>

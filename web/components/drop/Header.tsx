@@ -110,8 +110,8 @@ const DropHeader = ({
 													: `/img/default_user.png`
 											}
 											key={user.id}
-											width="30px"
-											height="30px"
+											width="30"
+											height="30"
 											className={`rounded-full`}
 											objectFit="cover"
 											alt={user.fullName}

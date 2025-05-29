@@ -39,24 +39,25 @@ const DropPdfPage = () => {
 								<NoSsrWrapper>
 									<div className="flex w-full flex-col pt-12 md:pt-0">
 										<div className="mx-8 flex justify-between pt-6">
-											<Link href={`/drops/${fullDrop.id}`}>
-												<a className="flex gap-2">
-													<svg
-														xmlns="http://www.w3.org/2000/svg"
-														fill="none"
-														viewBox="0 0 24 24"
-														strokeWidth={2}
-														stroke="currentColor"
-														className="h-6 w-6"
-													>
-														<path
-															strokeLinecap="round"
-															strokeLinejoin="round"
-															d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
-														/>
-													</svg>
-													Back to Drop
-												</a>
+											<Link
+												className="flex gap-2"
+												href={`/drops/${fullDrop.id}`}
+											>
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													fill="none"
+													viewBox="0 0 24 24"
+													strokeWidth={2}
+													stroke="currentColor"
+													className="h-6 w-6"
+												>
+													<path
+														strokeLinecap="round"
+														strokeLinejoin="round"
+														d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
+													/>
+												</svg>
+												Back to Drop
 											</Link>
 
 											<PDFDownloadLink

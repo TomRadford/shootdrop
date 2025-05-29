@@ -96,37 +96,36 @@ const GearItemComponent = ({
 				{/* ToDo: Consider target blank to open new tab
 				Disadvantage would be reloading app in new tab
 */}
-				<a>
-					<div className="relative -mb-2 overflow-hidden rounded-2xl hover:cursor-pointer">
-						{gearItem.images.length > 0 ? (
-							<>
-								<Image
-									src={gearItem.images[0].url}
-									width="300px"
-									height="330px"
-									objectFit="cover"
-									placeholder="blur"
-									blurDataURL={whitePixel}
-									alt={gearItem.model}
-								/>
-							</>
-						) : (
+
+				<div className="relative -mb-2 overflow-hidden rounded-2xl hover:cursor-pointer">
+					{gearItem.images.length > 0 ? (
+						<>
 							<Image
-								src={`/img/default_gear.jpg`}
-								width="300px"
-								height="330px"
+								src={gearItem.images[0].url}
+								width="300"
+								height="330"
 								objectFit="cover"
 								placeholder="blur"
 								blurDataURL={whitePixel}
 								alt={gearItem.model}
 							/>
-						)}
-						<div className="absolute bottom-[6px] flex w-full flex-col bg-gradient-to-t from-[#000000b9] to-transparent px-3 pb-2 pt-12 text-left ">
-							<h3 className="font-bold">{gearItem.manufacturer}</h3>
-							<h3>{gearItem.model}</h3>
-						</div>
+						</>
+					) : (
+						<Image
+							src={`/img/default_gear.jpg`}
+							width="300"
+							height="330"
+							objectFit="cover"
+							placeholder="blur"
+							blurDataURL={whitePixel}
+							alt={gearItem.model}
+						/>
+					)}
+					<div className="absolute bottom-[6px] flex w-full flex-col bg-gradient-to-t from-[#000000b9] to-transparent px-3 pb-2 pt-12 text-left ">
+						<h3 className="font-bold">{gearItem.manufacturer}</h3>
+						<h3>{gearItem.model}</h3>
 					</div>
-				</a>
+				</div>
 			</Link>
 			{listToAdd && (
 				<button className="my-3 font-bold" onClick={handleAddListItem}>
@@ -165,8 +164,8 @@ const GearItemComponent = ({
 										? data.userThatUpdated.profilePicture
 										: '/img/default_user.png'
 								}
-								height="20px"
-								width="20px"
+								height="20"
+								width="20"
 								alt={data.userThatUpdated.fullName}
 							/>
 							<div className="absolute top-7 -left-3 z-10 rounded-md bg-black bg-opacity-70 p-1 opacity-0 transition-opacity  group-hover:opacity-100">

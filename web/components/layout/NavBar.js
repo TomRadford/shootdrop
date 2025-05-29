@@ -10,9 +10,7 @@ import useGetMe from '../../lib/hooks/getMe'
 const NavLink = ({ label, link, setShowNav }) => (
 	<li className="py-2 font-bold">
 		<Link href={link}>
-			<a>
-				<button onClick={() => setShowNav(false)}>{label}</button>
-			</a>
+			<button onClick={() => setShowNav(false)}>{label}</button>
 		</Link>
 	</li>
 )
@@ -55,8 +53,8 @@ const User = ({ me }) => {
 										? me.profilePicture
 										: `/img/default_user.png`
 								}
-								width="30px"
-								height="30px"
+								width="30"
+								height="30"
 								className="rounded-full"
 								objectFit="cover"
 								alt={me.fullName}
@@ -82,12 +80,11 @@ const NavBar = () => {
 			onMouseLeave={() => setShowNav(false)}
 		>
 			<div className="px-3">
-				<Link href="/">
-					<a>
-						<button className="mx-auto inline-block justify-center text-2xl font-semibold">
-							ShootDrop
-						</button>
-					</a>
+				<Link
+					href="/"
+					className="mx-auto inline-block justify-center text-2xl font-semibold"
+				>
+					ShootDrop
 				</Link>
 				<button
 					className="fixed right-0 pt-1 pr-4 md:hidden"

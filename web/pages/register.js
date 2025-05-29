@@ -76,8 +76,8 @@ const RegisterCard = () => {
 			<div className="mb-4">
 				<h2 className="mb-3 text-xl font-semibold">
 					Register or{' '}
-					<Link href="/login">
-						<a className="font-bold underline">login</a>
+					<Link href="/login" className="font-bold underline">
+						login
 					</Link>
 				</h2>
 				{!result.data && (
@@ -176,8 +176,8 @@ const LoginPage = () => {
 						<div className="mx-auto mt-2 w-[10rem]">
 							<p className="text-[10px] font-light">
 								By registering you agree to our{' '}
-								<Link href="/terms">
-									<a className="font-semibold">Terms and privacy policy</a>
+								<Link href="/terms" className="font-semibold">
+									Terms and privacy policy
 								</Link>
 							</p>
 						</div>

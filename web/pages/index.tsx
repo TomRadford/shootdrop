@@ -265,17 +265,18 @@ const Home = ({
 				</div>
 				<div className="flex flex-col items-center justify-center bg-gradient-to-t from-gray-900 to-gray-800 px-2 pb-20 text-center">
 					<div className="mt-16 flex w-11/12 max-w-2xl flex-col items-center gap-7 lg:flex-row lg:justify-between 2xl:max-w-3xl">
-						<Link href={`/drops/${drop.id}/pdf`}>
-							<a className="h-72 w-64 overflow-hidden rounded-3xl transition-transform will-change-transform hover:scale-105 active:scale-95">
-								<Image
-									alt="PDF generated with ShootDrop"
-									src="/img/landing/pdf.jpg"
-									width={400}
-									height={1000}
-									className="animate-[scrollLanding_3s_ease-in-out_infinite_alternate]"
-									draggable={false}
-								/>
-							</a>
+						<Link
+							href={`/drops/${drop.id}/pdf`}
+							className="h-72 w-64 overflow-hidden rounded-3xl transition-transform will-change-transform hover:scale-105 active:scale-95"
+						>
+							<Image
+								alt="PDF generated with ShootDrop"
+								src="/img/landing/pdf.jpg"
+								width={400}
+								height={1000}
+								className="animate-[scrollLanding_3s_ease-in-out_infinite_alternate]"
+								draggable={false}
+							/>
 						</Link>
 						<div className="max-w-sm">
 							<p className="font-bold">PDFs</p>
@@ -309,12 +310,13 @@ const Home = ({
 				</div>
 				<div className="flex flex-col items-center justify-center bg-gradient-to-t from-gray-900 to-gray-800 px-2 pb-20 text-center">
 					<div className="mt-10 flex w-11/12 max-w-2xl flex-col-reverse items-center gap-10 lg:flex-row lg:justify-between 2xl:max-w-3xl">
-						<Link href="/gear/add">
-							<a className=" h-72 w-11/12 overflow-hidden rounded-3xl transition-transform will-change-transform hover:scale-105 active:scale-95 sm:w-96">
-								<video autoPlay muted loop>
-									<source src="/img/landing/addgear.mp4" type="video/mp4" />
-								</video>
-							</a>
+						<Link
+							href="/gear/add"
+							className=" h-72 w-11/12 overflow-hidden rounded-3xl transition-transform will-change-transform hover:scale-105 active:scale-95 sm:w-96"
+						>
+							<video autoPlay muted loop>
+								<source src="/img/landing/addgear.mp4" type="video/mp4" />
+							</video>
 						</Link>
 						<div className="max-w-sm">
 							<p className="font-bold">Something missing, add it!</p>
@@ -327,10 +329,11 @@ const Home = ({
 				<div className="relative flex bg-gradient-to-t from-black to-gray-900 pb-72 pt-40">
 					<div className=" m-auto text-center">
 						<p className=" 2xl:text-xl">Heard enough?</p>
-						<Link href="/drops/add">
-							<a className="cursor-pointer text-5xl font-bold transition-all duration-500 hover:drop-shadow-[0_2px_3px_rgba(255,255,255,0.8)] 2xl:text-6xl">
-								Make a Drop!
-							</a>
+						<Link
+							href="/drops/add"
+							className="cursor-pointer text-5xl font-bold transition-all duration-500 hover:drop-shadow-[0_2px_3px_rgba(255,255,255,0.8)] 2xl:text-6xl"
+						>
+							Make a Drop!
 						</Link>
 					</div>
 					<span className="absolute bottom-10 flex w-full flex-col items-center gap-5 ">

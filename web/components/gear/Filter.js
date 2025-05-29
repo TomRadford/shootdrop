@@ -121,30 +121,24 @@ const GearFilter = ({
 							{list.category.toLowerCase()} gear
 						</h2>
 						<Link href={`/drops/${list.drop.id}`}>
-							<a>
-								<h4 className="text-sm">
-									for <span className="font-medium">{list.drop.project}</span>
-								</h4>
-							</a>
+							<h4 className="text-sm">
+								for <span className="font-medium">{list.drop.project}</span>
+							</h4>
 						</Link>
 					</div>
 				) : (
 					<div className="mr-4 mb-4 flex flex-col text-left">
 						<h2 className="text-lg capitalize">
 							Add{' '}
-							<Link href={`/list/${listToAdd.id}`}>
-								<a className="font-semibold">
-									{listToAdd.category.toLowerCase()} gear
-								</a>
+							<Link href={`/list/${listToAdd.id}`} className="font-semibold">
+								{listToAdd.category.toLowerCase()} gear
 							</Link>
 						</h2>
 						<Link href={`/drops/${listToAdd.drop.id}`}>
-							<a>
-								<h4 className="text-sm">
-									for{' '}
-									<span className="font-medium">{listToAdd.drop.project}</span>
-								</h4>
-							</a>
+							<h4 className="text-sm">
+								for{' '}
+								<span className="font-medium">{listToAdd.drop.project}</span>
+							</h4>
 						</Link>
 					</div>
 				)}

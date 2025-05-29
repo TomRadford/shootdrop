@@ -106,8 +106,8 @@ const MePage = () => {
 									<div className={`${imageLoading && `hidden`}`}>
 										<Image
 											src={profilePicture}
-											width="150px"
-											height="150px"
+											width="150"
+											height="150"
 											objectFit="cover"
 											className={`rounded-full`}
 											onLoadStart={() => setImageLoading(true)}

@@ -68,8 +68,8 @@ const LoginCard = () => {
 		<div className="">
 			<h2 className="mb-4 text-xl font-semibold">
 				Please login or{' '}
-				<Link href="/register">
-					<a className="font-bold underline">register</a>
+				<Link href="/register" className="font-bold underline">
+					register
 				</Link>
 			</h2>
 			<Card>
@@ -103,8 +103,8 @@ const LoginCard = () => {
 			</Card>
 			<div className="mx-auto mt-2 w-[10rem]">
 				<p className="text-[10px] font-light">
-					<Link href="/reset">
-						<a className="font-semibold">Forgot your password?</a>
+					<Link href="/reset" className="font-semibold">
+						Forgot your password?
 					</Link>
 				</p>
 			</div>
