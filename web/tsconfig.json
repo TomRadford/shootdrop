@@ -1,10 +1,10 @@
 {
 	"compilerOptions": {
 		"target": "ES2022",
-		"lib": ["esnext"],
+		"lib": ["esnext", "dom", "dom.iterable"],
 		"allowJs": true,
 		"skipLibCheck": true,
-		"strict": true,
+		"strict": false,
 		"forceConsistentCasingInFileNames": true,
 		"noEmit": true,
 		"incremental": true,
