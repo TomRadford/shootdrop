@@ -4,12 +4,12 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"dev": "next dev",
-		"build": "next build",
+		"dev": "graphql-codegen && next dev",
+		"build": "graphql-codegen && next build",
 		"start": "next start",
 		"lint": "next lint",
-		"compile": "graphql-codegen",
-		"watch": "graphql-codegen -w"
+		"typegen": "graphql-codegen",
+		"typegen:watch": "graphql-codegen -w"
 	},
 	"overrides": {
 		"@react-pdf/renderer": {
