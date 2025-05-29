@@ -138,14 +138,14 @@ importers:
         specifier: ^5.11.2
         version: 5.16.2(graphql@16.11.0)
       next:
-        specifier: ^12.3.4
-        version: 12.3.7(@babel/core@7.27.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        specifier: 12.3.4
+        version: 12.3.4(@babel/core@7.27.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       next-progress:
         specifier: ^2.2.0
-        version: 2.3.1(next@12.3.7(@babel/core@7.27.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
+        version: 2.3.1(next@12.3.4(@babel/core@7.27.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
       next-query-params:
         specifier: ^4.0.0
-        version: 4.3.1(next@12.3.7(@babel/core@7.27.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(use-query-params@2.2.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0))
+        version: 4.3.1(next@12.3.4(@babel/core@7.27.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(use-query-params@2.2.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0))
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -1227,8 +1227,8 @@ packages:
   '@mongodb-js/saslprep@1.2.2':
     resolution: {integrity: sha512-EB0O3SCSNRUFk66iRCpI+cXzIjdswfCs7F6nOC3RAGJ7xr5YhaicvsRwJ9eyzYvYRlCSDUO/c7g4yNulxKC1WA==}
 
-  '@next/env@12.3.7':
-    resolution: {integrity: sha512-gCw4sTeHoNr0EUO+Nk9Ll21OzF3PnmM0GlHaKgsY2AWQSqQlMgECvB0YI4k21M9iGy+tQ5RMyXQuoIMpzhtxww==}
+  '@next/env@12.3.4':
+    resolution: {integrity: sha512-H/69Lc5Q02dq3o+dxxy5O/oNxFsZpdL6WREtOOtOM1B/weonIwDXkekr1KV5DPVPr12IHFPrMrcJQ6bgPMfn7A==}
 
   '@next/eslint-plugin-next@12.3.1':
     resolution: {integrity: sha512-sw+lTf6r6P0j+g/n9y4qdWWI2syPqZx+uc0+B/fRENqfR3KpSid6MIKqc9gNwGhJASazEQ5b3w8h4cAET213jw==}
@@ -3737,8 +3737,8 @@ packages:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
       use-query-params: ^2.0.0
 
-  next@12.3.7:
-    resolution: {integrity: sha512-3PDn+u77s5WpbkUrslBP6SKLMeUj9cSx251LOt+yP9fgnqXV/ydny81xQsclz9R6RzCLONMCtwK2RvDdLa/mJQ==}
+  next@12.3.4:
+    resolution: {integrity: sha512-VcyMJUtLZBGzLKo3oMxrEF0stxh8HwuW976pAzlHhI3t8qJ4SROjCrSh1T24bhrbjw55wfZXAbXPGwPt5FLRfQ==}
     engines: {node: '>=12.22.0'}
     hasBin: true
     peerDependencies:
@@ -6750,7 +6750,7 @@ snapshots:
       sparse-bitfield: 3.0.3
     optional: true
 
-  '@next/env@12.3.7': {}
+  '@next/env@12.3.4': {}
 
   '@next/eslint-plugin-next@12.3.1':
     dependencies:
@@ -8487,7 +8487,7 @@ snapshots:
       eslint: 8.24.0
       eslint-import-resolver-node: 0.3.9
       eslint-import-resolver-typescript: 2.7.1(eslint-plugin-import@2.31.0(eslint@8.24.0))(eslint@8.24.0)
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.24.0)(typescript@4.9.5))(eslint-import-resolver-typescript@2.7.1)(eslint@8.24.0)
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.24.0)(typescript@4.9.5))(eslint-import-resolver-typescript@2.7.1(eslint-plugin-import@2.31.0(eslint@8.24.0))(eslint@8.24.0))(eslint@8.24.0)
       eslint-plugin-jsx-a11y: 6.10.2(eslint@8.24.0)
       eslint-plugin-react: 7.37.5(eslint@8.24.0)
       eslint-plugin-react-hooks: 4.6.2(eslint@8.24.0)
@@ -8513,7 +8513,7 @@ snapshots:
     dependencies:
       debug: 4.4.1(supports-color@5.5.0)
       eslint: 8.24.0
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.24.0)(typescript@4.9.5))(eslint-import-resolver-typescript@2.7.1)(eslint@8.24.0)
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.24.0)(typescript@4.9.5))(eslint-import-resolver-typescript@2.7.1(eslint-plugin-import@2.31.0(eslint@8.24.0))(eslint@8.24.0))(eslint@8.24.0)
       glob: 7.2.3
       is-glob: 4.0.3
       resolve: 1.22.10
@@ -8532,7 +8532,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.24.0)(typescript@4.9.5))(eslint-import-resolver-typescript@2.7.1)(eslint@8.24.0):
+  eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.24.0)(typescript@4.9.5))(eslint-import-resolver-typescript@2.7.1(eslint-plugin-import@2.31.0(eslint@8.24.0))(eslint@8.24.0))(eslint@8.24.0):
     dependencies:
       '@rtsao/scc': 1.1.0
       array-includes: 3.1.8
@@ -9782,22 +9782,22 @@ snapshots:
 
   negotiator@1.0.0: {}
 
-  next-progress@2.3.1(next@12.3.7(@babel/core@7.27.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0):
+  next-progress@2.3.1(next@12.3.4(@babel/core@7.27.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0):
     dependencies:
-      next: 12.3.7(@babel/core@7.27.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      next: 12.3.4(@babel/core@7.27.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       nprogress: 0.2.0
       react: 18.2.0
 
-  next-query-params@4.3.1(next@12.3.7(@babel/core@7.27.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(use-query-params@2.2.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)):
+  next-query-params@4.3.1(next@12.3.4(@babel/core@7.27.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(use-query-params@2.2.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)):
     dependencies:
-      next: 12.3.7(@babel/core@7.27.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      next: 12.3.4(@babel/core@7.27.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       react: 18.2.0
       tslib: 2.8.1
       use-query-params: 2.2.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
 
-  next@12.3.7(@babel/core@7.27.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
+  next@12.3.4(@babel/core@7.27.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
-      '@next/env': 12.3.7
+      '@next/env': 12.3.4
       '@swc/helpers': 0.4.11
       caniuse-lite: 1.0.30001718
       postcss: 8.4.14
