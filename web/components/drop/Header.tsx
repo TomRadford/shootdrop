@@ -89,8 +89,8 @@ const DropHeader = ({
 	}
 
 	return (
-		<>
-			<header className="mx-auto flex justify-between gap-1 align-bottom md:w-full">
+        <>
+            <header className="mx-auto flex justify-between gap-1 align-bottom md:w-full">
 				<div className="flex min-w-max items-center pl-3 md:pl-0">
 					<button
 						className={!me ? 'cursor-default' : ''}
@@ -155,7 +155,7 @@ const DropHeader = ({
 								Last edited {format(new Date(drop.updatedAt), 'HH:mm d/M/yy')}
 							</p>
 							<div className="flex gap-2">
-								<Link href={`/drops/${drop.id}/pdf`}>
+								<Link href={`/drops/${drop.id}/pdf`} legacyBehavior>
 									<button className=" rounded border border-solid border-slate-600 p-2 transition-colors duration-300 hover:bg-slate-900">
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
@@ -202,14 +202,14 @@ const DropHeader = ({
 					)}
 				</div>
 			</header>
-			<UserModal
+            <UserModal
 				modalOpen={modalOpen}
 				setModalOpen={setModalOpen}
 				drop={drop}
 				userInDrop={userInDrop}
 			/>
-		</>
-	)
+        </>
+    );
 }
 
 export default DropHeader

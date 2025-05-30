@@ -85,55 +85,55 @@ const GearItemComponent = ({
 	}
 
 	return (
-		<div
+        <div
 			// Double overflow on parent and child for
 			className={`relative h-full rounded-xl bg-black bg-opacity-30 shadow-xl ${
 				list || listToAdd ? `` : 'overflow-hidden'
 			}`}
 		>
-			{userInDrop && <ItemRemove list={list} gearListItemId={data.id} />}
-			<Link href={`/gear/${gearItem.id}`}>
-				{/* ToDo: Consider target blank to open new tab
+            {userInDrop && <ItemRemove list={list} gearListItemId={data.id} />}
+            <Link href={`/gear/${gearItem.id}`}>
+                {/* ToDo: Consider target blank to open new tab
 				Disadvantage would be reloading app in new tab
 */}
-				<a>
-					<div className="relative -mb-2 overflow-hidden rounded-2xl hover:cursor-pointer">
-						{gearItem.images.length > 0 ? (
-							<>
-								<Image
-									src={gearItem.images[0].url}
-									width="300px"
-									height="330px"
-									objectFit="cover"
-									placeholder="blur"
-									blurDataURL={whitePixel}
-									alt={gearItem.model}
-								/>
-							</>
-						) : (
-							<Image
-								src={`/img/default_gear.jpg`}
-								width="300px"
-								height="330px"
-								objectFit="cover"
-								placeholder="blur"
-								blurDataURL={whitePixel}
-								alt={gearItem.model}
-							/>
-						)}
-						<div className="absolute bottom-[6px] flex w-full flex-col bg-gradient-to-t from-[#000000b9] to-transparent px-3 pb-2 pt-12 text-left ">
-							<h3 className="font-bold">{gearItem.manufacturer}</h3>
-							<h3>{gearItem.model}</h3>
-						</div>
-					</div>
-				</a>
-			</Link>
-			{listToAdd && (
+
+                <div className="relative -mb-2 overflow-hidden rounded-2xl hover:cursor-pointer">
+                    {gearItem.images.length > 0 ? (
+                        <>
+                            <Image
+                                src={gearItem.images[0].url}
+                                width="300px"
+                                height="330px"
+                                objectFit="cover"
+                                placeholder="blur"
+                                blurDataURL={whitePixel}
+                                alt={gearItem.model}
+                            />
+                        </>
+                    ) : (
+                        <Image
+                            src={`/img/default_gear.jpg`}
+                            width="300px"
+                            height="330px"
+                            objectFit="cover"
+                            placeholder="blur"
+                            blurDataURL={whitePixel}
+                            alt={gearItem.model}
+                        />
+                    )}
+                    <div className="absolute bottom-[6px] flex w-full flex-col bg-gradient-to-t from-[#000000b9] to-transparent px-3 pb-2 pt-12 text-left ">
+                        <h3 className="font-bold">{gearItem.manufacturer}</h3>
+                        <h3>{gearItem.model}</h3>
+                    </div>
+                </div>
+
+            </Link>
+            {listToAdd && (
 				<button className="my-3 font-bold" onClick={handleAddListItem}>
 					Add Item
 				</button>
 			)}
-			{list && isGearListItem(data) && (
+            {list && isGearListItem(data) && (
 				<div className="mx-4 my-2 flex flex-col ">
 					<ItemQuantity
 						listId={list.id}
@@ -176,8 +176,8 @@ const GearItemComponent = ({
 					</div>
 				</div>
 			)}
-		</div>
-	)
+        </div>
+    );
 }
 
 export default GearItemComponent

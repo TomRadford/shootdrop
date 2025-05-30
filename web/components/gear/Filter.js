@@ -73,8 +73,8 @@ const GearFilter = ({
 	}
 
 	return (
-		<form className="flex w-full flex-wrap items-center justify-center gap-8 bg-gradient-to-b from-[#121212] to-transparent pb-8 pt-16 md:pt-8">
-			<div className="flex flex-col items-center gap-1 px-3 xl:flex-row">
+        <form className="flex w-full flex-wrap items-center justify-center gap-8 bg-gradient-to-b from-[#121212] to-transparent pb-8 pt-16 md:pt-8">
+            <div className="flex flex-col items-center gap-1 px-3 xl:flex-row">
 				{!list && !listToAdd ? (
 					<div className="relative z-10 mb-14 flex w-full select-none justify-center sm:justify-start xl:mr-40">
 						<div className="group absolute rounded-xl bg-[#191f29]">
@@ -121,31 +121,31 @@ const GearFilter = ({
 							{list.category.toLowerCase()} gear
 						</h2>
 						<Link href={`/drops/${list.drop.id}`}>
-							<a>
-								<h4 className="text-sm">
-									for <span className="font-medium">{list.drop.project}</span>
-								</h4>
-							</a>
-						</Link>
+
+                            <h4 className="text-sm">
+                                for <span className="font-medium">{list.drop.project}</span>
+                            </h4>
+
+                        </Link>
 					</div>
 				) : (
 					<div className="mr-4 mb-4 flex flex-col text-left">
 						<h2 className="text-lg capitalize">
 							Add{' '}
-							<Link href={`/list/${listToAdd.id}`}>
-								<a className="font-semibold">
-									{listToAdd.category.toLowerCase()} gear
-								</a>
-							</Link>
+							<Link href={`/list/${listToAdd.id}`} className="font-semibold">
+
+                                {listToAdd.category.toLowerCase()}gear
+                                                                
+                            </Link>
 						</h2>
 						<Link href={`/drops/${listToAdd.drop.id}`}>
-							<a>
-								<h4 className="text-sm">
-									for{' '}
-									<span className="font-medium">{listToAdd.drop.project}</span>
-								</h4>
-							</a>
-						</Link>
+
+                            <h4 className="text-sm">
+                                for{' '}
+                                <span className="font-medium">{listToAdd.drop.project}</span>
+                            </h4>
+
+                        </Link>
 					</div>
 				)}
 				{list && <ListComment list={list} />}
@@ -168,13 +168,13 @@ const GearFilter = ({
 					</div>
 				) : null}
 			</div>
-			<div className="w-64 lg:w-96">
+            <div className="w-64 lg:w-96">
 				<div className="rounded-3xl bg-gray-800 bg-opacity-40 py-4 px-4">
 					<GearTags setTagsModalOpen={setTagsModalOpen} />
 				</div>
 			</div>
-		</form>
-	)
+        </form>
+    );
 }
 
 export default GearFilter

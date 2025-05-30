@@ -17,8 +17,8 @@ const DropPdfPage = () => {
 	const { drop: fullDrop, loading } = useGetFullDrop(dropId as string)
 
 	return (
-		<>
-			<Head>
+        <>
+            <Head>
 				<title>
 					{loading
 						? `Generate PDF | ShootDrop`
@@ -27,7 +27,7 @@ const DropPdfPage = () => {
 						: 'No Drop Found | ShootDrop'}
 				</title>
 			</Head>
-			<Layout>
+            <Layout>
 				<div className="flex h-screen w-full">
 					{loading ? (
 						<div className="mx-auto flex flex-col justify-center">
@@ -39,25 +39,24 @@ const DropPdfPage = () => {
 								<NoSsrWrapper>
 									<div className="flex w-full flex-col pt-12 md:pt-0">
 										<div className="mx-8 flex justify-between pt-6">
-											<Link href={`/drops/${fullDrop.id}`}>
-												<a className="flex gap-2">
-													<svg
-														xmlns="http://www.w3.org/2000/svg"
-														fill="none"
-														viewBox="0 0 24 24"
-														strokeWidth={2}
-														stroke="currentColor"
-														className="h-6 w-6"
-													>
-														<path
-															strokeLinecap="round"
-															strokeLinejoin="round"
-															d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
-														/>
-													</svg>
-													Back to Drop
-												</a>
-											</Link>
+											<Link href={`/drops/${fullDrop.id}`} className="flex gap-2">
+
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                    strokeWidth={2}
+                                                    stroke="currentColor"
+                                                    className="h-6 w-6"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
+                                                    />
+                                                </svg>Back to Drop
+                                                                                                
+                                            </Link>
 
 											<PDFDownloadLink
 												document={<DropPdf dropForPdf={fullDrop} />}
@@ -87,8 +86,8 @@ const DropPdfPage = () => {
 					)}
 				</div>
 			</Layout>
-		</>
-	)
+        </>
+    );
 }
 
 export default DropPdfPage

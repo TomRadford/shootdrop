@@ -65,14 +65,14 @@ const LoginCard = () => {
 		})
 	}
 	return (
-		<div className="">
-			<h2 className="mb-4 text-xl font-semibold">
+        <div className="">
+            <h2 className="mb-4 text-xl font-semibold">
 				Please login or{' '}
-				<Link href="/register">
-					<a className="font-bold underline">register</a>
+				<Link href="/register" className="font-bold underline">
+					register
 				</Link>
 			</h2>
-			<Card>
+            <Card>
 				<form onSubmit={handleLogin} className="flex flex-col gap-1">
 					<input
 						className="bg-transparent"
@@ -101,14 +101,14 @@ const LoginCard = () => {
 					</button>
 				</form>
 			</Card>
-			<div className="mx-auto mt-2 w-[10rem]">
+            <div className="mx-auto mt-2 w-[10rem]">
 				<p className="text-[10px] font-light">
-					<Link href="/reset">
-						<a className="font-semibold">Forgot your password?</a>
+					<Link href="/reset" className="font-semibold">
+						Forgot your password?
 					</Link>
 				</p>
 			</div>
-			<p className="mt-5">
+            <p className="mt-5">
 				Made by{' '}
 				<a
 					target="_blank"
@@ -120,8 +120,8 @@ const LoginCard = () => {
 				</a>{' '}
 				🎥
 			</p>
-		</div>
-	)
+        </div>
+    );
 }
 
 const LoginPage = () => {

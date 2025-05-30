@@ -72,12 +72,12 @@ const RegisterCard = () => {
 	}
 
 	return (
-		<div className="w-[17rem]">
-			<div className="mb-4">
+        <div className="w-[17rem]">
+            <div className="mb-4">
 				<h2 className="mb-3 text-xl font-semibold">
 					Register or{' '}
-					<Link href="/login">
-						<a className="font-bold underline">login</a>
+					<Link href="/login" className="font-bold underline">
+						login
 					</Link>
 				</h2>
 				{!result.data && (
@@ -86,7 +86,7 @@ const RegisterCard = () => {
 					</p>
 				)}
 			</div>
-			{result.data ? (
+            {result.data ? (
 				<Card>
 					<div>
 						<h1 className="mb-2 font-bold">Thanks for registering!</h1>
@@ -155,8 +155,8 @@ const RegisterCard = () => {
 					</form>
 				</Card>
 			)}
-		</div>
-	)
+        </div>
+    );
 }
 
 const LoginPage = () => {
@@ -165,19 +165,19 @@ const LoginPage = () => {
 	if (loading) return <Loading />
 
 	return (
-		<>
-			<Head>
+        <>
+            <Head>
 				<title>Registration | ShootDrop</title>
 			</Head>
-			<Layout>
+            <Layout>
 				<div className="flex h-screen flex-col">
 					<div className="m-auto text-center">
 						<RegisterCard />
 						<div className="mx-auto mt-2 w-[10rem]">
 							<p className="text-[10px] font-light">
 								By registering you agree to our{' '}
-								<Link href="/terms">
-									<a className="font-semibold">Terms and privacy policy</a>
+								<Link href="/terms" className="font-semibold">
+									Terms and privacy policy
 								</Link>
 							</p>
 						</div>
@@ -196,8 +196,8 @@ const LoginPage = () => {
 					</div>
 				</div>
 			</Layout>
-		</>
-	)
+        </>
+    );
 }
 
 export default LoginPage
