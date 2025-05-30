@@ -20,7 +20,7 @@
 		"@apollo/client": "^3.7.0",
 		"@hcaptcha/react-hcaptcha": "^1.4.4",
 		"@headlessui/react": "^1.7.3",
-		"@react-pdf/renderer": "^3.4.3",
+		"@react-pdf/renderer": "^4.3.0",
 		"@tailwindcss/forms": "^0.5.3",
 		"@types/react-pdf": "^6.2.0",
 		"@vercel/analytics": "^0.1.8",
