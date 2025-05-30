@@ -1,6 +1,6 @@
 import { useQuery, useLazyQuery } from '@apollo/client'
 import { ALL_GEAR_ITEMS, GET_LIST_ITEMS } from '../../lib/apollo/queries'
-import Image from 'next/image'
+import Image from "next/legacy/image"
 import Link from 'next/link'
 import { InView } from 'react-intersection-observer'
 import { useEffect, useState } from 'react'

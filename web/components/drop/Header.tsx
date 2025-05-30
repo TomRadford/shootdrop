@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import Image from "next/legacy/image"
 import TextareaAutosize from 'react-textarea-autosize'
 import { useQuery, useMutation } from '@apollo/client'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'

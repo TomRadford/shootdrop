@@ -6,7 +6,7 @@ import { ME, EDIT_ME } from '../lib/apollo/queries'
 import Card from '../components/Card'
 import { useEffect, useState } from 'react'
 import Head from 'next/head'
-import Image from 'next/image'
+import Image from "next/legacy/image"
 import useCheckAuth from '../lib/hooks/checkAuth'
 import { makeWEBP } from '../lib/image/resizer'
 import axios from 'axios'

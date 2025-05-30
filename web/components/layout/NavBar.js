@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useQuery } from '@apollo/client'
 import Link from 'next/link'
-import Image from 'next/image'
+import Image from "next/legacy/image"
 import ClientOnly from '../ClientOnly'
 import { ME } from '../../lib/apollo/queries'
 import useCheckAuth from '../../lib/hooks/checkAuth'

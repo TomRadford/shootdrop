@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import Image from "next/legacy/image"
 import { User } from '../../__generated__/graphql'
 
 const ModalUser = ({ user }: { user: User }) => (

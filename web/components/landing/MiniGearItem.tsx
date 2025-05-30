@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import Image from "next/legacy/image"
 import Link from 'next/link'
 import { GearItem } from '../../__generated__/graphql'
 const whitePixel =
@@ -6,11 +6,11 @@ const whitePixel =
 
 const MiniGearItem = ({ gearItem }: { gearItem: GearItem }) => (
 	// Custom gearItem display for landing forked from GearItem
-	<Link href={`/gear/${gearItem.id}`}>
-		{/* ToDo: Consider target blank to open new tab
+	(<Link href={`/gear/${gearItem.id}`}>
+        {/* ToDo: Consider target blank to open new tab
 Disadvantage would be reloading app in new tab
 */}
-		<a>
+        <a>
 			<div className="relative overflow-hidden rounded-2xl hover:cursor-pointer">
 				{gearItem.images.length > 0 ? (
 					<>
@@ -42,7 +42,7 @@ Disadvantage would be reloading app in new tab
 				</div>
 			</div>
 		</a>
-	</Link>
+    </Link>)
 )
 
 export default MiniGearItem

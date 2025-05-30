@@ -19,7 +19,7 @@ import { TypeAnimation } from 'react-type-animation'
 import { FullDrop, GearListWithItems } from '../lib/types'
 import LandingList from '../components/landing/List'
 import GearItem from '../components/gear/Item'
-import Image from 'next/image'
+import Image from "next/legacy/image"
 import Link from 'next/link'
 import { gql } from '@apollo/client'
 import MarqueeSection from '../components/landing/Marquee'

@@ -1,6 +1,6 @@
 import Card from '../Card'
 import { formatDistance, format } from 'date-fns'
-import Image from 'next/image'
+import Image from "next/legacy/image"
 import Link from 'next/link'
 import { Drop } from '../../__generated__/graphql'
 const DropSummaryCard = ({ drop }: { drop: Drop }) => {

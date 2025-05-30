@@ -1,5 +1,5 @@
 import { formatDistance } from 'date-fns'
-import Image from 'next/image'
+import Image from "next/legacy/image"
 import Link from 'next/link'
 import { GearListWithItems } from '../../lib/types'
 import Card from '../Card'

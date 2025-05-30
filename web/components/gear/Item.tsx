@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Image from 'next/image'
+import Image from "next/legacy/image"
 import ItemQuantity from '../list/ItemQuantity'
 import useUserInDrop from '../../lib/hooks/userInDrop'
 import ItemComment from '../list/ItemComment'

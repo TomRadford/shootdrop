@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import Image from "next/legacy/image"
 import { GearItem } from '../../__generated__/graphql'
 
 const getSpan = (items: GearItem[], keyOffset: string) =>

@@ -11,7 +11,7 @@ import Card from '../Card'
 import useUserInDrop from '../../lib/hooks/userInDrop'
 import useGetMe from '../../lib/hooks/getMe'
 import Link from 'next/link'
-import Image from 'next/image'
+import Image from "next/legacy/image"
 import { formatDistance } from 'date-fns'
 import {
 	Drop,
