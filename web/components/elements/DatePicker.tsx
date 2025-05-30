@@ -1,6 +1,7 @@
 import DatePicker from 'react-datepicker'
-import { forwardRef, useEffect, useState } from 'react'
+import { forwardRef } from 'react'
 import { format } from 'date-fns'
+import { cn } from '../../lib/utils'
 
 // Credit: https://github.com/msnegurski/tailwind-react-datepicker
 
@@ -12,6 +13,7 @@ const DatePickerTailwind = ({
 	previousDate,
 }) => {
 	return (
+		//@ts-expect-error TS expects multiple for some reason
 		<DatePicker
 			disabled={disabled}
 			selected={date}
@@ -23,7 +25,7 @@ const DatePickerTailwind = ({
 			previousMonthButtonLabel="<"
 			popperClassName="react-datepicker-popper"
 			customInput={
-				<ButtonInput className={disabled && `hover:cursor-default`} />
+				<ButtonInput className={cn({ 'hover:cursor-default': disabled })} />
 			}
 			startOpen={startOpen}
 			renderCustomHeader={({
@@ -88,11 +90,20 @@ const DatePickerTailwind = ({
 	)
 }
 
-const ButtonInput = forwardRef(({ value, onClick, className }, ref) => (
-	<button onClick={onClick} ref={ref} type="button" className={className}>
-		{format(new Date(value), 'dd MMMM yyyy')}
-	</button>
-))
+const ButtonInput = forwardRef(
+	(
+		{
+			value,
+			onClick,
+			className,
+		}: { value?: Date; onClick?: () => void; className: string },
+		ref: React.Ref<HTMLButtonElement>
+	) => (
+		<button onClick={onClick} ref={ref} type="button" className={className}>
+			{format(new Date(value), 'dd MMMM yyyy')}
+		</button>
+	)
+)
 ButtonInput.displayName = 'Button Input'
 
 export default DatePickerTailwind
