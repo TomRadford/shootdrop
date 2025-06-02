@@ -13,12 +13,11 @@ const DatePickerTailwind = ({
 	previousDate,
 }) => {
 	return (
-		//@ts-expect-error TS expects multiple for some reason
 		<DatePicker
 			disabled={disabled}
 			selected={date}
 			minDate={previousDate}
-			onChange={(newDate) => setDate(newDate)}
+			onChange={(newDate: Date | null) => setDate(newDate)}
 			selectsStart
 			startDate={date}
 			nextMonthButtonLabel=">"

@@ -1,4 +1,4 @@
-import Image from "next/legacy/image"
+import Image from 'next/legacy/image'
 import TextareaAutosize from 'react-textarea-autosize'
 import { useQuery, useMutation } from '@apollo/client'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
@@ -89,8 +89,8 @@ const DropHeader = ({
 	}
 
 	return (
-        <>
-            <header className="mx-auto flex justify-between gap-1 align-bottom md:w-full">
+		<>
+			<header className="mx-auto flex justify-between gap-1 align-bottom md:w-full">
 				<div className="flex min-w-max items-center pl-3 md:pl-0">
 					<button
 						className={!me ? 'cursor-default' : ''}
@@ -110,8 +110,8 @@ const DropHeader = ({
 													: `/img/default_user.png`
 											}
 											key={user.id}
-											width="30px"
-											height="30px"
+											width="30"
+											height="30"
 											className={`rounded-full`}
 											objectFit="cover"
 											alt={user.fullName}
@@ -202,14 +202,14 @@ const DropHeader = ({
 					)}
 				</div>
 			</header>
-            <UserModal
+			<UserModal
 				modalOpen={modalOpen}
 				setModalOpen={setModalOpen}
 				drop={drop}
 				userInDrop={userInDrop}
 			/>
-        </>
-    );
+		</>
+	)
 }
 
 export default DropHeader

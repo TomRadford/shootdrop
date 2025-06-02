@@ -9,7 +9,8 @@
 		"start": "next start",
 		"lint": "next lint",
 		"typegen": "graphql-codegen",
-		"typegen:watch": "graphql-codegen -w"
+		"typegen:watch": "graphql-codegen -w",
+		"typecheck": "tsc --noEmit"
 	},
 	"overrides": {
 		"@react-pdf/renderer": {

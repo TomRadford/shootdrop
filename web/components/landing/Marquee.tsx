@@ -1,4 +1,4 @@
-import Image from "next/legacy/image"
+import Image from 'next/legacy/image'
 import { GearItem } from '../../__generated__/graphql'
 
 const getSpan = (items: GearItem[], keyOffset: string) =>
@@ -9,8 +9,8 @@ const getSpan = (items: GearItem[], keyOffset: string) =>
 		>
 			<Image
 				src={item.images[0].url}
-				width="300px"
-				height="300px"
+				width="300"
+				height="300"
 				alt=""
 				objectFit="cover"
 				draggable={false}
