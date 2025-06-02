@@ -1,12 +1,17 @@
 import useGetMe from '../../lib/hooks/getMe'
-import { useEffect, useState } from 'react'
-import Card from '../Card'
 import { useMutation, useQuery } from '@apollo/client'
 import { EDIT_GEAR_ITEM, ALL_TAGS } from '../../lib/apollo/queries'
 import { useGearQueryParams } from '../../lib/hooks/queryParams'
+import { GearItem } from '../../__generated__/graphql'
 
 // Takes either GearItem (GearEditor) or setQuery & query (GearBrowser)
-const GearTags = ({ gearItem, setTagsModalOpen }) => {
+const GearTags = ({
+	gearItem,
+	setTagsModalOpen,
+}: {
+	gearItem?: GearItem
+	setTagsModalOpen: (open: boolean) => void
+}) => {
 	const me = useGetMe()
 	const [query, setQuery] = useGearQueryParams()
 
@@ -30,25 +35,25 @@ const GearTags = ({ gearItem, setTagsModalOpen }) => {
 	}
 
 	return (
-        <div className="flex flex-col gap-1 px-4 pb-4">
-            <span className="mb-2 flex items-end gap-2">
+		<div className="flex flex-col gap-1 px-4 pb-4">
+			<span className="mb-2 flex items-end gap-2">
 				<h3 className="text-left text-base font-semibold">Tags</h3>
 				{(me || !gearItem) && (
 					<p className="text-xs font-light text-gray-300">tap to remove</p>
 				)}
 			</span>
-            <div className="flex flex-wrap gap-2">
+			<div className="flex flex-wrap gap-2">
 				{allTagsLoading ? (
 					// Sekelon loader for tags while pulling in ALL_TAGS query for tag.name
-					(<>
-                        {query.tags &&
+					<>
+						{query.tags &&
 							query.tags.map((tagId) => (
 								<button
 									key={tagId}
 									className="flex h-7 w-20 animate-pulse items-center rounded bg-teal-600 px-2 py-1 text-sm opacity-70"
 								></button>
 							))}
-                    </>)
+					</>
 				) : (
 					tags.map((tag) => (
 						<div key={tag.id}>
@@ -71,7 +76,7 @@ const GearTags = ({ gearItem, setTagsModalOpen }) => {
 												),
 										  })
 								}}
-								disabled={!me && gearItem}
+								disabled={!me && !!gearItem}
 								className={`flex items-center rounded bg-teal-600 px-2 py-1 text-sm transition-colors duration-300 ${
 									(me || !gearItem) && `hover:bg-red-500`
 								}`}
@@ -94,8 +99,8 @@ const GearTags = ({ gearItem, setTagsModalOpen }) => {
 					</button>
 				)}
 			</div>
-        </div>
-    );
+		</div>
+	)
 }
 
 export default GearTags

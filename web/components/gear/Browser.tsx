@@ -1,6 +1,5 @@
-import { useQuery, useLazyQuery } from '@apollo/client'
+import { useQuery, NetworkStatus } from '@apollo/client'
 import { ALL_GEAR_ITEMS, GET_LIST_ITEMS } from '../../lib/apollo/queries'
-import Image from "next/legacy/image"
 import Link from 'next/link'
 import { InView } from 'react-intersection-observer'
 import { useEffect, useState } from 'react'
@@ -10,7 +9,6 @@ import { useGearQueryParams } from '../../lib/hooks/queryParams'
 import GearItem from './Item'
 import ItemModal from '../list/ItemModal'
 import useUserInDrop from '../../lib/hooks/userInDrop'
-import { QueryDocumentKeys } from 'graphql/language/ast'
 
 const GearListSkeleton = ({ length = 20 }) => (
 	<>
@@ -26,50 +24,40 @@ const GearListSkeleton = ({ length = 20 }) => (
 //GearBrowser to be used on /gear, /list/[id] and /list/[id]/add routes
 const GearBrowser = ({ listToAdd, list }) => {
 	const [query, setQuery] = useGearQueryParams()
-	const [fetchingMore, setFetchingMore] = useState(false)
-	const [refetching, setRefetching] = useState(false)
 	const [tagsModalOpen, setTagsModalOpen] = useState(false)
 	const userInDrop = useUserInDrop(list ? list.drop : false)
-	const [
-		getGear,
-		{
-			data: allGearData,
-			loading: allGearLoading,
-			refetch,
-			fetchMore: fetchMoreGear,
-		},
-	] = useLazyQuery(
-		list ? GET_LIST_ITEMS : ALL_GEAR_ITEMS,
-		//ToDo: update cache on local/subscription-based gearItem add
-		{
-			variables: list
-				? { ...query, list: list.id }
-				: listToAdd
-				? { ...query, category: listToAdd.category }
-				: query, //use queryParams to filter & list.id if list
-			//ToDo: relook at this fetch policy for fresh results
-			fetchPolicy: 'network-only',
-			onCompleted: () => {
-				setFetchingMore(false)
-				setRefetching(false)
-			},
-		}
-	)
 
-	// useEffect(() => {
-	//   // Fetch on mount
-	//   getGear()
-	// }, [])
+	const {
+		data: allGearData,
+		refetch,
+		fetchMore: fetchMoreGear,
+		networkStatus,
+	} = useQuery(list ? GET_LIST_ITEMS : ALL_GEAR_ITEMS, {
+		variables: list
+			? { ...query, list: list.id }
+			: listToAdd
+			? { ...query, category: listToAdd.category }
+			: query,
+		fetchPolicy: 'network-only',
+		notifyOnNetworkStatusChange: true,
+	})
+
+	const isInitialLoading = networkStatus === NetworkStatus.loading
+	const fetchingMore = networkStatus === NetworkStatus.fetchMore
 
 	useEffect(() => {
-		//refetch when url query params change from filter
-		//getGear not used to prevent issues mismatched queries
-		//ToDo: relook at this issue
+		// refetch when url query params change from filter
 		refetch()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [query])
 
+	console.log({ isInitialLoading, fetchingMore })
+
 	const handleInView = (inView, entry) => {
+		if (isInitialLoading || fetchingMore || !allGearData) {
+			return
+		}
+
 		if (
 			inView &&
 			(list
@@ -78,7 +66,6 @@ const GearBrowser = ({ listToAdd, list }) => {
 				: allGearData.allGearItems.gearItems.length <
 				  allGearData.allGearItems.totalDocs)
 		) {
-			setFetchingMore(true)
 			fetchMoreGear({
 				variables: {
 					offset: list
@@ -90,8 +77,8 @@ const GearBrowser = ({ listToAdd, list }) => {
 	}
 
 	return (
-        <div className="flex h-full min-h-screen">
-            <div className="mb-10 w-full pt-0 text-center md:mx-0 md:mb-20 md:pt-0">
+		<div className="flex h-full min-h-screen">
+			<div className="mb-10 w-full pt-0 text-center md:mx-0 md:mb-20 md:pt-0">
 				<TagsModal
 					tagsModalOpen={tagsModalOpen}
 					listCategory={
@@ -102,7 +89,6 @@ const GearBrowser = ({ listToAdd, list }) => {
 				<ItemModal list={listToAdd} />
 
 				<GearFilter
-					setRefetching={setRefetching}
 					refetch={refetch}
 					setTagsModalOpen={setTagsModalOpen}
 					list={list}
@@ -110,7 +96,7 @@ const GearBrowser = ({ listToAdd, list }) => {
 				/>
 
 				<div className="mb-10">
-					{allGearLoading || refetching ? (
+					{isInitialLoading ? (
 						<div className="mx-2 ">
 							<div className="mx-auto flex max-w-7xl flex-wrap justify-center gap-4">
 								<GearListSkeleton />
@@ -136,8 +122,11 @@ const GearBrowser = ({ listToAdd, list }) => {
 											{userInDrop ? (
 												<>
 													No items yet,
-													<Link href={`/list/${list.id}/add`} className="font-bold">
-														 add something! 
+													<Link
+														href={`/list/${list.id}/add`}
+														className="font-bold"
+													>
+														&nbsp;add something!
 													</Link>
 												</>
 											) : (
@@ -178,42 +167,40 @@ const GearBrowser = ({ listToAdd, list }) => {
 							<div>
 								{list ? (
 									<Link href={`/drops/${list.drop.id}`} className="flex gap-2">
-
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            strokeWidth={2}
-                                            stroke="currentColor"
-                                            className="h-6 w-6"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
-                                            />
-                                        </svg>Back to Drop
-                                                                                
-                                    </Link>
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											fill="none"
+											viewBox="0 0 24 24"
+											strokeWidth={2}
+											stroke="currentColor"
+											className="h-6 w-6"
+										>
+											<path
+												strokeLinecap="round"
+												strokeLinejoin="round"
+												d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
+											/>
+										</svg>
+										Back to Drop
+									</Link>
 								) : (
 									<Link href={`/list/${listToAdd.id}`} className="flex gap-2">
-
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            strokeWidth={2}
-                                            stroke="currentColor"
-                                            className="h-6 w-6"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
-                                            />
-                                        </svg>Back to List
-                                                                                
-                                    </Link>
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											fill="none"
+											viewBox="0 0 24 24"
+											strokeWidth={2}
+											stroke="currentColor"
+											className="h-6 w-6"
+										>
+											<path
+												strokeLinecap="round"
+												strokeLinejoin="round"
+												d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
+											/>
+										</svg>
+										Back to List
+									</Link>
 								)}
 							</div>
 							{list && userInDrop ? (
@@ -227,8 +214,8 @@ const GearBrowser = ({ listToAdd, list }) => {
 					</div>
 				) : null}
 			</div>
-        </div>
-    );
+		</div>
+	)
 }
 
 export default GearBrowser

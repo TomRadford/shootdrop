@@ -1,18 +1,15 @@
 import { useEffect, useState } from 'react'
 import GearTags from './TagsList'
-import { useGearQueryParams } from '../../lib/hooks/queryParams'
-import { useRouter } from 'next/router'
+import {
+	GearQueryParams,
+	useGearQueryParams,
+} from '../../lib/hooks/queryParams'
 import Link from 'next/link'
 import ListComment from '../list/Comment'
+import { UPDATE_TIMEOUT } from '../../lib/config'
 
 // Debounced query params used for search state
-const GearFilter = ({
-	setRefetching,
-	refetch,
-	setTagsModalOpen,
-	list,
-	listToAdd,
-}) => {
+const GearFilter = ({ refetch, setTagsModalOpen, list, listToAdd }) => {
 	const [query, setQuery] = useGearQueryParams()
 	// const [refetchGearData, ] = useLazyQuery(ALL_GEAR_ITEMS, { variables: query })
 	const [debouncedManufacturer, setDebouncedManufacturer] = useState('')
@@ -21,25 +18,31 @@ const GearFilter = ({
 	//set debouce values on history navigate / page load
 	useEffect(() => {
 		if (query.manufacturer !== undefined) {
-			setDebouncedManufacturer(query.manufacturer)
+			if (query.manufacturer === '') {
+				setQuery(() => ({ manufacturer: null }))
+				setDebouncedManufacturer('')
+			} else {
+				setDebouncedManufacturer(query.manufacturer)
+			}
 		}
 		if (query.model !== undefined) {
-			setDebouncedModel(query.model)
+			if (query.model === '') {
+				setQuery(() => ({ model: null }))
+				setDebouncedModel('')
+			} else {
+				setDebouncedModel(query.model)
+			}
 		}
-		// refetch(query) happening in GearBrowser
 	}, [query])
 
 	useEffect(() => {
-		if (query.manufacturer === '' || query.model === '') {
-			setRefetching(false)
-		}
 		if (
 			query.manufacturer !== debouncedManufacturer ||
 			query.model !== debouncedModel
 		) {
 			console.log('updating query params')
-			setRefetching(true)
-			let newParams = {}
+			// setRefetching(true)
+			let newParams: GearQueryParams = {}
 			if (debouncedManufacturer.length > 0) {
 				newParams.manufacturer = debouncedManufacturer
 			}
@@ -52,12 +55,11 @@ const GearFilter = ({
 			const timeout = setTimeout(() => {
 				//resets previous values with push over default pushIn
 				setQuery(newParams, 'push')
-			}, 1200)
+			}, UPDATE_TIMEOUT)
 			return () => clearTimeout(timeout)
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [debouncedModel, debouncedManufacturer])
-	// console.log(query.category)
 
 	const handleCategoryChange = (e, newCategory) => {
 		e.preventDefault()
@@ -73,8 +75,8 @@ const GearFilter = ({
 	}
 
 	return (
-        <form className="flex w-full flex-wrap items-center justify-center gap-8 bg-gradient-to-b from-[#121212] to-transparent pb-8 pt-16 md:pt-8">
-            <div className="flex flex-col items-center gap-1 px-3 xl:flex-row">
+		<form className="flex w-full flex-wrap items-center justify-center gap-8 bg-gradient-to-b from-[#121212] to-transparent pb-8 pt-16 md:pt-8">
+			<div className="flex flex-col items-center gap-1 px-3 xl:flex-row">
 				{!list && !listToAdd ? (
 					<div className="relative z-10 mb-14 flex w-full select-none justify-center sm:justify-start xl:mr-40">
 						<div className="group absolute rounded-xl bg-[#191f29]">
@@ -121,31 +123,25 @@ const GearFilter = ({
 							{list.category.toLowerCase()} gear
 						</h2>
 						<Link href={`/drops/${list.drop.id}`}>
-
-                            <h4 className="text-sm">
-                                for <span className="font-medium">{list.drop.project}</span>
-                            </h4>
-
-                        </Link>
+							<h4 className="text-sm">
+								for <span className="font-medium">{list.drop.project}</span>
+							</h4>
+						</Link>
 					</div>
 				) : (
 					<div className="mr-4 mb-4 flex flex-col text-left">
 						<h2 className="text-lg capitalize">
 							Add{' '}
 							<Link href={`/list/${listToAdd.id}`} className="font-semibold">
-
-                                {listToAdd.category.toLowerCase()}gear
-                                                                
-                            </Link>
+								{listToAdd.category.toLowerCase()}gear
+							</Link>
 						</h2>
 						<Link href={`/drops/${listToAdd.drop.id}`}>
-
-                            <h4 className="text-sm">
-                                for{' '}
-                                <span className="font-medium">{listToAdd.drop.project}</span>
-                            </h4>
-
-                        </Link>
+							<h4 className="text-sm">
+								for{' '}
+								<span className="font-medium">{listToAdd.drop.project}</span>
+							</h4>
+						</Link>
 					</div>
 				)}
 				{list && <ListComment list={list} />}
@@ -168,13 +164,13 @@ const GearFilter = ({
 					</div>
 				) : null}
 			</div>
-            <div className="w-64 lg:w-96">
+			<div className="w-64 lg:w-96">
 				<div className="rounded-3xl bg-gray-800 bg-opacity-40 py-4 px-4">
 					<GearTags setTagsModalOpen={setTagsModalOpen} />
 				</div>
 			</div>
-        </form>
-    );
+		</form>
+	)
 }
 
 export default GearFilter
