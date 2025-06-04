@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import Image from 'next/legacy/image'
 import TextareaAutosize from 'react-textarea-autosize'
 import { useQuery, useMutation } from '@apollo/client'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
@@ -110,8 +110,8 @@ const DropHeader = ({
 													: `/img/default_user.png`
 											}
 											key={user.id}
-											width="30px"
-											height="30px"
+											width="30"
+											height="30"
 											className={`rounded-full`}
 											objectFit="cover"
 											alt={user.fullName}
@@ -155,7 +155,7 @@ const DropHeader = ({
 								Last edited {format(new Date(drop.updatedAt), 'HH:mm d/M/yy')}
 							</p>
 							<div className="flex gap-2">
-								<Link href={`/drops/${drop.id}/pdf`}>
+								<Link href={`/drops/${drop.id}/pdf`} legacyBehavior>
 									<button className=" rounded border border-solid border-slate-600 p-2 transition-colors duration-300 hover:bg-slate-900">
 										<svg
 											xmlns="http://www.w3.org/2000/svg"

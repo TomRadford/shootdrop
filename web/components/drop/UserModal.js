@@ -1,6 +1,6 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useEffect, useState } from 'react'
-import Image from 'next/image'
+import Image from "next/legacy/image"
 import useGetMe from '../../lib/hooks/getMe'
 import { useMutation, useLazyQuery } from '@apollo/client'
 import { ALL_USERS, UPDATE_DROP } from '../../lib/apollo/queries'

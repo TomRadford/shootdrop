@@ -1,5 +1,4 @@
-import { BlobProvider, PDFDownloadLink, PDFViewer } from '@react-pdf/renderer'
-import { Document, Page } from 'react-pdf'
+import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer'
 import NoSsrWrapper from '../../../components/NoSsr'
 import Layout from '../../../components/layout'
 import { useRouter } from 'next/router'
@@ -39,24 +38,25 @@ const DropPdfPage = () => {
 								<NoSsrWrapper>
 									<div className="flex w-full flex-col pt-12 md:pt-0">
 										<div className="mx-8 flex justify-between pt-6">
-											<Link href={`/drops/${fullDrop.id}`}>
-												<a className="flex gap-2">
-													<svg
-														xmlns="http://www.w3.org/2000/svg"
-														fill="none"
-														viewBox="0 0 24 24"
-														strokeWidth={2}
-														stroke="currentColor"
-														className="h-6 w-6"
-													>
-														<path
-															strokeLinecap="round"
-															strokeLinejoin="round"
-															d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
-														/>
-													</svg>
-													Back to Drop
-												</a>
+											<Link
+												href={`/drops/${fullDrop.id}`}
+												className="flex gap-2"
+											>
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													fill="none"
+													viewBox="0 0 24 24"
+													strokeWidth={2}
+													stroke="currentColor"
+													className="h-6 w-6"
+												>
+													<path
+														strokeLinecap="round"
+														strokeLinejoin="round"
+														d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
+													/>
+												</svg>
+												Back to Drop
 											</Link>
 
 											<PDFDownloadLink
@@ -65,7 +65,7 @@ const DropPdfPage = () => {
 												className="bg-size-200 bg-pos-0 hover:bg-pos-100 ml-1 w-min rounded bg-gradient-to-r from-sky-700 via-sky-800 to-sky-900 px-3 py-1 text-sm font-bold transition-all duration-500"
 											>
 												{({ blob, url, loading, error }) =>
-													loading ? 'Loading' : 'Download'
+													loading ? <>Loading</> : <>Download</>
 												}
 											</PDFDownloadLink>
 										</div>

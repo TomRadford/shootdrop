@@ -5,12 +5,8 @@ import { FullDrop, GearListWithItems } from '../types'
 // Common queries
 
 export const useGetList = (
-	dropResult: QueryResult<
-		any,
-		{
-			drop: string | string[]
-		}
-	>,
+	// ToDo use generic
+	dropResult: QueryResult<any>,
 	category: string
 ): QueryResult<
 	any,

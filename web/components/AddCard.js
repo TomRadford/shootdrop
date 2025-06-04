@@ -41,10 +41,10 @@ export const AddButton = ({ onClick, title, loading }) => (
 const AddCard = ({ href, title, onClick }) =>
 	href ? (
 		<Link href={href}>
-			<a>
-				<AddButton />
-			</a>
-		</Link>
+
+            <AddButton />
+
+        </Link>
 	) : (
 		<AddButton onClick={onClick} title={title} />
 	)

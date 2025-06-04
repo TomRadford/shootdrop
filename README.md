@@ -35,7 +35,7 @@ A drop is tied to a shoot in the real world, it serves as the home for all gear-
 - Collaborators can be added here. They can edit any lists attached to the drops they're on.
 - The URL is publically sharable for everyone on the production to stay up to date.
 - Overview of all list items - giving you an idea of the shoot at a glance.
-- PDF Generation to easily print and share with production teams. 
+- PDF Generation to easily print and share with production teams.
 
 ### Lists
 
@@ -72,46 +72,49 @@ A list is tied to a drop, it consists of Gear Items in a particular category (ei
 
 ## Dev Setup
 
+You need [pnpm](https://pnpm.io/) as your package manager. Install it globally with `npm install -g pnpm` if you don't have it already.
+
 You can give this a spin on your local machine by installing NodeJS version 16 or higher.
 
-Make sure you setup the following **environment variables**
-
-**Web**
-
-.env.local
-
-    NEXT_PUBLIC_API_URI= your api URI
-    NEXT_PUBLIC_RECAPTCHA_SITE_KEY= grab one at https://www.hcaptcha.com/
-
-**API**
-
-.env
-
-    DEV_MONGODB_URI= Spin up a free mongodb at https://www.mongodb.com/cloud/atlas/register
-    PORT= any
-    SECRET= any
-    HCAPTCHASECRET= grab one at https://www.hcaptcha.com/
-    SENDGRID_API_KEY= grab one at https://sendgrid.com/free/
-    SITE_ADMIN= your email
-    DEV_AWS_ACCESS_KEY_ID= Grab one from AWS console
-    DEV_AWS_SECRET_ACCESS_KEY= Grab one from AWS console
-    DEV_S3_BUCKET= S3 bucket name
+Make sure you setup the **environment variables** in .example env files
 
 **Commands for running the app locally**
 
 In root directory of repo, open terminal.
 
-API
+```
+pnpm install
 
-    cd api
-    npm install
-    npm run dev
+pnpm dev:services
 
-WEB
+# Setup local bucket
 
-    cd web
-    npm install
-    npm run dev
+chmod +x minio-setup.sh
+
+./minio-setup.sh
+
+pnpm dev:api
+
+pnpm dev:web
+```
+
+### Seed db
+
+Get prod dump and then:
+
+```
+mongorestore --uri="mongodb://root:example@localhost:27017" dumps/240501_02-00
+
+# open shell
+db.createUser({
+     user: "appuser",
+     pwd: "yourpassword",
+     roles: [ { role: "readWrite", db: "shootdrop" } ]
+})
+
+DEV_MONGODB_URI=mongodb://appuser:yourpassword@localhost:27017/shootdrop
+
+```
 
 ## Author
 
@@ -135,8 +138,8 @@ Give a ⭐️ if this project helped you!
 
 ## 📝 License
 
-Copyright © 2022 [Tom Radford](https://github.com/TomRadford).<br />
-This project is [GPL--3.0--only](https://github.com/TomRadford/shootdrop/blob/master/LICENSE) licensed.
+Copyright © 2025 [Tom Radford](https://github.com/TomRadford).<br />
+See license.
 
 ---
 

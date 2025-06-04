@@ -2,12 +2,11 @@
 	"name": "shootdrop",
 	"version": "1.0.0",
 	"description": "Shoot asset list creation made easy",
-	"main": "index.js",
 	"scripts": {
-		"postinstall": "(cd api && npm install)",
-		"api-lint": "(cd api && eslint .)",
-		"api-dev": "(cd api && npm run dev)",
-		"web-dev": " (cd web && npm run dev)"
+		"dev:api": "pnpm --filter shootdrop-api dev",
+		"dev:web": "pnpm --filter shootdrop-web dev",
+		"dev:services": "docker compose up -d",
+		"dev:down": "docker compose down"
 	},
 	"repository": {
 		"type": "git",
@@ -18,5 +17,6 @@
 	"bugs": {
 		"url": "https://github.com/TomRadford/shootdrop/issues"
 	},
-	"homepage": "https://github.com/TomRadford/shootdrop#readme"
+	"homepage": "https://github.com/TomRadford/shootdrop#readme",
+	"packageManager": "pnpm@9.15.0+sha512.76e2379760a4328ec4415815bcd6628dee727af3779aaa4c914e3944156c4299921a89f976381ee107d41f12cfa4b66681ca9c718f0668fa0831ed4c6d8ba56c"
 }

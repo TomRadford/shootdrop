@@ -64,7 +64,7 @@ const List = ({ list }: ListProps) => {
 					</Text>
 				</View>
 
-				<Text style={{ color: 'white' }}>{list.comment}</Text>
+				<Text style={{ color: 'white', paddingTop: 5 }}>{list.comment}</Text>
 			</View>
 			<View style={styles.sheet}>
 				<View

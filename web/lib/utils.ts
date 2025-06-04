@@ -1,4 +1,6 @@
 import { GearItem, GearList, GearListItem } from '../__generated__/graphql'
+import { ClassValue, clsx } from 'clsx'
+import { twMerge } from 'tailwind-merge'
 
 //Generic utils
 export const assertNever = (value: never): never => {
@@ -24,4 +26,13 @@ export const isGearListItem = (
 	gearListItem: any
 ): gearListItem is GearListItem => {
 	return Boolean(isGearItem(gearListItem.gearItem) || gearListItem.gearList)
+}
+
+/**
+ * Combines clsx and tailwind-merge for optimal class merging.
+ * @param inputs - Class names or conditional class values.
+ * @returns A single string with merged class names.
+ */
+export const cn = (...inputs: ClassValue[]): string => {
+	return twMerge(clsx(inputs))
 }

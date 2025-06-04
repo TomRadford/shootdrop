@@ -11,3 +11,7 @@ node_modules
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+mongo-data
+minio-data
+dumps/

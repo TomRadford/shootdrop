@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useQuery } from '@apollo/client'
 import Link from 'next/link'
-import Image from 'next/image'
+import Image from "next/legacy/image"
 import ClientOnly from '../ClientOnly'
 import { ME } from '../../lib/apollo/queries'
 import useCheckAuth from '../../lib/hooks/checkAuth'
@@ -10,10 +10,10 @@ import useGetMe from '../../lib/hooks/getMe'
 const NavLink = ({ label, link, setShowNav }) => (
 	<li className="py-2 font-bold">
 		<Link href={link}>
-			<a>
-				<button onClick={() => setShowNav(false)}>{label}</button>
-			</a>
-		</Link>
+
+            <button onClick={() => setShowNav(false)}>{label}</button>
+
+        </Link>
 	</li>
 )
 
@@ -23,8 +23,8 @@ const User = ({ me }) => {
 		window.location = '/login'
 	}
 	return (
-		<div className="mx-auto flex flex-1 flex-row items-center justify-center gap-4 py-5">
-			{me ? (
+        <div className="mx-auto flex flex-1 flex-row items-center justify-center gap-4 py-5">
+            {me ? (
 				<>
 					<button onClick={handleLogout}>
 						<svg
@@ -43,7 +43,7 @@ const User = ({ me }) => {
 						</svg>
 					</button>
 
-					<Link href="/me">
+					<Link href="/me" legacyBehavior>
 						<button className="flex items-center gap-3">
 							<span className="text-sm font-light">
 								{me.fullName ? me.fullName : me.username}
@@ -65,30 +65,30 @@ const User = ({ me }) => {
 					</Link>
 				</>
 			) : (
-				<Link href="/login">
+				<Link href="/login" legacyBehavior>
 					<button className="text-sm font-light">Login</button>
 				</Link>
 			)}
-		</div>
-	)
+        </div>
+    );
 }
 
 const NavBar = () => {
 	const [showNav, setShowNav] = useState(false)
 	const me = useGetMe()
 	return (
-		<nav
+        <nav
 			className="bg-gray-secondary top:0 fixed z-50 flex w-full flex-col py-2 text-center text-white md:left-0 md:h-screen md:w-64 md:py-10"
 			onMouseLeave={() => setShowNav(false)}
 		>
-			<div className="px-3">
+            <div className="px-3">
 				<Link href="/">
-					<a>
-						<button className="mx-auto inline-block justify-center text-2xl font-semibold">
-							ShootDrop
-						</button>
-					</a>
-				</Link>
+
+                    <button className="mx-auto inline-block justify-center text-2xl font-semibold">
+                        ShootDrop
+                    </button>
+
+                </Link>
 				<button
 					className="fixed right-0 pt-1 pr-4 md:hidden"
 					onClick={() => setShowNav(!showNav)}
@@ -109,7 +109,7 @@ const NavBar = () => {
 					</svg>
 				</button>
 			</div>
-			<div
+            <div
 				className={`${
 					!showNav && 'hidden'
 				} md:mx-16 md:block md:pt-3 md:text-left`}
@@ -141,12 +141,12 @@ const NavBar = () => {
 					</ul>
 				</div>
 			</div>
-			<div className={`${!showNav && 'hidden'} mt-auto md:block`}>
+            <div className={`${!showNav && 'hidden'} mt-auto md:block`}>
 				<ClientOnly>
 					<User me={me} />
 				</ClientOnly>
 			</div>
-		</nav>
-	)
+        </nav>
+    );
 }
 export default NavBar

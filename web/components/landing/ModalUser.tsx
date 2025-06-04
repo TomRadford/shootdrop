@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import Image from 'next/legacy/image'
 import { User } from '../../__generated__/graphql'
 
 const ModalUser = ({ user }: { user: User }) => (
@@ -6,8 +6,8 @@ const ModalUser = ({ user }: { user: User }) => (
 		<Image
 			src={user.profilePicture ? user.profilePicture : `/img/default_user.png`}
 			key={user.id}
-			width="40px"
-			height="40px"
+			width="40"
+			height="40"
 			className={`rounded-full`}
 			objectFit="cover"
 			alt={user.fullName}

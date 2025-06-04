@@ -1,43 +1,50 @@
 {
-	"name": "shootdrop-server",
+	"name": "shootdrop-api",
 	"version": "0.1.0",
 	"description": "GraphQL API for ShootDrop",
-	"main": "index.js",
+	"type": "module",
 	"scripts": {
-		"dev": "cross-env NODE_ENV=development nodemon index.js",
-		"start": "cross-env NODE_ENV=production node index.js",
+		"dev": "cross-env NODE_ENV=development tsx watch index.ts",
+		"start": "cross-env NODE_ENV=production tsx index.ts",
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"lint": "lint ."
+		"lint": "lint .",
+		"typecheck": "tsc --noEmit"
 	},
 	"author": "Tom Radford",
 	"license": "ISC",
 	"dependencies": {
+		"@apollo/server": "^4.12.1",
+		"@as-integrations/express5": "^1.0.0",
 		"@aws-sdk/client-s3": "^3.201.0",
 		"@aws-sdk/s3-request-presigner": "^3.201.0",
+		"@graphql-tools/schema": "^10.0.23",
 		"@sendgrid/mail": "^7.7.0",
-		"apollo-server-core": "^3.10.2",
-		"apollo-server-express": "^3.10.2",
-		"bcrypt": "^5.1.0",
+		"bcrypt": "^6.0.0",
 		"cors": "^2.8.5",
 		"cross-env": "^7.0.3",
 		"dotenv": "^16.0.2",
-		"express": "^4.18.1",
+		"express": "^5.1.0",
 		"graphql": "^16.6.0",
 		"graphql-subscriptions": "^2.0.0",
+		"graphql-tag": "^2.12.6",
 		"graphql-ws": "^5.11.1",
-		"jsonwebtoken": "^9.0.0",
+		"jsonwebtoken": "^9.0.2",
 		"mailgen": "^2.0.27",
 		"mongoose": "^6.6.1",
 		"mongoose-aggregate-paginate-v2": "^1.0.6",
 		"mongoose-paginate-v2": "^1.7.1",
 		"nanoid": "^3.3.4",
-		"node-fetch": "^2.6.7",
-		"ws": "^8.8.1"
+		"ws": "^8.8.1",
+		"tsx": "^4.19.4"
 	},
 	"devDependencies": {
-		"eslint": "^8.23.1",
-		"eslint-config-prettier": "^8.5.0",
-		"eslint-plugin-prettier": "^4.2.1",
-		"nodemon": "^2.0.20"
+		"@types/bcrypt": "^5.0.2",
+		"@types/cors": "^2.8.18",
+		"@types/express": "^5.0.2",
+		"@types/jsonwebtoken": "^9.0.9",
+		"@types/node": "18.11.18",
+		"@types/ws": "^8.18.1",
+		"nodemon": "^3.1.0",
+		"typescript": "^4.9.4"
 	}
 }

@@ -77,7 +77,7 @@ const App = ({ Component, pageProps }: AppProps) => {
 									transform: rotate(3deg) translate(0px, -4px);
 				}
 		
-				` as unknown as JSX.Element
+				` as unknown as string
 						}
 						// Waiting for patch on NextProgress
 						options={{
