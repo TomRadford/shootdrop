@@ -685,7 +685,7 @@ const resolvers = {
 			}
 			return {
 				value: jwt.sign(userForToken, config.SECRET as any, {
-					expiresIn: 60 * 60 * 12,
+					expiresIn: 60 * 60 * 24 * 7, // 7 days
 				}),
 			}
 		},
