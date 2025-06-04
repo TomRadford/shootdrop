@@ -133,7 +133,7 @@ const GearFilter = ({ refetch, setTagsModalOpen, list, listToAdd }) => {
 						<h2 className="text-lg capitalize">
 							Add{' '}
 							<Link href={`/list/${listToAdd.id}`} className="font-semibold">
-								{listToAdd.category.toLowerCase()}gear
+								{listToAdd.category.toLowerCase()} gear
 							</Link>
 						</h2>
 						<Link href={`/drops/${listToAdd.drop.id}`}>
