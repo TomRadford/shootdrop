@@ -10,7 +10,13 @@ import { useMutation } from '@apollo/client'
 import { ADD_LIST_ITEM, GET_LIST_ITEMS } from '../../lib/apollo/queries'
 import useListItemStore from '../../lib/hooks/store/listItem'
 import { useEffect } from 'react'
-import { GearItem, GearList, GearListItem } from '../../__generated__/graphql'
+import {
+	AddListItemMutationVariables,
+	AddListItemMutation,
+	GearItem,
+	GearList,
+	GearListItem,
+} from '../../__generated__/graphql'
 import { isGearItem, isGearListItem } from '../../lib/utils'
 const whitePixel =
 	'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII='
@@ -34,29 +40,32 @@ const GearItemComponent = ({
 			loading: addListItemLoading,
 			error: addListItemError,
 		},
-	] = useMutation(ADD_LIST_ITEM, {
-		update: (cache, response) => {
-			// ToDo: update gearListItems using cache,
-			//currently using cache-and-network fetch policy due to
-			// not being able to merge dupes (quantity > 1) on client
-			// cache.updateQuery(
-			//   {
-			//     query: GET_LIST_ITEMS,
-			//     variables: { list: listToAdd.id },
-			//   },
-			//   ({ getListItems }) => {
-			//     return {
-			//       getListItems: {
-			//         totalDocs: getListItems.totalDocs + 1,
-			//         gearListItems: getListItems.gearListItems.concat(
-			//           response.data.addListItem
-			//         ),
-			//       },
-			//     }
-			//   }
-			// )
-		},
-	})
+	] = useMutation<AddListItemMutation, AddListItemMutationVariables>(
+		ADD_LIST_ITEM,
+		{
+			update: (cache, response) => {
+				// ToDo: update gearListItems using cache,
+				//currently using cache-and-network fetch policy due to
+				// not being able to merge dupes (quantity > 1) on client
+				// cache.updateQuery(
+				//   {
+				//     query: GET_LIST_ITEMS,
+				//     variables: { list: listToAdd.id },
+				//   },
+				//   ({ getListItems }) => {
+				//     return {
+				//       getListItems: {
+				//         totalDocs: getListItems.totalDocs + 1,
+				//         gearListItems: getListItems.gearListItems.concat(
+				//           response.data.addListItem
+				//         ),
+				//       },
+				//     }
+				//   }
+				// )
+			},
+		}
+	)
 	// ToDo: cache update
 
 	useEffect(() => {
