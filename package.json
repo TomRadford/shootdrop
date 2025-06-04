@@ -6,7 +6,10 @@
 		"dev:api": "pnpm --filter shootdrop-api dev",
 		"dev:web": "pnpm --filter shootdrop-web dev",
 		"dev:services": "docker compose up -d",
-		"dev:down": "docker compose down"
+		"dev:down": "docker compose down",
+		"build:web": "pnpm --filter shootdrop-web build",
+		"start:web": "pnpm --filter shootdrop-web start",
+		"start:api": "pnpm --filter shootdrop-api start"
 	},
 	"repository": {
 		"type": "git",
