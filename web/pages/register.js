@@ -72,8 +72,8 @@ const RegisterCard = () => {
 	}
 
 	return (
-        <div className="w-[17rem]">
-            <div className="mb-4">
+		<div className="w-[17rem]">
+			<div className="mb-4">
 				<h2 className="mb-3 text-xl font-semibold">
 					Register or{' '}
 					<Link href="/login" className="font-bold underline">
@@ -86,7 +86,7 @@ const RegisterCard = () => {
 					</p>
 				)}
 			</div>
-            {result.data ? (
+			{result.data ? (
 				<Card>
 					<div>
 						<h1 className="mb-2 font-bold">Thanks for registering!</h1>
@@ -134,7 +134,10 @@ const RegisterCard = () => {
 						<div className="mx-auto mt-2">
 							{process.env.NODE_ENV === 'production' && (
 								<HCaptcha
-									sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+									sitekey={
+										process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ??
+										'397a9cdc-7cf1-4baa-9bda-8e2e352b1427'
+									}
 									onVerify={(token, ekay) => setCaptchaToken(token)}
 									onExpire={() => setCaptchaToken(null)}
 									size="compact"
@@ -155,8 +158,8 @@ const RegisterCard = () => {
 					</form>
 				</Card>
 			)}
-        </div>
-    );
+		</div>
+	)
 }
 
 const LoginPage = () => {
@@ -165,11 +168,11 @@ const LoginPage = () => {
 	if (loading) return <Loading />
 
 	return (
-        <>
-            <Head>
+		<>
+			<Head>
 				<title>Registration | ShootDrop</title>
 			</Head>
-            <Layout>
+			<Layout>
 				<div className="flex h-screen flex-col">
 					<div className="m-auto text-center">
 						<RegisterCard />
@@ -196,8 +199,8 @@ const LoginPage = () => {
 					</div>
 				</div>
 			</Layout>
-        </>
-    );
+		</>
+	)
 }
 
 export default LoginPage
