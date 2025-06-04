@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-const USER_DETAILS = gql`
+export const USER_DETAILS = gql`
 	fragment UserDetails on User {
 		id
 		username
@@ -9,7 +9,7 @@ const USER_DETAILS = gql`
 	}
 `
 
-const GEAR_ITEM_DETAILS = gql`
+export const GEAR_ITEM_DETAILS = gql`
 	fragment GearItemDetails on GearItem {
 		id
 		category
@@ -120,7 +120,7 @@ export const CREATE_USER = gql`
 `
 
 export const ME = gql`
-	query {
+	query Me {
 		me {
 			...UserDetails
 		}
@@ -129,7 +129,7 @@ export const ME = gql`
 `
 
 export const ME_DROPS = gql`
-	query {
+	query MeDrops {
 		me {
 			fullName
 			id
@@ -174,7 +174,7 @@ export const EDIT_ME = gql`
 	${USER_DETAILS}
 `
 
-const DROP_DETAILS = gql`
+export const DROP_DETAILS = gql`
 	fragment DropDetails on Drop {
 		id
 		project
