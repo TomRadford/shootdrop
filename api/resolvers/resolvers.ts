@@ -549,11 +549,18 @@ const resolvers = {
 				// If gearItem already exists in this list:
 				// increment quantity instead of duplicating
 				existingGearListItem.quantity = existingGearListItem.quantity + 1
-				existingGearListItem.comment = comment
+
+				if (
+					existingGearListItem.comment !== comment &&
+					typeof comment === 'string'
+				) {
+					existingGearListItem.comment = comment
+				}
+
 				existingGearListItem.prefs = prefs
 					? prefs.map((pref) => {
-							//ToDo: relook at pref getting added here as existing would be overriten
-							//for now client does not alter prefs on add so can be ignored
+							//ToDo: relook at pref getting added here as existing would be overwritten
+							// For now: client does not alter prefs on add so can be ignored
 							return {
 								//@ts-expect-error TODO: Mongoose upgrade
 								pref: mongoose.Types.ObjectId(pref.id),
