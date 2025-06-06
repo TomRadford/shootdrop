@@ -36,3 +36,7 @@ export const isGearListItem = (
 export const cn = (...inputs: ClassValue[]): string => {
 	return twMerge(clsx(inputs))
 }
+
+export const capitalize = (str: string): string => {
+	return str.charAt(0).toUpperCase() + str.slice(1)
+}
