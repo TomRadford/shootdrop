@@ -24,7 +24,7 @@ const authLink = setContext((_, { headers }) => {
 
 // ToDo: fix coolify not loading https://api.shootdrop.com/graphql
 const httpLink = new HttpLink({
-	uri: process.env.NEXT_PUBLIC_API_URI ?? 'https://api.shootdrop.com/graphql',
+	uri: process.env.NEXT_PUBLIC_API_URI,
 })
 
 const handleError = onError(({ graphQLErrors, networkError }) => {

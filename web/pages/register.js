@@ -134,10 +134,7 @@ const RegisterCard = () => {
 						<div className="mx-auto mt-2">
 							{process.env.NODE_ENV === 'production' && (
 								<HCaptcha
-									sitekey={
-										process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ??
-										'397a9cdc-7cf1-4baa-9bda-8e2e352b1427'
-									}
+									sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
 									onVerify={(token, ekay) => setCaptchaToken(token)}
 									onExpire={() => setCaptchaToken(null)}
 									size="compact"
