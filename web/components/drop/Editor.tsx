@@ -7,6 +7,7 @@ import useUserInDrop from '../../lib/hooks/userInDrop'
 import React, { useState } from 'react'
 import DeleteModal from './DeleteModal'
 import { Drop, GearList } from '../../__generated__/graphql'
+
 const DropEditor = ({
 	children,
 	drop,
@@ -47,54 +48,24 @@ const DropEditor = ({
 									<h2 className="py-5 text-xl font-semibold">
 										{drop.lists.length > 0
 											? `Lists`
-											: userInDrop && me && `Add list`}
+											: userInDrop && me && `Add a list to get started`}
 									</h2>
 
 									<section className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-16">
-										<DropListInfo
-											drop={drop}
-											listEntry={
-												drop.lists.filter(
-													(list) => list.category === 'CAMERA'
-												)[0]
-											}
-											setDeleteModalOpen={setDeleteModalOpen}
-											setListToDelete={setListToDelete}
-											category="CAMERA"
-										/>
-										<DropListInfo
-											drop={drop}
-											listEntry={
-												drop.lists.filter(
-													(list) => list.category === 'SOUND'
-												)[0]
-											}
-											setDeleteModalOpen={setDeleteModalOpen}
-											setListToDelete={setListToDelete}
-											category="SOUND"
-										/>
-										<DropListInfo
-											drop={drop}
-											listEntry={
-												drop.lists.filter(
-													(list) => list.category === 'LIGHTING'
-												)[0]
-											}
-											setDeleteModalOpen={setDeleteModalOpen}
-											setListToDelete={setListToDelete}
-											category="LIGHTING"
-										/>
-										<DropListInfo
-											drop={drop}
-											listEntry={
-												drop.lists.filter(
-													(list) => list.category === 'GRIPS'
-												)[0]
-											}
-											setDeleteModalOpen={setDeleteModalOpen}
-											setListToDelete={setListToDelete}
-											category="GRIPS"
-										/>
+										{['CAMERA', 'SOUND', 'LIGHTING', 'GRIPS'].map(
+											(category) => (
+												<DropListInfo
+													key={category}
+													drop={drop}
+													listEntries={drop.lists.filter(
+														(list) => list.category === category
+													)}
+													setDeleteModalOpen={setDeleteModalOpen}
+													setListToDelete={setListToDelete}
+													category={category}
+												/>
+											)
+										)}
 									</section>
 								</div>
 							</div>
