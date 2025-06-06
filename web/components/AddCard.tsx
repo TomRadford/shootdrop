@@ -3,30 +3,32 @@ import Card from './Card'
 import LoadingSpinner from './elements/LoadingSpinner'
 import { Fragment } from 'react'
 
+//ToDo: make this one component
+
 export const AddButton = ({
 	onClick,
 	title,
 	loading,
 	as = 'button',
 }: {
-	onClick?: () => void
+	onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
 	title?: string
 	loading?: boolean
 	as?: 'button' | 'fragment'
 }) => {
 	const Component = as === 'button' ? 'button' : Fragment
 	return (
-		<Component className="relative mx-auto w-80 transition-transform hover:scale-105 active:scale-95 sm:w-96">
+		<Component
+			{...(as === 'button' && { onClick })}
+			className="relative mx-auto w-80 transition-transform hover:scale-105 active:scale-95 sm:w-96"
+		>
 			<Card>
 				{title && (
-					<div className="text-md absolute top-5 left-10 flex font-semibold">{`${
+					<div className="text-md font-semibold text-center">{`${
 						title[0]
 					}${title.slice(1).toLowerCase()}`}</div>
 				)}
-				<div
-					className="flex h-44 items-center justify-center"
-					onClick={onClick}
-				>
+				<div className="flex h-44 items-center justify-center">
 					{loading ? (
 						<LoadingSpinner />
 					) : (
@@ -51,7 +53,7 @@ export const AddButton = ({
 
 const AddCard = ({ href, title, onClick }) =>
 	href ? (
-		<Link href={href}>
+		<Link href={href} onClick={onClick}>
 			<AddButton as="fragment" />
 		</Link>
 	) : (
