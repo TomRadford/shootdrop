@@ -175,6 +175,7 @@ const GearItemComponent = ({
 								}
 								height="20"
 								width="20"
+								objectFit="cover"
 								alt={data.userThatUpdated.fullName}
 							/>
 							<div className="absolute top-7 -left-3 z-10 rounded-md bg-black bg-opacity-70 p-1 opacity-0 transition-opacity  group-hover:opacity-100">
