@@ -45,16 +45,18 @@ const DropListInfo = ({
 		})
 	}
 
-	const showLargeAddButton = userInDrop && me && !listEntries.length
+	const canEdit = userInDrop && me
 
 	return (
 		<div className="flex relative flex-col gap-4">
 			<div className="flex w-full justify-center gap-2">
-				<h3 className="font-bold text-lg">
-					{capitalize(category.toLowerCase())}
-				</h3>
+				{canEdit || listEntries.length ? (
+					<h3 className="font-bold text-lg">
+						{capitalize(category.toLowerCase())}
+					</h3>
+				) : null}
 
-				{!showLargeAddButton && (
+				{canEdit && listEntries.length ? (
 					<Button
 						onClick={handleAdd}
 						className="flex items-center p-1"
@@ -62,7 +64,7 @@ const DropListInfo = ({
 					>
 						<AddIcon width={16} height={16} />
 					</Button>
-				)}
+				) : null}
 			</div>
 			{!!listEntries?.length ? (
 				listEntries.map((listEntry) => (
@@ -75,7 +77,7 @@ const DropListInfo = ({
 						setDeleteModalOpen={setDeleteModalOpen}
 					/>
 				))
-			) : showLargeAddButton ? (
+			) : canEdit && !listEntries.length ? (
 				<AddButton
 					title={`Create list`}
 					onClick={handleAdd}
