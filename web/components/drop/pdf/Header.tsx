@@ -10,11 +10,12 @@ const styles = StyleSheet.create({
 	},
 	dropTitle: {
 		color: 'black',
-		fontSize: 14,
+		fontSize: 10,
 		textAlign: 'center',
 		fontWeight: 300,
 		fontFamily: 'Helvetica-Bold',
 		flexWrap: 'wrap',
+		wordBreak: 'break-word',
 		maxWidth: 130,
 	},
 	list: {
@@ -98,10 +99,18 @@ const Header = ({
 					<Link src={`https://shootdrop.com/drops/${id}`}>
 						<Text style={styles.dropTitle}>{drop}</Text>
 					</Link>
-					<View style={{ flexDirection: 'column', alignItems: 'center' }}>
-						<Text>Last updated at:</Text>
-						<Text>{format(new Date(updatedAt), 'HH:mm')}</Text>
-						<Text>{format(new Date(updatedAt), 'dd MMM yyyy')}</Text>
+					<View
+						style={{
+							flexDirection: 'column',
+							fontSize: 7,
+							alignItems: 'center',
+							fontWeight: 100,
+						}}
+					>
+						<Text>
+							Last updated at: {format(new Date(updatedAt), 'HH:mm')}{' '}
+							{format(new Date(updatedAt), 'dd MMM yyyy')}
+						</Text>
 					</View>
 				</View>
 				<View style={{ alignItems: 'center' }}>

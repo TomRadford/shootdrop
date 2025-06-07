@@ -58,6 +58,7 @@ const List = ({ list }: ListProps) => {
 							right: 8,
 							width: '30%',
 							textAlign: 'right',
+							paddingTop: 10,
 						}}
 					>
 						{list.itemCount} items
