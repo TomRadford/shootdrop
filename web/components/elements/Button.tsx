@@ -6,6 +6,7 @@ import { cn } from '../../lib/utils'
 type SharedProps = {
 	className?: string
 	href?: string
+	label?: string
 }
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & SharedProps
@@ -18,12 +19,15 @@ const hasHref = (props: ButtonProps | AnchorProps): props is AnchorProps =>
 
 const isRelativeHref = (href: string): boolean => href.startsWith('/')
 
-const buttonStyles = cva('rounded px-3 py-1 transition-all', {
+const buttonStyles = cva('relative rounded px-3 py-1 transition-all group', {
 	variants: {
 		variant: {
 			blue: 'bg-size-200 bg-pos-0 hover:bg-pos-100 bg-gradient-to-r from-sky-700 via-sky-800 to-sky-900 duration-500',
 			outline:
 				'border border-solid border-slate-600 transition-colors duration-300 hover:bg-slate-900',
+		},
+		center: {
+			true: 'flex items-center justify-center p-2',
 		},
 	},
 	defaultVariants: {
@@ -34,23 +38,34 @@ const buttonStyles = cva('rounded px-3 py-1 transition-all', {
 const AnchorButton = forwardRef<
 	HTMLAnchorElement,
 	AnchorProps & VariantProps<typeof buttonStyles>
->(({ variant, className, ...rest }, ref) => (
-	<a ref={ref} {...rest} className={cn(buttonStyles({ variant }), className)}>
+>(({ variant, center, className, ...rest }, ref) => (
+	<a
+		ref={ref}
+		{...rest}
+		className={cn(buttonStyles({ variant, center }), className)}
+	>
 		{rest.children}
 	</a>
 ))
 AnchorButton.displayName = 'AnchorButton'
 
+const ButtonLabel = ({ label }: { label: string }) => (
+	<div className="absolute top-7 -left-3 z-10 rounded-md bg-black bg-opacity-70 p-1 opacity-0 transition-opacity group-hover:opacity-100">
+		{label}
+	</div>
+)
+
 const NativeButton = forwardRef<
 	HTMLButtonElement,
 	ButtonProps & VariantProps<typeof buttonStyles>
->(({ variant, className, ...rest }, ref) => (
+>(({ variant, center, label, className, ...rest }, ref) => (
 	<button
 		ref={ref}
 		{...rest}
-		className={cn(buttonStyles({ variant }), className)}
+		className={cn(buttonStyles({ variant, center }), className)}
 	>
 		{rest.children}
+		{label && <ButtonLabel label={label} />}
 	</button>
 ))
 NativeButton.displayName = 'NativeButton'
@@ -64,17 +79,26 @@ const Button = forwardRef<
 			<Link
 				href={props.href}
 				className={cn(
-					buttonStyles({ variant: props.variant }),
+					buttonStyles({ variant: props.variant, center: props.center }),
 					props.className
 				)}
 			>
 				{props.children}
+				{props.label && <ButtonLabel label={props.label} />}
 			</Link>
 		) : (
-			<AnchorButton ref={ref as React.Ref<HTMLAnchorElement>} {...props} />
+			<AnchorButton ref={ref as React.Ref<HTMLAnchorElement>} {...props}>
+				{props.children}
+				{props.label && <ButtonLabel label={props.label} />}
+			</AnchorButton>
 		)
 	}
-	return <NativeButton ref={ref as React.Ref<HTMLButtonElement>} {...props} />
+	return (
+		<NativeButton ref={ref as React.Ref<HTMLButtonElement>} {...props}>
+			{props.children}
+			{props.label && <ButtonLabel label={props.label} />}
+		</NativeButton>
+	)
 })
 Button.displayName = 'Button'
 
