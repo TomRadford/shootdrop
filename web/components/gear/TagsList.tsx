@@ -8,9 +8,13 @@ import { GearItem } from '../../__generated__/graphql'
 const GearTags = ({
 	gearItem,
 	setTagsModalOpen,
+	title = 'Tags',
+	subtitle = 'tap to remove',
 }: {
 	gearItem?: GearItem
 	setTagsModalOpen: (open: boolean) => void
+	title?: string
+	subtitle?: string
 }) => {
 	const me = useGetMe()
 	const [query, setQuery] = useGearQueryParams()
@@ -36,12 +40,12 @@ const GearTags = ({
 
 	return (
 		<div className="flex flex-col gap-1 px-4 pb-4">
-			<span className="mb-2 flex items-end gap-2">
-				<h3 className="text-left text-base font-semibold">Tags</h3>
+			<div className="mb-2 flex items-baseline gap-2">
+				<h3 className="text-left font-semibold">{title}</h3>
 				{(me || !gearItem) && (
-					<p className="text-xs font-light text-gray-300">tap to remove</p>
+					<p className="text-xs font-light text-gray-300">{subtitle}</p>
 				)}
-			</span>
+			</div>
 			<div className="flex flex-wrap gap-2">
 				{allTagsLoading ? (
 					// Sekelon loader for tags while pulling in ALL_TAGS query for tag.name

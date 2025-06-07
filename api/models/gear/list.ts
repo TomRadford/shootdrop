@@ -49,6 +49,10 @@ const GearListSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 		},
+		title: {
+			type: String,
+			default: '',
+		},
 		comment: {
 			type: String,
 			default: '',

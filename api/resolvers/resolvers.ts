@@ -481,11 +481,12 @@ const resolvers = {
 			}
 			const parentDrop = await Drop.findOne({ lists: existingGearList })
 			checkDropPermissions(context, parentDrop)
-			const { comment } = args
+			const { comment, title } = args
 			const newList = await GearList.findByIdAndUpdate(
 				args.id,
 				{
-					comment,
+					...(comment && { comment }),
+					...(title && { title }),
 				},
 				{ returnDocument: 'after' }
 			)

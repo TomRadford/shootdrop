@@ -7,9 +7,21 @@ import {
 import Link from 'next/link'
 import ListComment from '../list/Comment'
 import { UPDATE_TIMEOUT } from '../../lib/config'
+import { GearList } from '../../__generated__/graphql'
+import { ListTitle } from '../list/Title'
+import { capitalize } from '../../lib/utils'
 
 // Debounced query params used for search state
-const GearFilter = ({ refetch, setTagsModalOpen, list, listToAdd }) => {
+const GearFilter = ({
+	setTagsModalOpen,
+	list,
+	listToAdd,
+}: {
+	refetch: () => void
+	setTagsModalOpen: (open: boolean) => void
+	list?: GearList
+	listToAdd?: GearList
+}) => {
 	const [query, setQuery] = useGearQueryParams()
 	// const [refetchGearData, ] = useLazyQuery(ALL_GEAR_ITEMS, { variables: query })
 	const [debouncedManufacturer, setDebouncedManufacturer] = useState('')
@@ -76,7 +88,7 @@ const GearFilter = ({ refetch, setTagsModalOpen, list, listToAdd }) => {
 
 	return (
 		<form className="flex w-full flex-wrap items-center justify-center gap-8 bg-gradient-to-b from-[#121212] to-transparent pb-8 pt-16 md:pt-8">
-			<div className="flex flex-col items-center gap-1 px-3 xl:flex-row">
+			<div className="flex flex-col gap-1 px-3 xl:flex-row">
 				{!list && !listToAdd ? (
 					<div className="relative z-10 mb-14 flex w-full select-none justify-center sm:justify-start xl:mr-40">
 						<div className="group absolute rounded-xl bg-[#191f29]">
@@ -119,9 +131,8 @@ const GearFilter = ({ refetch, setTagsModalOpen, list, listToAdd }) => {
 					</div>
 				) : list ? (
 					<div className="flex flex-col text-left">
-						<h2 className="text-lg font-semibold capitalize">
-							{list.category.toLowerCase()} gear
-						</h2>
+						<div className="text-sm text-gray-400">{list.category}</div>
+						<ListTitle list={list} />
 						<Link href={`/drops/${list.drop.id}`}>
 							<h4 className="text-sm">
 								for <span className="font-medium">{list.drop.project}</span>
@@ -136,10 +147,14 @@ const GearFilter = ({ refetch, setTagsModalOpen, list, listToAdd }) => {
 								{listToAdd.category.toLowerCase()} gear
 							</Link>
 						</h2>
-						<Link href={`/drops/${listToAdd.drop.id}`}>
+						<Link href={`/list/${listToAdd.id}`}>
 							<h4 className="text-sm">
 								for{' '}
-								<span className="font-medium">{listToAdd.drop.project}</span>
+								<span className="font-medium">
+									{listToAdd.title ||
+										capitalize(listToAdd.category.toLowerCase())}{' '}
+									list
+								</span>
 							</h4>
 						</Link>
 					</div>
@@ -166,7 +181,11 @@ const GearFilter = ({ refetch, setTagsModalOpen, list, listToAdd }) => {
 			</div>
 			<div className="w-64 lg:w-96">
 				<div className="rounded-3xl bg-gray-800 bg-opacity-40 py-4 px-4">
-					<GearTags setTagsModalOpen={setTagsModalOpen} />
+					<GearTags
+						title={list ? 'Filters' : 'Tags'}
+						subtitle={list ? 'Filter your list' : 'tap to remove'}
+						setTagsModalOpen={setTagsModalOpen}
+					/>
 				</div>
 			</div>
 		</form>

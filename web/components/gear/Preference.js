@@ -12,7 +12,6 @@ import {
 } from '../../lib/apollo/queries'
 import { UPDATE_TIMEOUT } from '../../lib/config'
 import useGetMe from '../../lib/hooks/getMe'
-import AddCard from '../AddCard'
 import Card from '../Card'
 
 const Opt = ({ opt, gearPrefId }) => {

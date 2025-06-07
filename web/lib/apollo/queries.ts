@@ -75,6 +75,7 @@ export const LIST_DETAILS = gql`
 		id
 		category
 		comment
+		title
 		drop {
 			id
 			project
@@ -500,8 +501,8 @@ export const GET_LIST = gql`
 `
 
 export const EDIT_LIST = gql`
-	mutation editList($id: String!, $comment: String!) {
-		editList(id: $id, comment: $comment) {
+	mutation editList($id: String!, $comment: String, $title: String) {
+		editList(id: $id, comment: $comment, title: $title) {
 			...ListDetails
 		}
 	}

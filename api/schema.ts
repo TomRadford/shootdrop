@@ -43,6 +43,7 @@ const typeDefs = gql`
 		id: ID!
 		category: String
 		comment: String
+		title: String
 		drop: Drop
 		updatedAt: Date
 	}
@@ -240,7 +241,7 @@ const typeDefs = gql`
 		): Drop!
 		removeDrop(drop: String!): Boolean!
 		addList(drop: String!, category: GearCategory!, comment: String): GearList!
-		editList(id: String!, comment: String!): GearList!
+		editList(id: String!, comment: String, title: String): GearList!
 		removeList(id: String!): Boolean!
 		addListItem(
 			list: String!
