@@ -1,7 +1,12 @@
-import { View, Text, Link, StyleSheet } from '@react-pdf/renderer'
+import { View, Text, Link, StyleSheet, Font } from '@react-pdf/renderer'
 import { andFormatter } from '../../../lib/text/formatter'
 import { GearListWithItems } from '../../../lib/types'
 import { capitalize } from '../../../lib/utils'
+
+Font.registerEmojiSource({
+	format: 'png',
+	url: 'https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/',
+})
 
 const styles = StyleSheet.create({
 	container: {

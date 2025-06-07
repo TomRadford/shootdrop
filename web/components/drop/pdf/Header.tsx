@@ -115,7 +115,11 @@ const Header = ({
 					</View>
 				</View>
 				<View style={{ alignItems: 'center' }}>
-					<Text style={styles.dropTitle}>{client}</Text>
+					<Text
+						style={{ ...styles.dropTitle, fontSize: 12, alignSelf: 'flex-end' }}
+					>
+						{client}
+					</Text>
 					<View
 						style={{
 							flexDirection: 'column',
@@ -124,7 +128,14 @@ const Header = ({
 					>
 						{gearCheckDate && (
 							<View style={styles.detailItem}>
-								<Text style={{ fontSize: 8, maxWidth: 50, lineHeight: 1 }}>
+								<Text
+									style={{
+										fontSize: 8,
+										maxWidth: 50,
+										lineHeight: 1,
+										paddingBottom: 4,
+									}}
+								>
 									Gear Check: {format(gearCheckDate, 'dd MMM yyyy')}
 								</Text>
 							</View>
