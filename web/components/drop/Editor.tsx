@@ -52,7 +52,7 @@ const DropEditor = ({
 									</h2>
 
 									<section className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-16">
-										{['CAMERA', 'SOUND', 'LIGHTING', 'GRIPS'].map(
+										{['CAMERA', 'LIGHTING', 'GRIPS', 'SOUND'].map(
 											(category) => (
 												<DropListInfo
 													key={category}

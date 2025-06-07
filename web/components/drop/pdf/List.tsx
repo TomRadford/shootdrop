@@ -1,6 +1,7 @@
 import { View, Text, Link, StyleSheet } from '@react-pdf/renderer'
 import { andFormatter } from '../../../lib/text/formatter'
 import { GearListWithItems } from '../../../lib/types'
+import { capitalize } from '../../../lib/utils'
 
 const styles = StyleSheet.create({
 	container: {
@@ -13,10 +14,10 @@ const styles = StyleSheet.create({
 	},
 	listTitle: {
 		fontFamily: 'Helvetica-Bold',
-		fontSize: 18,
-		textTransform: 'lowercase',
+		fontSize: 15,
 		color: 'white',
 		textDecoration: 'none',
+		paddingTop: 5,
 	},
 	sheet: {},
 	sheetRow: {
@@ -48,8 +49,22 @@ const List = ({ list }: ListProps) => {
 						width: '100%',
 					}}
 				>
+					<Text
+						style={{
+							color: 'white',
+							position: 'absolute',
+							left: 8,
+							width: '30%',
+							textAlign: 'left',
+							paddingTop: 10,
+						}}
+					>
+						{list.category}
+					</Text>
 					<Link src={`https://shootdrop.com/list/${list.id}`}>
-						<Text style={styles.listTitle}>{list.category} gear</Text>
+						<Text style={styles.listTitle}>
+							{list.title || `${capitalize(list.category.toLowerCase())} gear`}
+						</Text>
 					</Link>
 					<Text
 						style={{

@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { formatDistance } from 'date-fns'
 import { useQuery } from '@apollo/client'
 import { GET_LIST_ITEMS } from '../../lib/apollo/queries'
+import { capitalize } from '../../lib/utils'
 
 const ListEntry = ({
 	listEntry,
@@ -55,7 +56,9 @@ const ListEntry = ({
 				<Link href={`/list/${listEntry.id}`}>
 					<div className="pb-13 flex flex-col gap-1 px-4 py-2 ">
 						<h3 className="text-md text-left font-semibold">
-							{`${category[0]}${category.slice(1).toLowerCase()}`}
+							{listEntry.title
+								? listEntry.title
+								: `${capitalize(listEntry.category.toLowerCase())} list`}
 						</h3>
 						<p className="text-left text-sm font-light text-gray-300">
 							{listEntry.comment}

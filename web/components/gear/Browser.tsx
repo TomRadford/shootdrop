@@ -9,6 +9,7 @@ import { useGearQueryParams } from '../../lib/hooks/queryParams'
 import GearItem from './Item'
 import ItemModal from '../list/ItemModal'
 import useUserInDrop from '../../lib/hooks/userInDrop'
+import { GearList } from '../../__generated__/graphql'
 
 const GearListSkeleton = ({ length = 20 }) => (
 	<>
@@ -22,10 +23,16 @@ const GearListSkeleton = ({ length = 20 }) => (
 )
 
 //GearBrowser to be used on /gear, /list/[id] and /list/[id]/add routes
-const GearBrowser = ({ listToAdd, list }) => {
+const GearBrowser = ({
+	listToAdd,
+	list,
+}: {
+	listToAdd?: GearList
+	list?: GearList
+}) => {
 	const [query, setQuery] = useGearQueryParams()
 	const [tagsModalOpen, setTagsModalOpen] = useState(false)
-	const userInDrop = useUserInDrop(list ? list.drop : false)
+	const userInDrop = useUserInDrop(list ? list.drop : null)
 
 	const {
 		data: allGearData,

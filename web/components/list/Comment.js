@@ -22,7 +22,6 @@ const ListComment = ({ list }) => {
 			const timeout = setTimeout(() => {
 				console.log('updating list comment')
 				editList({
-					//Here
 					variables: {
 						id: list.id,
 						comment,

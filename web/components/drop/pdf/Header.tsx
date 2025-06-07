@@ -7,6 +7,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		marginTop: 5,
 		alignItems: 'center',
+		marginBottom: 10,
 	},
 	dropTitle: {
 		color: 'black',
@@ -123,7 +124,9 @@ const Header = ({
 					>
 						{gearCheckDate && (
 							<View style={styles.detailItem}>
-								<Text>Gear Check: {format(gearCheckDate, 'dd MMM yyyy')}</Text>
+								<Text style={{ fontSize: 8, maxWidth: 50, lineHeight: 1 }}>
+									Gear Check: {format(gearCheckDate, 'dd MMM yyyy')}
+								</Text>
 							</View>
 						)}
 						{startDate && (

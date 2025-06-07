@@ -11,6 +11,7 @@ import {
 } from '../../lib/apollo/queries'
 import { User } from '../../__generated__/graphql'
 import { useRouter } from 'next/router'
+import { capitalize } from '../../lib/utils'
 const DeleteModal = ({
 	deleteModalOpen,
 	setDeleteModalOpen,
@@ -132,9 +133,11 @@ const DeleteModal = ({
 										<span className="font-bold">
 											{!list
 												? drop.project
-												: `the ${list?.category?.toLowerCase()} list`}
+												: `${
+														list?.title ||
+														capitalize(list?.category.toLowerCase())
+												  }`}
 										</span>
-										?
 									</h4>
 								</Dialog.Title>
 								<div className="mx-4 my-2 flex flex-col items-center">
