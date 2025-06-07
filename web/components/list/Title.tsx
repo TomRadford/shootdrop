@@ -6,6 +6,7 @@ import { useState } from 'react'
 import useGetMe from '../../lib/hooks/getMe'
 import useUserInDrop from '../../lib/hooks/userInDrop'
 import { UPDATE_TIMEOUT } from '../../lib/config'
+import { capitalize } from '../../lib/utils'
 
 export const ListTitle = ({ list }: { list: GearList }) => {
 	const [editList, editListResult] = useMutation(EDIT_LIST)
@@ -30,7 +31,7 @@ export const ListTitle = ({ list }: { list: GearList }) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [title])
 
-	return (
+	return me && userInDrop ? (
 		<input
 			placeholder={`Enter a title for this list`}
 			type="text"
@@ -39,5 +40,9 @@ export const ListTitle = ({ list }: { list: GearList }) => {
 			disabled={!me || !userInDrop}
 			className="flex bg-transparent text-left"
 		/>
+	) : (
+		<h3 className="text-lg font-semibold capitalize">
+			{title ? title : `${capitalize(list.category.toLowerCase())} list`}
+		</h3>
 	)
 }
