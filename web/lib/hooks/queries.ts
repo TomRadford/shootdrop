@@ -68,6 +68,8 @@ const useGetLists = (lists: GearList[] = [], dropLoading: boolean) => {
 	return results
 }
 
+const EMPTY_ARRAY: GearList[] = []
+
 /**
  * WARNING:
  * Only use for pdf generation.
@@ -98,19 +100,19 @@ export const useGetFullDrop = (
 	}, [allLists])
 
 	const cameraLists = useGetLists(
-		listsByCategory['CAMERA'] || [],
+		listsByCategory['CAMERA'] || EMPTY_ARRAY,
 		dropResult.loading
 	)
 	const lightingLists = useGetLists(
-		listsByCategory['LIGHTING'] || [],
+		listsByCategory['LIGHTING'] || EMPTY_ARRAY,
 		dropResult.loading
 	)
 	const gripsLists = useGetLists(
-		listsByCategory['GRIPS'] || [],
+		listsByCategory['GRIPS'] || EMPTY_ARRAY,
 		dropResult.loading
 	)
 	const soundLists = useGetLists(
-		listsByCategory['SOUND'] || [],
+		listsByCategory['SOUND'] || EMPTY_ARRAY,
 		dropResult.loading
 	)
 
