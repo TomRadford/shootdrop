@@ -1,23 +1,21 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Drop } from '../../__generated__/graphql'
 import useGetMe from './getMe'
 
 const useUserInDrop = (drop: Drop) => {
 	const me = useGetMe()
-	const [userInDrop, setUserInDrop] = useState(false)
-	useEffect(() => {
-		if (me && drop) {
-			//ToDo: evaluate if boolean return is maybe a better fit
+
+	return useMemo(() => {
+		if (me && drop?.id) {
 			if (drop.users.find((user) => user.id === me.id)) {
-				setUserInDrop(true)
+				return true
 			} else {
-				setUserInDrop(false)
+				return false
 			}
 		} else {
-			setUserInDrop(false)
+			return false
 		}
-	}, [me, drop])
-	return userInDrop
+	}, [me, drop?.id])
 }
 
 export default useUserInDrop
