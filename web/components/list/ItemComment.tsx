@@ -3,8 +3,18 @@ import { EDIT_LIST_ITEM } from '../../lib/apollo/queries'
 import TextareaAutosize from 'react-textarea-autosize'
 import { useState, useEffect } from 'react'
 import useGetMe from '../../lib/hooks/getMe'
+import { GearListItem } from '../../__generated__/graphql'
+import { UPDATE_TIMEOUT } from '../../lib/config'
 
-const ItemComment = ({ listId, gearListItem, userInDrop }) => {
+const ItemComment = ({
+	listId,
+	gearListItem,
+	userInDrop,
+}: {
+	listId: string
+	gearListItem: GearListItem
+	userInDrop: boolean
+}) => {
 	const me = useGetMe()
 	const [editListItem, { data, loading, error }] = useMutation(EDIT_LIST_ITEM)
 	const [comment, setComment] = useState(
@@ -13,7 +23,7 @@ const ItemComment = ({ listId, gearListItem, userInDrop }) => {
 
 	useEffect(() => {
 		const timeout = setTimeout(() => {
-			if (comment !== gearListItem.comment && comment !== '') {
+			if (comment !== gearListItem.comment) {
 				console.log('updating comment')
 				editListItem({
 					variables: {
@@ -23,7 +33,7 @@ const ItemComment = ({ listId, gearListItem, userInDrop }) => {
 					},
 				})
 			}
-		}, 1000)
+		}, UPDATE_TIMEOUT)
 		return () => clearTimeout(timeout)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [comment])
