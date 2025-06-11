@@ -7,6 +7,7 @@ import useUserInDrop from '../../lib/hooks/userInDrop'
 import React, { useState } from 'react'
 import DeleteModal from './DeleteModal'
 import { Drop, GearList } from '../../__generated__/graphql'
+import DuplicateModal from './DuplicateModal'
 
 const DropEditor = ({
 	children,
@@ -18,6 +19,7 @@ const DropEditor = ({
 	const userInDrop = useUserInDrop(drop)
 	const me = useGetMe()
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+	const [duplicateModalOpen, setDuplicateModalOpen] = useState(false)
 	const [listToDelete, setListToDelete] = useState<GearList>(undefined)
 	return (
 		<div className="flex h-full min-h-screen">
@@ -29,12 +31,20 @@ const DropEditor = ({
 					list={listToDelete}
 					setListToDelete={setListToDelete}
 				/>
+				<DuplicateModal
+					duplicateModalOpen={duplicateModalOpen}
+					setDuplicateModalOpen={setDuplicateModalOpen}
+					drop={drop}
+					list={listToDelete}
+					setListToDelete={setListToDelete}
+				/>
 				{/* HERE: WORK OUT HOW TO HANDLE MODAL SET FOR EITHER DROP OR LIST */}
 				<form>
 					<DropHeader
 						drop={drop}
 						userInDrop={userInDrop}
 						setDeleteModalOpen={setDeleteModalOpen}
+						setDuplicateModalOpen={setDuplicateModalOpen}
 					/>
 					{drop && (
 						<div className="flex">
