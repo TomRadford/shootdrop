@@ -19,21 +19,24 @@ const hasHref = (props: ButtonProps | AnchorProps): props is AnchorProps =>
 
 const isRelativeHref = (href: string): boolean => href.startsWith('/')
 
-const buttonStyles = cva('relative rounded px-3 py-1 transition-all group', {
-	variants: {
-		variant: {
-			blue: 'bg-size-200 bg-pos-0 hover:bg-pos-100 bg-gradient-to-r from-sky-700 via-sky-800 to-sky-900 duration-500',
-			outline:
-				'border border-solid border-slate-600 transition-colors duration-300 hover:bg-slate-900',
+const buttonStyles = cva(
+	'w-min relative rounded px-2 py-1 transition-all group',
+	{
+		variants: {
+			variant: {
+				blue: 'bg-size-200 bg-pos-0 hover:bg-pos-100 bg-gradient-to-r from-sky-700 via-sky-800 to-sky-900 duration-500',
+				outline: 'border border-solid border-slate-600 hover:bg-slate-900',
+				red: ' rounded bg-red-600 transition-colors hover:bg-red-800',
+			},
+			center: {
+				true: 'flex items-center justify-center p-2',
+			},
 		},
-		center: {
-			true: 'flex items-center justify-center p-2',
+		defaultVariants: {
+			variant: 'blue',
 		},
-	},
-	defaultVariants: {
-		variant: 'blue',
-	},
-})
+	}
+)
 
 const AnchorButton = forwardRef<
 	HTMLAnchorElement,
