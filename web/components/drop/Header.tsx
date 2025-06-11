@@ -47,8 +47,6 @@ const DropHeader = ({
 
 	const router = useRouter()
 
-	console.log({ userInDrop })
-
 	useEffect(() => {
 		setIsAdding(0)
 	}, [])
