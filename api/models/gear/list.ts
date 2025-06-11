@@ -43,7 +43,7 @@ const GearListItemSchema = new mongoose.Schema(
 )
 GearListItemSchema.plugin(aggregatePaginate)
 
-const GearListSchema = new mongoose.Schema(
+export const GearListSchema = new mongoose.Schema(
 	{
 		category: {
 			type: String,

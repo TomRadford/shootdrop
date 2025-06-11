@@ -240,6 +240,7 @@ const typeDefs = gql`
 			wrapDate: Date
 		): Drop!
 		removeDrop(drop: String!): Boolean!
+		duplicateDrop(drop: String!, project: String!, client: String!): Drop!
 		addList(drop: String!, category: GearCategory!, comment: String): GearList!
 		editList(id: String!, comment: String, title: String): GearList!
 		removeList(id: String!): Boolean!
