@@ -12,6 +12,7 @@ import {
 import { User } from '../../__generated__/graphql'
 import { useRouter } from 'next/router'
 import { capitalize } from '../../lib/utils'
+import Button from '../elements/Button'
 const DeleteModal = ({
 	deleteModalOpen,
 	setDeleteModalOpen,
@@ -148,12 +149,9 @@ const DeleteModal = ({
 										</p>
 									)}
 
-									<button
-										onClick={handleRemove}
-										className="w-min rounded bg-red-600 py-1 px-2 transition-colors hover:bg-red-800"
-									>
+									<Button onClick={handleRemove} variant="red">
 										Delete
-									</button>
+									</Button>
 								</div>
 							</Dialog.Panel>
 						</Transition.Child>

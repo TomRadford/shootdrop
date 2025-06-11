@@ -60,11 +60,11 @@ const Header = ({
 	id: string
 	drop: string
 	client: string
-	gearCheckDate: number
-	startDate: number
-	endDate: number
-	wrapDate: string
-	updatedAt: number
+	gearCheckDate?: Date
+	startDate?: Date
+	endDate?: Date
+	wrapDate?: Date
+	updatedAt: Date
 	director: string
 	dop: string
 	soundie: string

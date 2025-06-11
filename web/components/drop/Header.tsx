@@ -10,17 +10,20 @@ import useIsAddingStore from '../../lib/hooks/store/isAdding'
 import { UPDATE_TIMEOUT } from '../../lib/config'
 import { Drop } from '../../__generated__/graphql'
 import Button from '../elements/Button'
-import PageIcon from '../ui/icons/PageIcon'
-import RubbishIcon from '../ui/icons/RubbishIcon'
+import PageIcon from '../elements/icons/PageIcon'
+import RubbishIcon from '../elements/icons/RubbishIcon'
+import DuplicateIcon from '../elements/icons/DuplicateIcon'
 
 const DropHeader = ({
 	drop,
 	userInDrop,
 	setDeleteModalOpen,
+	setDuplicateModalOpen,
 }: {
 	drop: Drop
 	userInDrop: boolean
 	setDeleteModalOpen: Dispatch<SetStateAction<boolean>>
+	setDuplicateModalOpen: Dispatch<SetStateAction<boolean>>
 }) => {
 	const [modalOpen, setModalOpen] = useState(false)
 
@@ -156,7 +159,7 @@ const DropHeader = ({
 							<p className=" top-0 text-gray-600">
 								Last edited {format(new Date(drop.updatedAt), 'HH:mm d/M/yy')}
 							</p>
-							<div className="flex gap-2">
+							<div className="flex gap-2 sm:flex-row flex-col">
 								<Button
 									center
 									href={`/drops/${drop.id}/pdf`}
@@ -166,18 +169,31 @@ const DropHeader = ({
 									<PageIcon width={16} height={16} />
 								</Button>
 								{userInDrop && (
-									<Button
-										onClick={(e) => {
-											e.preventDefault()
-											setDeleteModalOpen(true)
-										}}
-										center
-										variant="outline"
-										className="transition-colors duration-300 hover:bg-red-900"
-										label="Delete drop"
-									>
-										<RubbishIcon width={16} height={16} />
-									</Button>
+									<>
+										<Button
+											onClick={(e) => {
+												e.preventDefault()
+												setDuplicateModalOpen(true)
+											}}
+											center
+											variant="outline"
+											label="Duplicate drop"
+										>
+											<DuplicateIcon width={16} height={16} />
+										</Button>
+										<Button
+											onClick={(e) => {
+												e.preventDefault()
+												setDeleteModalOpen(true)
+											}}
+											center
+											variant="outline"
+											className="transition-colors duration-300 hover:bg-red-900"
+											label="Delete drop"
+										>
+											<RubbishIcon width={16} height={16} />
+										</Button>
+									</>
 								)}
 							</div>
 						</>

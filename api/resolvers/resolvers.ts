@@ -1,13 +1,13 @@
 import { GraphQLScalarType, GraphQLError, Kind } from 'graphql'
 import { ApolloServerErrorCode } from '@apollo/server/errors'
-import mongoose from 'mongoose'
+import mongoose, { InferSchemaType } from 'mongoose'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import { nanoid } from 'nanoid/async'
 import User from '../models/user'
 import Drop from '../models/drop'
 import Tag from '../models/gear/tag'
-import { GearList, GearListItem } from '../models/gear/list'
+import { GearList, GearListItem, GearListSchema } from '../models/gear/list'
 import GearItem from '../models/gear/item'
 import GearImage from '../models/gear/image'
 import config from '../utils/config'
@@ -17,6 +17,7 @@ import { GearPref, GearPrefOpt } from '../models/gear/pref'
 import { handlePrefs, handleEditPrefs } from '../utils/prefs'
 import { generateUploadURL, deleteS3Object } from '../utils/s3'
 import { sendAccountRequest, sendPasswordReset } from '../utils/mailer'
+import { Document } from 'mongoose'
 
 const dateScalar = new GraphQLScalarType({
 	name: 'Date',
@@ -448,6 +449,57 @@ const resolvers = {
 				})
 			}
 			return true
+		},
+
+		duplicateDrop: async (root, args, context) => {
+			checkAuth(context)
+			const existingDrop = await Drop.findById(args.drop).populate('lists')
+
+			checkDropPermissions(context, existingDrop)
+
+			const newDrop = new Drop({
+				users: [context.currentUser],
+				project: args.project,
+				client: args.client,
+			})
+
+			const newLists = []
+
+			for (const list of existingDrop.lists as unknown as (InferSchemaType<
+				typeof GearListSchema
+			> &
+				Document)[]) {
+				const newList = new GearList({
+					title: list.title,
+					category: list.category,
+					comment: list.comment,
+					drop: newDrop,
+				})
+				await newList.save()
+
+				newLists.push(newList)
+
+				const existingListItems = await GearListItem.find({
+					gearList: list._id,
+				})
+
+				for (const listItem of existingListItems) {
+					const newListItem = new GearListItem({
+						gearItem: listItem.gearItem,
+						quantity: listItem.quantity,
+						comment: listItem.comment,
+						prefs: listItem.prefs,
+						gearList: newList,
+						userThatUpdated: context.currentUser,
+					})
+					await newListItem.save()
+				}
+			}
+
+			newDrop.lists = newLists
+
+			await newDrop.save()
+			return await newDrop.populate(['users'])
 		},
 
 		addList: async (root, args, context) => {

@@ -5,6 +5,9 @@ import { Fragment } from 'react'
 
 //ToDo: make this one component
 
+const wrapperClassName =
+	'relative mx-auto w-80 transition-transform hover:scale-105 active:scale-95 sm:w-96'
+
 export const AddButton = ({
 	onClick,
 	title,
@@ -20,7 +23,7 @@ export const AddButton = ({
 	return (
 		<Component
 			{...(as === 'button' && { onClick })}
-			className="relative mx-auto w-80 transition-transform hover:scale-105 active:scale-95 sm:w-96"
+			{...(as === 'button' && { className: wrapperClassName })}
 		>
 			<Card>
 				{title && (
@@ -53,7 +56,7 @@ export const AddButton = ({
 
 const AddCard = ({ href, title, onClick }) =>
 	href ? (
-		<Link href={href} onClick={onClick}>
+		<Link href={href} onClick={onClick} className={wrapperClassName}>
 			<AddButton as="fragment" />
 		</Link>
 	) : (

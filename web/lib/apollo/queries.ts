@@ -232,6 +232,15 @@ export const REMOVE_DROP = gql`
 	}
 `
 
+export const DUPLICATE_DROP = gql`
+	mutation duplicateDrop($drop: String!, $project: String!, $client: String!) {
+		duplicateDrop(drop: $drop, project: $project, client: $client) {
+			...DropDetails
+		}
+	}
+	${DROP_DETAILS}
+`
+
 export const UPDATE_DROP = gql`
 	mutation updateDrop(
 		$id: String!
