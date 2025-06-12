@@ -49,16 +49,24 @@ const GearBrowser = ({
 		notifyOnNetworkStatusChange: true,
 	})
 
-	const isInitialLoading = networkStatus === NetworkStatus.loading
+	/**
+	 * This also includes refetch since we wanna also show skeleton when the gear query params change
+	 */
+	const isInitialLoading =
+		networkStatus === NetworkStatus.loading ||
+		networkStatus === NetworkStatus.refetch
+
 	const fetchingMore = networkStatus === NetworkStatus.fetchMore
 
 	useEffect(() => {
 		// refetch when url query params change from filter
 		refetch()
+		// ToDo: find a better way to reactively re-call query on query params change,
+		// for some reason useQuery from apollo client doesn't re-call automatically when
+		// the query when the query params change
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [query])
-
-	console.log({ isInitialLoading, fetchingMore })
 
 	const handleInView = (inView, entry) => {
 		if (isInitialLoading || fetchingMore || !allGearData) {
