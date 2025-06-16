@@ -2,7 +2,7 @@ import Card from '../Card'
 import { GearListItem, GearList } from '../../__generated__/graphql'
 
 import Link from 'next/link'
-import Image from 'next/image'
+import Image from 'next/legacy/image'
 import { formatDistance } from 'date-fns'
 import { useQuery } from '@apollo/client'
 import { GET_LIST_ITEMS } from '../../lib/apollo/queries'
@@ -25,6 +25,7 @@ const ListEntry = ({
 		fetchPolicy: 'cache-and-network',
 		variables: { list: listEntry.id },
 	})
+
 	return (
 		<div className="relative mx-auto w-80 sm:w-96" key={listEntry.id}>
 			<Card>
@@ -90,8 +91,9 @@ const ListEntry = ({
 																? listItem.gearItem.images[0].url
 																: `/img/default_gear.jpg`
 														}
-														width="30"
-														height="30"
+														width={30}
+														height={30}
+														objectFit="cover"
 														className="rounded-full"
 														key={listItem.id}
 													/>
