@@ -9,8 +9,10 @@ import { ALL_DROPS, UPDATE_DROP } from '../../../lib/apollo/queries'
 import ClientOnly from '../../../components/ClientOnly'
 import client from '../../../lib/apollo/client'
 import { gql } from '@apollo/client'
+import { Drop } from '../../../__generated__/graphql'
+
 // Route for DropEditor to mount with a queried drop
-const DropPage = ({ drop }) => {
+const DropPage = ({ drop }: { drop?: Drop }) => {
 	const router = useRouter()
 	const dropId = router.query.id
 	const dropResult = useQuery(ALL_DROPS, {
@@ -47,7 +49,7 @@ const DropPage = ({ drop }) => {
 						: `${drop.project} | ShootDrop`}
 				</title>
 			</Head>
-			{dropResult.loading ? (
+			{dropResult.loading && !dropResult.data ? (
 				<Loading />
 			) : (
 				<Layout>
