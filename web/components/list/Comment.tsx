@@ -6,8 +6,9 @@ import { EDIT_LIST } from '../../lib/apollo/queries'
 import { useEffect } from 'react'
 import useUserInDrop from '../../lib/hooks/userInDrop'
 import { UPDATE_TIMEOUT } from '../../lib/config'
+import { GearList } from '../../__generated__/graphql'
 
-const ListComment = ({ list }) => {
+const ListComment = ({ list }: { list: GearList }) => {
 	const [comment, setComment] = useState(
 		list ? (list.comment ? list.comment : '') : ''
 	)
@@ -15,6 +16,10 @@ const ListComment = ({ list }) => {
 	const userInDrop = useUserInDrop(list.drop)
 
 	const [editList, editListResult] = useMutation(EDIT_LIST)
+
+	useEffect(() => {
+		setComment(list && list.comment ? list.comment : '')
+	}, [list.comment])
 
 	useEffect(() => {
 		//If !gearItem.description, only update to description/"" if logged in
