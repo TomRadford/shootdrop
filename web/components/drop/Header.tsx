@@ -48,6 +48,11 @@ const DropHeader = ({
 	const router = useRouter()
 
 	useEffect(() => {
+		setDropName(drop ? drop.project : '')
+		setClientName(drop ? drop.client : '')
+	}, [drop])
+
+	useEffect(() => {
 		setIsAdding(0)
 	}, [])
 
