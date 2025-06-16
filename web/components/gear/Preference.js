@@ -38,6 +38,10 @@ const Opt = ({ opt, gearPrefId }) => {
 		} // eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [optName])
 
+	useEffect(() => {
+		setOptName(opt ? opt.name : '')
+	}, [opt])
+
 	const handleRemove = (e) => {
 		e.preventDefault()
 		console.log('removing opt')
