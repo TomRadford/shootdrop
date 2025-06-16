@@ -45,7 +45,10 @@ const GearBrowser = ({
 			: listToAdd
 			? { ...query, category: listToAdd.category }
 			: query,
-		fetchPolicy: 'network-only',
+		/**
+		 * ToDo: I dont think cache for this matters due to how `isInitialLoading` works
+		 */
+		fetchPolicy: 'cache-and-network',
 		notifyOnNetworkStatusChange: true,
 	})
 
