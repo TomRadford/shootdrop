@@ -25,6 +25,12 @@ const GearHeader = ({ gearItem }) => {
 	const setIsAdding = useIsAddingStore((state) => state.setIsAdding)
 
 	useEffect(() => {
+		setCategory(gearItem ? gearItem.category : [])
+		setModel(gearItem ? gearItem.model : '')
+		setManufacturer(gearItem ? gearItem.manufacturer : '')
+	}, [gearItem])
+
+	useEffect(() => {
 		setIsAdding(0)
 	}, [])
 
