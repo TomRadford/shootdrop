@@ -9,6 +9,7 @@ import { ErrorBoundary, FallbackProps } from 'react-error-boundary'
 import Button from '../components/elements/Button'
 import { useEffect, useState } from 'react'
 import LoadingSpinner from '../components/elements/LoadingSpinner'
+import useWindowFocus from '../lib/hooks/windowFocus'
 
 const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
 	const [showError, setShowError] = useState<boolean>(false)
@@ -37,6 +38,9 @@ const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
 }
 
 const App = ({ Component, pageProps }: AppProps) => {
+	useWindowFocus(() => {
+		client.reFetchObservableQueries()
+	})
 	return (
 		<ErrorBoundary FallbackComponent={ErrorFallback}>
 			<ApolloProvider client={client}>
