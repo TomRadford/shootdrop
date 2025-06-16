@@ -13,8 +13,9 @@ const DropEditor = ({
 	children,
 	drop,
 }: {
-	children: React.ReactNode
-	drop: Drop
+	// ToDo: discriminated union type for both
+	children?: React.ReactNode
+	drop?: Drop
 }) => {
 	const userInDrop = useUserInDrop(drop)
 	const me = useGetMe()
