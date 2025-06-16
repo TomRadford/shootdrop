@@ -71,7 +71,7 @@ const DropPage = ({ drop }: { drop?: Drop }) => {
 //Project name queried for title SSR and replaced upon hydration
 
 const DROP_PROJECT = gql`
-	query allDrops($drop: String!) {
+	query allDropsProject($drop: String!) {
 		allDrops(drop: $drop) {
 			project
 		}
