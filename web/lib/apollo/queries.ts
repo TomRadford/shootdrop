@@ -539,6 +539,7 @@ const GEAR_LIST_ITEM_DETAILS = gql`
 		quantity
 		comment
 		updatedAt
+		createdAt
 		gearItem {
 			...GearItemDetails
 		}

@@ -57,6 +57,7 @@ const typeDefs = gql`
 		comment: String
 		userThatUpdated: User
 		updatedAt: Date
+		createdAt: Date
 	}
 
 	type GearListGearPref {
