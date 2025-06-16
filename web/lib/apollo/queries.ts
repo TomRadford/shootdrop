@@ -539,6 +539,7 @@ const GEAR_LIST_ITEM_DETAILS = gql`
 		quantity
 		comment
 		updatedAt
+		createdAt
 		gearItem {
 			...GearItemDetails
 		}
@@ -566,8 +567,15 @@ export const GET_LIST_ITEMS = gql`
 		$limit: Int
 		$offset: Int
 		$tags: [String]
+		$sort: SortOrder
 	) {
-		getListItems(list: $list, limit: $limit, offset: $offset, tags: $tags) {
+		getListItems(
+			list: $list
+			limit: $limit
+			offset: $offset
+			tags: $tags
+			sort: $sort
+		) {
 			totalDocs
 			gearListItems {
 				...GearListItemDetails

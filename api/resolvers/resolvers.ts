@@ -920,17 +920,21 @@ const resolvers = {
 
 		getListItems: async (root, args, context) => {
 			try {
-				let options = {}
+				let options: {
+					sort?: { createdAt: 1 | -1 }
+					limit?: number
+					offset?: number
+				} = {}
+
+				// Default order is ASC (oldest first)
+				options.sort = { createdAt: args?.sort === 'DESC' ? -1 : 1 }
 
 				if (args.limit) {
-					//@ts-expect-error TODO: Mongoose upgrade
 					options.limit = args.limit
 				} else {
-					//@ts-expect-error TODO: Mongoose upgrade
 					options.limit = 16
 				}
 				if (args.offset) {
-					//@ts-expect-error TODO: Mongoose upgrade
 					options.offset = args.offset
 				}
 
@@ -971,8 +975,6 @@ const resolvers = {
 					})
 				}
 
-				//@ts-expect-error TODO: Mongoose upgrade
-				options.sort = { _id: -1 }
 				const gearListItemAggregate = GearListItem.aggregate(aggregateParams)
 
 				//@ts-expect-error TODO: Mongoose upgrade

@@ -9,7 +9,7 @@ import { useGearQueryParams } from '../../lib/hooks/queryParams'
 import GearItem from './Item'
 import ItemModal from '../list/ItemModal'
 import useUserInDrop from '../../lib/hooks/userInDrop'
-import { GearList } from '../../__generated__/graphql'
+import { GearList, SortOrder } from '../../__generated__/graphql'
 
 const GearListSkeleton = ({ length = 20 }) => (
 	<>
@@ -33,7 +33,7 @@ const GearBrowser = ({
 	const [query, setQuery] = useGearQueryParams()
 	const [tagsModalOpen, setTagsModalOpen] = useState(false)
 	const userInDrop = useUserInDrop(list ? list.drop : null)
-
+	const [sort, setSort] = useState(SortOrder.Asc)
 	const {
 		data: allGearData,
 		refetch,
@@ -41,7 +41,7 @@ const GearBrowser = ({
 		networkStatus,
 	} = useQuery(list ? GET_LIST_ITEMS : ALL_GEAR_ITEMS, {
 		variables: list
-			? { ...query, list: list.id }
+			? { ...query, list: list.id, sort }
 			: listToAdd
 			? { ...query, category: listToAdd.category }
 			: query,
@@ -115,6 +115,8 @@ const GearBrowser = ({
 					setTagsModalOpen={setTagsModalOpen}
 					list={list}
 					listToAdd={listToAdd}
+					sort={sort}
+					setSort={setSort}
 				/>
 
 				<div className="mb-10">
