@@ -6,18 +6,17 @@ import { useRouter } from 'next/router'
 import { GET_LIST } from '../../lib/apollo/queries'
 import Loading from '../../components/Loading'
 import GearBrowser from '../../components/gear/Browser'
+import { GetListWithProjectQuery } from '../../__generated__/graphql'
 
-const ListPage = ({ list }) => {
+const ListPage = ({ list }: { list: GetListWithProjectQuery['getList'] }) => {
 	const router = useRouter()
 	const listId = router.query.id
 	const listResult = useQuery(GET_LIST, {
 		variables: {
 			id: listId,
 		},
-		// Refresh list on page load to ensure latest
-		// data between users
 		// ToDo: potentially replace this with subscription
-		fetchPolicy: 'network-only',
+		fetchPolicy: 'cache-and-network',
 	})
 	if (!list) {
 		return (
@@ -50,7 +49,7 @@ const ListPage = ({ list }) => {
           ${list.drop.project} | ShootDrop`}
 				</title>
 			</Head>
-			{listResult.loading ? (
+			{listResult.loading && !listResult.data ? (
 				<Loading />
 			) : (
 				<Layout>
@@ -64,7 +63,7 @@ const ListPage = ({ list }) => {
 }
 
 const LIST_PROJECT = gql`
-	query getList($id: String!) {
+	query getListWithProject($id: String!) {
 		getList(id: $id) {
 			id
 			category
@@ -78,7 +77,7 @@ const LIST_PROJECT = gql`
 
 export const getServerSideProps = async ({ params }) => {
 	try {
-		const { data } = await client.query({
+		const { data } = await client.query<GetListWithProjectQuery>({
 			query: LIST_PROJECT,
 			variables: {
 				id: params.id,
