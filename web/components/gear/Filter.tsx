@@ -7,20 +7,27 @@ import {
 import Link from 'next/link'
 import ListComment from '../list/Comment'
 import { UPDATE_TIMEOUT } from '../../lib/config'
-import { GearList } from '../../__generated__/graphql'
+import { GearList, SortOrder } from '../../__generated__/graphql'
 import { ListTitle } from '../list/Title'
 import { capitalize } from '../../lib/utils'
+import Button from '../elements/Button'
+import ArrowIcon from '../elements/icons/ArrowIcon'
 
 // Debounced query params used for search state
 const GearFilter = ({
 	setTagsModalOpen,
 	list,
 	listToAdd,
+	sort,
+	setSort,
 }: {
 	refetch: () => void
 	setTagsModalOpen: (open: boolean) => void
 	list?: GearList
 	listToAdd?: GearList
+	// Currently only used for lists
+	sort?: SortOrder
+	setSort?: (sort: SortOrder) => void
 }) => {
 	const [query, setQuery] = useGearQueryParams()
 	// const [refetchGearData, ] = useLazyQuery(ALL_GEAR_ITEMS, { variables: query })
@@ -179,6 +186,8 @@ const GearFilter = ({
 					</div>
 				) : null}
 			</div>
+			{/* ToDo: decide if we need this for lists? - it doesnt 100% make sense does it?   */}
+
 			<div className="w-64 lg:w-96">
 				<div className="rounded-3xl bg-gray-800 bg-opacity-40 py-4 px-4">
 					<GearTags
@@ -188,6 +197,23 @@ const GearFilter = ({
 					/>
 				</div>
 			</div>
+
+			{/* ToDo: sorting is lists-only at the moment, should we add it for gear browser? */}
+			{list && (
+				<Button
+					variant="outline"
+					center
+					onClick={(e) => {
+						e.preventDefault()
+						setSort(sort === SortOrder.Asc ? SortOrder.Desc : SortOrder.Asc)
+					}}
+				>
+					<ArrowIcon
+						direction={sort === SortOrder.Asc ? 'down' : 'up'}
+						size="sm"
+					/>
+				</Button>
+			)}
 		</form>
 	)
 }
