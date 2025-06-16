@@ -3,8 +3,8 @@ import { CodegenConfig } from '@graphql-codegen/cli'
 // ToDo: codegen is a little rough
 const config: CodegenConfig = {
 	schema: '../api/schema.ts',
-	// documents: ['./**/*.{ts,tsx}', '!./__generated__/**'],
-	documents: ['./lib/apollo/queries.ts'],
+	documents: ['./**/*.{ts,tsx}', '!./__generated__/**'],
+	// documents: ['./lib/apollo/queries.ts'],
 	generates: {
 		'./__generated__/graphql.ts': {
 			plugins: [
