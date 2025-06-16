@@ -51,6 +51,10 @@ const GearBrowser = ({
 
 	/**
 	 * This also includes refetch since we wanna also show skeleton when the gear query params change
+	 *
+	 * Note that we also refetch when the window is refocussed,
+	 * which will trigger this to be true (thus showing skelly)
+	 * but I think that's gucci tbh
 	 */
 	const isInitialLoading =
 		networkStatus === NetworkStatus.loading ||
