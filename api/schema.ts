@@ -10,6 +10,11 @@ const typeDefs = gql`
 		SOUND
 	}
 
+	enum SortOrder {
+		ASC
+		DESC
+	}
+
 	type User {
 		id: ID!
 		fullName: String
@@ -149,6 +154,7 @@ const typeDefs = gql`
 			tags: [String]
 			limit: Int
 			offset: Int
+			sort: SortOrder
 		): ListItemResults!
 		getProfileImageUpload: String!
 		getGearImageUpload(gearItem: String!): String!
