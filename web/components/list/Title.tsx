@@ -15,6 +15,10 @@ export const ListTitle = ({ list }: { list: GearList }) => {
 	const userInDrop = useUserInDrop(list.drop)
 
 	useEffect(() => {
+		setTitle(list && list.title ? list.title : '')
+	}, [list.title])
+
+	useEffect(() => {
 		//If !gearItem.description, only update to description/"" if logged in
 		if (list.title !== title) {
 			const timeout = setTimeout(() => {
