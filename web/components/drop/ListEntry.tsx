@@ -22,7 +22,7 @@ const ListEntry = ({
 	setDeleteModalOpen: (open: boolean) => void
 }) => {
 	const { data: itemsData, loading: itemsLoading } = useQuery(GET_LIST_ITEMS, {
-		fetchPolicy: 'network-only',
+		fetchPolicy: 'cache-and-network',
 		variables: { list: listEntry.id },
 	})
 	return (
@@ -63,7 +63,7 @@ const ListEntry = ({
 						<p className="text-left text-sm font-light text-gray-300">
 							{listEntry.comment}
 						</p>
-						{itemsLoading ? (
+						{itemsLoading && !itemsData ? (
 							<div className="flex -space-x-3 md:-space-x-2">
 								{[...new Array(5)].map((a, i) => (
 									<div
