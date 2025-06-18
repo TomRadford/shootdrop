@@ -31,6 +31,12 @@ const buttonStyles = cva(
 			center: {
 				true: 'flex items-center justify-center p-2',
 			},
+			loading: {
+				true: 'animate-pulse',
+			},
+			disabled: {
+				true: 'opacity-50 cursor-not-allowed',
+			},
 		},
 		defaultVariants: {
 			variant: 'blue',
@@ -41,11 +47,14 @@ const buttonStyles = cva(
 const AnchorButton = forwardRef<
 	HTMLAnchorElement,
 	AnchorProps & VariantProps<typeof buttonStyles>
->(({ variant, center, className, ...rest }, ref) => (
+>(({ variant, center, className, loading, disabled, ...rest }, ref) => (
 	<a
 		ref={ref}
 		{...rest}
-		className={cn(buttonStyles({ variant, center }), className)}
+		className={cn(
+			buttonStyles({ variant, center, loading, disabled }),
+			className
+		)}
 	>
 		{rest.children}
 	</a>
@@ -61,11 +70,12 @@ const ButtonLabel = ({ label }: { label: string }) => (
 const NativeButton = forwardRef<
 	HTMLButtonElement,
 	ButtonProps & VariantProps<typeof buttonStyles>
->(({ variant, center, label, className, ...rest }, ref) => (
+>(({ variant, center, disabled, label, className, loading, ...rest }, ref) => (
 	<button
 		ref={ref}
 		{...rest}
-		className={cn(buttonStyles({ variant, center }), className)}
+		disabled={loading || disabled}
+		className={cn(buttonStyles({ variant, center, loading }), className)}
 	>
 		{rest.children}
 		{label && <ButtonLabel label={label} />}
@@ -82,7 +92,12 @@ const Button = forwardRef<
 			<Link
 				href={props.href}
 				className={cn(
-					buttonStyles({ variant: props.variant, center: props.center }),
+					buttonStyles({
+						variant: props.variant,
+						center: props.center,
+						loading: props.loading,
+						disabled: props.disabled,
+					}),
 					props.className
 				)}
 			>

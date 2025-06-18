@@ -149,7 +149,13 @@ const DeleteModal = ({
 										</p>
 									)}
 
-									<Button onClick={handleRemove} variant="red">
+									<Button
+										onClick={handleRemove}
+										variant="red"
+										loading={
+											removeDropResult.loading || removeListResult.loading
+										}
+									>
 										Delete
 									</Button>
 								</div>

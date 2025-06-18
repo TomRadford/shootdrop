@@ -149,7 +149,11 @@ const DuplicateModal = ({
 										</p>
 									)}
 
-									<Button type="submit" variant="outline">
+									<Button
+										type="submit"
+										variant="outline"
+										loading={duplicateDropResult.loading}
+									>
 										Duplicate
 									</Button>
 								</div>
