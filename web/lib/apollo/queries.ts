@@ -6,6 +6,7 @@ export const USER_DETAILS = gql`
 		username
 		fullName
 		profilePicture
+		admin
 	}
 `
 
