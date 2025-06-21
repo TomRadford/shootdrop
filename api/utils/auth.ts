@@ -9,6 +9,13 @@ export const checkAuth = (context) => {
 			},
 		})
 	}
+	if (!currentUser.enabled) {
+		throw new GraphQLError('User is not enabled', {
+			extensions: {
+				code: 'BAD_USER_INPUT',
+			},
+		})
+	}
 }
 
 export const checkAdmin = (context) => {
