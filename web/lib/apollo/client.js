@@ -29,12 +29,22 @@ const httpLink = new HttpLink({
 
 const handleError = onError(({ graphQLErrors, networkError }) => {
 	if (graphQLErrors)
-		graphQLErrors.forEach(({ message, locations, path }) => {
+		graphQLErrors.forEach(({ message, locations, path, extensions }) => {
 			console.error(
 				`[GraphQL error]: Message ${message}, Location: ${locations}, Path: ${path}`
 			)
+
 			if (message === 'Context creation failed: jwt expired') {
 				localStorage.clear()
+				window.location = '/login'
+			}
+
+			if (
+				extensions?.code === 'BAD_USER_INPUT' &&
+				message === 'User is not enabled'
+			) {
+				localStorage.clear()
+				alert('Your account has been disabled - naughty naughty 🤭')
 				window.location = '/login'
 			}
 		})

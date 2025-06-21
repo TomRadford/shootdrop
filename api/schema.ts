@@ -20,8 +20,11 @@ const typeDefs = gql`
 		fullName: String
 		username: String!
 		gearhouse: Boolean!
+		admin: Boolean!
 		drops: [Drop]
 		profilePicture: String
+		createdAt: Date
+		updatedAt: Date
 	}
 
 	type Token {
@@ -209,6 +212,7 @@ const typeDefs = gql`
 			tags: [String]
 			prefs: [GearPrefInput]
 		): GearItem!
+		removeGearItem(id: String!): String!
 		addGearPref(gearItem: String!): GearPref!
 		editGearPref(id: String, name: String): GearPref!
 		removeGearPref(id: String!, gearItem: String!): String!

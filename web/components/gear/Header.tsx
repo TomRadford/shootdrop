@@ -5,10 +5,16 @@ import TextareaAutosize from 'react-textarea-autosize'
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
 import { useMutation } from '@apollo/client'
-import { ADD_GEAR_ITEM, EDIT_GEAR_ITEM } from '../../lib/apollo/queries'
+import {
+	ADD_GEAR_ITEM,
+	REMOVE_GEAR_ITEM,
+	EDIT_GEAR_ITEM,
+} from '../../lib/apollo/queries'
 import { andFormatter } from '../../lib/text/formatter'
 import useIsAddingStore from '../../lib/hooks/store/isAdding'
 import { UPDATE_TIMEOUT } from '../../lib/config'
+import Button from '../elements/Button'
+import RubbishIcon from '../elements/icons/RubbishIcon'
 
 const GearHeader = ({ gearItem }) => {
 	const [category, setCategory] = useState(gearItem ? gearItem.category : [])
@@ -20,9 +26,11 @@ const GearHeader = ({ gearItem }) => {
 	const [addGearItem, { data: addData, loading: addLoading, error: addError }] =
 		useMutation(ADD_GEAR_ITEM)
 	const [editGearItem, editGearItemResult] = useMutation(EDIT_GEAR_ITEM)
+	const [removeGearItem, removeGearItemResult] = useMutation(REMOVE_GEAR_ITEM)
 	const me = useGetMe()
 	const router = useRouter()
 	const setIsAdding = useIsAddingStore((state) => state.setIsAdding)
+	const isAdmin = me?.admin
 
 	useEffect(() => {
 		setCategory(gearItem ? gearItem.category : [])
@@ -87,8 +95,39 @@ const GearHeader = ({ gearItem }) => {
 		}
 	}
 
+	const handleRemove = (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.preventDefault()
+		// Just for admins so window confirm is straight up gucci 💆
+		if (
+			window.confirm('🚨 Delete this from the global Shootdrop database? 🚨') &&
+			window.confirm(
+				'Are you sure? - it will be deleted for all users everywhere ☠️'
+			)
+		) {
+			removeGearItem({
+				variables: { id: gearItem.id },
+				onCompleted: () => router.back(),
+			})
+		}
+	}
+
 	return (
 		<>
+			{isAdmin && (
+				<div className="fixed bottom-6 z-20  right-6 p-5 bg-black/80 backdrop-blur-sm rounded-md">
+					<div className="flex items-center gap-2 flex-row">
+						<p className="text-lg font-bold text-gray-400">🚨</p>
+						<Button
+							loading={removeGearItemResult.loading}
+							variant="outline"
+							center
+							onClick={handleRemove}
+						>
+							<RubbishIcon width={14} height={14} />
+						</Button>
+					</div>
+				</div>
+			)}
 			<header className="mx-auto flex justify-between gap-1 align-bottom">
 				<div className=" flex w-full flex-col items-center">
 					<div>
@@ -128,6 +167,7 @@ const GearHeader = ({ gearItem }) => {
 					</div>
 				</div>
 			</header>
+
 			<Transition appear show={modalOpen} as={Fragment}>
 				<Dialog
 					as="div"

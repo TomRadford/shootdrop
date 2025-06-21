@@ -11,7 +11,7 @@ import { GearList, GearListItem, GearListSchema } from '../models/gear/list'
 import GearItem from '../models/gear/item'
 import GearImage from '../models/gear/image'
 import config from '../utils/config'
-import { checkAuth, checkDropPermissions } from '../utils/auth'
+import { checkAdmin, checkAuth, checkDropPermissions } from '../utils/auth'
 import { handleTags } from '../utils/tags'
 import { GearPref, GearPrefOpt } from '../models/gear/pref'
 import { handlePrefs, handleEditPrefs } from '../utils/prefs'
@@ -195,6 +195,76 @@ const resolvers = {
 					},
 				})
 			}
+		},
+		removeGearItem: async (root, args, context) => {
+			checkAuth(context)
+			checkAdmin(context)
+
+			const gearItem = await GearItem.findById(args.id)
+			if (!gearItem) {
+				throw new GraphQLError('Gear Item not found', {
+					extensions: {
+						code: ApolloServerErrorCode.BAD_USER_INPUT,
+					},
+				})
+			}
+
+			await GearListItem.deleteMany({ gearItem: gearItem.id })
+
+			const gearPrefs = await GearPref.find({ gearItem: gearItem.id })
+
+			const allOptsFromThisGearItem = new Set<string>()
+			gearPrefs.forEach((pref) => {
+				pref.allOpts.forEach((opt) =>
+					allOptsFromThisGearItem.add(opt.toString())
+				)
+			})
+
+			const optsUsedByOtherGearItems = await GearPref.aggregate([
+				{
+					$match: {
+						gearItem: { $ne: gearItem.id },
+					},
+				},
+				{
+					$unwind: '$allOpts',
+				},
+				{
+					$group: {
+						_id: '$allOpts',
+					},
+				},
+			])
+
+			const optsUsedByOthersSet = new Set(
+				optsUsedByOtherGearItems.map((item) => item._id.toString())
+			)
+
+			const orphanedOpts = Array.from(allOptsFromThisGearItem).filter(
+				(opt) => !optsUsedByOthersSet.has(opt)
+			)
+
+			if (orphanedOpts.length > 0) {
+				await GearPrefOpt.deleteMany({
+					_id: { $in: orphanedOpts },
+				})
+			}
+
+			await GearPref.deleteMany({ gearItem: gearItem.id })
+
+			const gearImages = await GearImage.find({
+				_id: { $in: gearItem.images },
+			})
+
+			const deleteImagePromises = gearImages.map(async (image) => {
+				await deleteS3Object(`gear/${args.id}`, image.url.split('/').at(-1))
+				await image.delete()
+			})
+
+			await Promise.all(deleteImagePromises)
+			await gearItem.delete()
+
+			return gearItem.id
 		},
 		addGearPref: async (root, args, context) => {
 			checkAuth(context)
