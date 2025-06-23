@@ -6,6 +6,7 @@ export const USER_DETAILS = gql`
 		username
 		fullName
 		profilePicture
+		admin
 	}
 `
 
@@ -362,6 +363,12 @@ export const ADD_GEAR_ITEM = gql`
 		}
 	}
 	${GEAR_ITEM_DETAILS}
+`
+
+export const REMOVE_GEAR_ITEM = gql`
+	mutation removeGearItem($id: String!) {
+		removeGearItem(id: $id)
+	}
 `
 
 export const EDIT_GEAR_ITEM = gql`
