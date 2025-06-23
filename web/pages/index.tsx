@@ -19,7 +19,7 @@ import { TypeAnimation } from 'react-type-animation'
 import { FullDrop, GearListWithItems } from '../lib/types'
 import LandingList from '../components/landing/List'
 import GearItem from '../components/gear/Item'
-import Image from "next/legacy/image"
+import Image from 'next/legacy/image'
 import Link from 'next/link'
 import { gql } from '@apollo/client'
 import MarqueeSection from '../components/landing/Marquee'
@@ -34,6 +34,7 @@ const users: User[] = [
 		gearhouse: false,
 		fullName: 'Roger Deakins',
 		profilePicture: '/img/landing/roger.jpg',
+		admin: false,
 	},
 	{
 		id: '2',
@@ -41,6 +42,7 @@ const users: User[] = [
 		gearhouse: false,
 		fullName: 'John Higgins',
 		profilePicture: '/img/landing/john.jpg',
+		admin: false,
 	},
 	{
 		id: '3',
@@ -48,6 +50,7 @@ const users: User[] = [
 		gearhouse: false,
 		fullName: 'Andy Harris',
 		profilePicture: '/img/landing/andy.png',
+		admin: false,
 	},
 ]
 
@@ -69,8 +72,8 @@ const Home = ({
 		),
 	]
 	return (
-        <>
-            <Head>
+		<>
+			<Head>
 				<title>ShootDrop: Your next shoot starts here</title>
 				<meta name="description" content="Gear lists simplified." />
 				<meta property="og:type" content="website" />
@@ -80,7 +83,7 @@ const Home = ({
 					key="title"
 				/>
 			</Head>
-            <Layout>
+			<Layout>
 				<div className="relative flex h-screen overflow-y-hidden bg-gradient-to-t from-gray-900 to-black">
 					<div className="m-auto text-center">
 						<div className="relative ">
@@ -265,19 +268,18 @@ const Home = ({
 				<div className="flex flex-col items-center justify-center bg-gradient-to-t from-gray-900 to-gray-800 px-2 pb-20 text-center">
 					<div className="mt-16 flex w-11/12 max-w-2xl flex-col items-center gap-7 lg:flex-row lg:justify-between 2xl:max-w-3xl">
 						<Link
-                            href={`/drops/${drop.id}/pdf`}
-                            className="h-72 w-64 overflow-hidden rounded-3xl transition-transform will-change-transform hover:scale-105 active:scale-95">
-
-                            <Image
-                                alt="PDF generated with ShootDrop"
-                                src="/img/landing/pdf.jpg"
-                                width={400}
-                                height={1000}
-                                className="animate-[scrollLanding_3s_ease-in-out_infinite_alternate]"
-                                draggable={false}
-                            />
-
-                        </Link>
+							href={`/drops/${drop.id}/pdf`}
+							className="h-72 w-64 overflow-hidden rounded-3xl transition-transform will-change-transform hover:scale-105 active:scale-95"
+						>
+							<Image
+								alt="PDF generated with ShootDrop"
+								src="/img/landing/pdf.jpg"
+								width={400}
+								height={1000}
+								className="animate-[scrollLanding_3s_ease-in-out_infinite_alternate]"
+								draggable={false}
+							/>
+						</Link>
 						<div className="max-w-sm">
 							<p className="font-bold">PDFs</p>
 							<p>
@@ -311,14 +313,13 @@ const Home = ({
 				<div className="flex flex-col items-center justify-center bg-gradient-to-t from-gray-900 to-gray-800 px-2 pb-20 text-center">
 					<div className="mt-10 flex w-11/12 max-w-2xl flex-col-reverse items-center gap-10 lg:flex-row lg:justify-between 2xl:max-w-3xl">
 						<Link
-                            href="/gear/add"
-                            className=" h-72 w-11/12 overflow-hidden rounded-3xl transition-transform will-change-transform hover:scale-105 active:scale-95 sm:w-96">
-
-                            <video autoPlay muted loop>
-                                <source src="/img/landing/addgear.mp4" type="video/mp4" />
-                            </video>
-
-                        </Link>
+							href="/gear/add"
+							className=" h-72 w-11/12 overflow-hidden rounded-3xl transition-transform will-change-transform hover:scale-105 active:scale-95 sm:w-96"
+						>
+							<video autoPlay muted loop>
+								<source src="/img/landing/addgear.mp4" type="video/mp4" />
+							</video>
+						</Link>
 						<div className="max-w-sm">
 							<p className="font-bold">Something missing, add it!</p>
 							<p className="max-w-xs">
@@ -331,11 +332,10 @@ const Home = ({
 					<div className=" m-auto text-center">
 						<p className=" 2xl:text-xl">Heard enough?</p>
 						<Link
-                            href="/drops/add"
-                            className="cursor-pointer text-5xl font-bold transition-all duration-500 hover:drop-shadow-[0_2px_3px_rgba(255,255,255,0.8)] 2xl:text-6xl">
-							
-								Make a Drop!
-							
+							href="/drops/add"
+							className="cursor-pointer text-5xl font-bold transition-all duration-500 hover:drop-shadow-[0_2px_3px_rgba(255,255,255,0.8)] 2xl:text-6xl"
+						>
+							Make a Drop!
 						</Link>
 					</div>
 					<span className="absolute bottom-10 flex w-full flex-col items-center gap-5 ">
@@ -362,8 +362,8 @@ const Home = ({
 					</span>
 				</div>
 			</Layout>
-        </>
-    );
+		</>
+	)
 }
 
 // Seperate Apollo client for SSG (ref's specific drop on api.shootdrop.com)
