@@ -488,8 +488,13 @@ export const REMOVE_GEAR_IMAGE = gql`
 `
 
 export const ALL_TAGS = gql`
-	query allTags($tags: [String], $tag: String, $category: [GearCategory]) {
-		allTags(tags: $tags, tag: $tag, category: $category) {
+	query allTags(
+		$tags: [String]
+		$tag: String
+		$category: [GearCategory]
+		$limit: Int
+	) {
+		allTags(tags: $tags, tag: $tag, category: $category, limit: $limit) {
 			id
 			name
 			category
@@ -500,6 +505,22 @@ export const ALL_TAGS = gql`
 export const ADD_TAG = gql`
 	mutation addTag($name: String!, $category: [GearCategory]) {
 		addTag(name: $name, category: $category) {
+			id
+			name
+			category
+		}
+	}
+`
+
+export const REMOVE_TAG = gql`
+	mutation removeTag($id: String!) {
+		removeTag(id: $id)
+	}
+`
+
+export const EDIT_TAG = gql`
+	mutation editTag($id: String!, $name: String, $category: [GearCategory]) {
+		editTag(id: $id, name: $name, category: $category) {
 			id
 			name
 			category

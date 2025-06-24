@@ -125,6 +125,44 @@ const resolvers = {
 			})
 			return await newTag.save()
 		},
+		editTag: async (
+			root,
+			args: { id: string; name?: string; category?: string[] },
+			context
+		) => {
+			checkAuth(context)
+			checkAdmin(context)
+			const { id, name, category } = args
+			const update: { name?: string; category?: string[] } = {}
+			if (name) update.name = name.toLowerCase()
+			if (category) update.category = category
+			const updatedTag = await Tag.findByIdAndUpdate(id, update, {
+				returnDocument: 'after',
+			})
+			if (!updatedTag) {
+				throw new GraphQLError('Tag not found', {
+					extensions: {
+						code: ApolloServerErrorCode.BAD_USER_INPUT,
+					},
+				})
+			}
+			return updatedTag
+		},
+		removeTag: async (root, args, context) => {
+			checkAuth(context)
+			checkAdmin(context)
+			const tag = await Tag.findById(args.id)
+			if (!tag) {
+				throw new GraphQLError('Tag not found', {
+					extensions: {
+						code: ApolloServerErrorCode.BAD_USER_INPUT,
+					},
+				})
+			}
+			await GearItem.updateMany({ tags: tag._id }, { $pull: { tags: tag._id } })
+			await tag.deleteOne()
+			return true
+		},
 		addGearItem: async (root, args, context) => {
 			checkAuth(context)
 			const {
@@ -1127,7 +1165,9 @@ const resolvers = {
 						],
 					}
 				}
-				const tagSearch = await Tag.find(findParams).sort('name').limit(20)
+				const tagSearch = await Tag.find(findParams)
+					.sort('name')
+					.limit(args.limit || 20)
 				return tagSearch
 			} catch {
 				throw new GraphQLError(`Error searching for tag: ${args.tag}`, {
