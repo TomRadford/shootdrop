@@ -488,8 +488,13 @@ export const REMOVE_GEAR_IMAGE = gql`
 `
 
 export const ALL_TAGS = gql`
-	query allTags($tags: [String], $tag: String, $category: [GearCategory]) {
-		allTags(tags: $tags, tag: $tag, category: $category) {
+	query allTags(
+		$tags: [String]
+		$tag: String
+		$category: [GearCategory]
+		$limit: Int
+	) {
+		allTags(tags: $tags, tag: $tag, category: $category, limit: $limit) {
 			id
 			name
 			category
