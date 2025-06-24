@@ -98,7 +98,7 @@ const TagRow = ({ tag }: { tag: Tag }) => {
 						{tag.category && tag.category.length > 0 ? (
 							tag.category.join(', ')
 						) : (
-							<span className="text-gray-400">(none)</span>
+							<span className="text-gray-200">ALL</span>
 						)}
 					</Button>
 				</td>
