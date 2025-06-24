@@ -512,6 +512,22 @@ export const ADD_TAG = gql`
 	}
 `
 
+export const REMOVE_TAG = gql`
+	mutation removeTag($id: String!) {
+		removeTag(id: $id)
+	}
+`
+
+export const EDIT_TAG = gql`
+	mutation editTag($id: String!, $name: String, $category: [GearCategory]) {
+		editTag(id: $id, name: $name, category: $category) {
+			id
+			name
+			category
+		}
+	}
+`
+
 export const GET_LIST = gql`
 	query getList($id: String!) {
 		getList(id: $id) {
