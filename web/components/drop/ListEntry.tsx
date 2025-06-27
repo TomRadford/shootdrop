@@ -55,7 +55,7 @@ const ListEntry = ({
 		<div
 			className={cn(
 				'relative mx-auto w-80 sm:w-96',
-				copyListLoading && 'animate-pulse'
+				copyListLoading && 'animate-pulse pointer-events-none'
 			)}
 			key={listEntry.id}
 		>
