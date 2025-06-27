@@ -1,12 +1,15 @@
 import Card from '../Card'
-import { GearListItem, GearList } from '../../__generated__/graphql'
+import { GearListItem, GearList, Drop } from '../../__generated__/graphql'
 
 import Link from 'next/link'
 import Image from 'next/legacy/image'
 import { formatDistance } from 'date-fns'
-import { useQuery } from '@apollo/client'
-import { GET_LIST_ITEMS } from '../../lib/apollo/queries'
-import { capitalize } from '../../lib/utils'
+import { useMutation, useQuery } from '@apollo/client'
+import { ALL_DROPS, COPY_LISTS, GET_LIST_ITEMS } from '../../lib/apollo/queries'
+import { capitalize, cn } from '../../lib/utils'
+import RubbishIcon from '../elements/icons/RubbishIcon'
+import Button from '../elements/Button'
+import DuplicateIcon from '../elements/icons/DuplicateIcon'
 
 const ListEntry = ({
 	listEntry,
@@ -26,33 +29,66 @@ const ListEntry = ({
 		variables: { list: listEntry.id },
 	})
 
+	const [copyList, { loading: copyListLoading }] = useMutation(COPY_LISTS, {
+		update: (cache, response) => {
+			cache.updateQuery(
+				{ query: ALL_DROPS, variables: { drop: listEntry.drop.id } },
+				(data: { allDrops: Drop[] } | null) => {
+					if (!data) return null
+
+					return {
+						allDrops: data.allDrops.map((drop) =>
+							drop.id === listEntry.drop.id
+								? {
+										...drop,
+										lists: [...drop.lists, ...response.data.copyLists],
+								  }
+								: drop
+						),
+					}
+				}
+			)
+		},
+	})
+
 	return (
-		<div className="relative mx-auto w-80 sm:w-96" key={listEntry.id}>
+		<div
+			className={cn(
+				'relative mx-auto w-80 sm:w-96',
+				copyListLoading && 'animate-pulse'
+			)}
+			key={listEntry.id}
+		>
 			<Card>
 				{userInDrop && (
-					<button
-						onClick={(e) => {
-							e.preventDefault()
-							setListToDelete(listEntry)
-							setDeleteModalOpen(true)
-						}}
-						className="absolute right-3 top-3 rounded border border-solid border-slate-600 p-2 transition-colors duration-300 hover:bg-red-900"
-					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 24 24"
-							strokeWidth={1.5}
-							stroke="currentColor"
-							className="h-3 w-3"
+					<>
+						<Button
+							onClick={(e) => {
+								e.preventDefault()
+								setListToDelete(listEntry)
+								setDeleteModalOpen(true)
+							}}
+							variant="outline"
+							className="absolute right-3 top-3 rounded border border-solid border-slate-600 p-2 transition-colors duration-300 hover:bg-red-900"
 						>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-							/>
-						</svg>
-					</button>
+							<RubbishIcon width={12} height={12} />
+						</Button>
+						<Button
+							onClick={(e) => {
+								e.preventDefault()
+								copyList({
+									variables: {
+										lists: [listEntry.id],
+										targetDrop: listEntry.drop.id,
+									},
+								})
+							}}
+							variant="outline"
+							className="absolute right-12 top-3 rounded border border-solid border-slate-600 p-2 transition-colors duration-300 hover:bg-blue-900"
+						>
+							<DuplicateIcon width={12} height={12} />
+						</Button>
+					</>
 				)}
 				<Link href={`/list/${listEntry.id}`}>
 					<div className="pb-13 flex flex-col gap-1 px-4 py-2 ">
