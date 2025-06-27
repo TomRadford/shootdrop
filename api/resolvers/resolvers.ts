@@ -17,7 +17,7 @@ import { GearPref, GearPrefOpt } from '../models/gear/pref'
 import { handlePrefs, handleEditPrefs } from '../utils/prefs'
 import { generateUploadURL, deleteS3Object } from '../utils/s3'
 import { sendAccountRequest, sendPasswordReset } from '../utils/mailer'
-import { Document } from 'mongoose'
+import { duplicateLists } from '../utils/lists'
 
 const dateScalar = new GraphQLScalarType({
 	name: 'Date',
@@ -571,40 +571,15 @@ const resolvers = {
 				client: args.client,
 			})
 
-			const newLists = []
+			const newLists = await duplicateLists({
+				lists: existingDrop.lists as unknown as Array<
+					InferSchemaType<typeof GearListSchema>
+				>,
+				currentUser: context.currentUser,
+				targetDrop: newDrop,
+			})
 
-			for (const list of existingDrop.lists as unknown as (InferSchemaType<
-				typeof GearListSchema
-			> &
-				Document)[]) {
-				const newList = new GearList({
-					title: list.title,
-					category: list.category,
-					comment: list.comment,
-					drop: newDrop,
-				})
-				await newList.save()
-
-				newLists.push(newList)
-
-				const existingListItems = await GearListItem.find({
-					gearList: list._id,
-				})
-
-				for (const listItem of existingListItems) {
-					const newListItem = new GearListItem({
-						gearItem: listItem.gearItem,
-						quantity: listItem.quantity,
-						comment: listItem.comment,
-						prefs: listItem.prefs,
-						gearList: newList,
-						userThatUpdated: context.currentUser,
-					})
-					await newListItem.save()
-				}
-			}
-
-			newDrop.lists = newLists
+			newDrop.lists = newLists as any //Mongoose handles this but its typings arent smart
 
 			await newDrop.save()
 			return await newDrop.populate(['users'])
@@ -680,6 +655,35 @@ const resolvers = {
 					},
 				})
 			}
+		},
+
+		copyLists: async (root, args, context) => {
+			checkAuth(context)
+			const {
+				lists,
+				targetDrop: targetDropId,
+			}: { lists: string[]; targetDrop: string } = args
+
+			const targetDrop = await Drop.findById(targetDropId)
+			checkDropPermissions(context, targetDrop)
+
+			const listsToCopy = await GearList.find({
+				_id: { $in: lists },
+			})
+
+			const newLists = await duplicateLists({
+				lists: listsToCopy,
+				currentUser: context.currentUser,
+				targetDrop: targetDrop,
+			})
+
+			targetDrop.lists = targetDrop.lists.concat(
+				//@ts-expect-error TODO: Mongoose upgrade
+				newLists.map((l) => mongoose.Types.ObjectId(l))
+			)
+			await targetDrop.save()
+
+			return newLists
 		},
 
 		addListItem: async (root, args, context) => {

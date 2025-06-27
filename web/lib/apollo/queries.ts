@@ -561,6 +561,15 @@ export const REMOVE_LIST = gql`
 	}
 `
 
+export const COPY_LISTS = gql`
+	mutation copyLists($lists: [String!], $targetDrop: String!) {
+		copyLists(lists: $lists, targetDrop: $targetDrop) {
+			...ListDetails
+		}
+	}
+	${LIST_DETAILS}
+`
+
 const GEAR_LIST_ITEM_DETAILS = gql`
 	fragment GearListItemDetails on GearListItem {
 		id

@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose'
 
-const schema = new Schema(
+export const DropSchema = new Schema(
 	{
 		project: String,
 		client: String,
@@ -22,6 +22,6 @@ const schema = new Schema(
 	{ timestamps: true }
 )
 
-const Drop = model<typeof schema>('Drop', schema)
+const Drop = model<typeof DropSchema>('Drop', DropSchema)
 
 export default Drop
