@@ -657,6 +657,36 @@ const resolvers = {
 			}
 		},
 
+		copyLists: async (root, args, context) => {
+			checkAuth(context)
+			const {
+				lists,
+				targetDrop: targetDropId,
+			}: { lists: string[]; targetDrop: string } = args
+			const { currentUser } = context
+
+			const targetDrop = await Drop.findById(targetDropId)
+			checkDropPermissions(context, targetDrop)
+
+			const listsToCopy = await GearList.find({
+				_id: { $in: lists },
+			})
+
+			const newLists = await duplicateLists({
+				lists: listsToCopy,
+				currentUser,
+				targetDrop: targetDrop,
+			})
+
+			targetDrop.lists = targetDrop.lists.concat(
+				//@ts-expect-error TODO: Mongoose upgrade
+				newLists.map((l) => mongoose.Types.ObjectId(l))
+			)
+			await targetDrop.save()
+
+			return newLists
+		},
+
 		addListItem: async (root, args, context) => {
 			//Note: if GearItem already exisits, quantity will increment
 			// and existing ListItem will return

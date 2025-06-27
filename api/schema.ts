@@ -262,6 +262,7 @@ const typeDefs = gql`
 		addList(drop: String!, category: GearCategory!, comment: String): GearList!
 		editList(id: String!, comment: String, title: String): GearList!
 		removeList(id: String!): Boolean!
+		copyLists(lists: [String!], targetDrop: String!): [GearList!]
 		addListItem(
 			list: String!
 			gearItem: String!

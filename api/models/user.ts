@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-const schema = new mongoose.Schema(
+export const UserSchema = new mongoose.Schema(
 	{
 		//NB: doubles as email address
 		username: {
@@ -37,12 +37,12 @@ const schema = new mongoose.Schema(
 	{ timestamps: true }
 )
 
-schema.set('toJSON', {
+UserSchema.set('toJSON', {
 	transform: (document, returnedObject) => {
 		delete returnedObject.passwordHash
 	},
 })
 
-const User = mongoose.model<typeof schema>('User', schema)
+const User = mongoose.model<typeof UserSchema>('User', UserSchema)
 
 export default User
