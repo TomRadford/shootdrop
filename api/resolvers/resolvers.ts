@@ -663,7 +663,6 @@ const resolvers = {
 				lists,
 				targetDrop: targetDropId,
 			}: { lists: string[]; targetDrop: string } = args
-			const { currentUser } = context
 
 			const targetDrop = await Drop.findById(targetDropId)
 			checkDropPermissions(context, targetDrop)
@@ -674,7 +673,7 @@ const resolvers = {
 
 			const newLists = await duplicateLists({
 				lists: listsToCopy,
-				currentUser,
+				currentUser: context.currentUser,
 				targetDrop: targetDrop,
 			})
 
