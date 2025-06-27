@@ -17,7 +17,7 @@ import { GearPref, GearPrefOpt } from '../models/gear/pref'
 import { handlePrefs, handleEditPrefs } from '../utils/prefs'
 import { generateUploadURL, deleteS3Object } from '../utils/s3'
 import { sendAccountRequest, sendPasswordReset } from '../utils/mailer'
-import { Document } from 'mongoose'
+import { duplicateLists } from '../utils/lists'
 
 const dateScalar = new GraphQLScalarType({
 	name: 'Date',
@@ -571,40 +571,15 @@ const resolvers = {
 				client: args.client,
 			})
 
-			const newLists = []
+			const newLists = await duplicateLists({
+				lists: existingDrop.lists as unknown as Array<
+					InferSchemaType<typeof GearListSchema>
+				>,
+				currentUser: context.currentUser,
+				targetDrop: newDrop,
+			})
 
-			for (const list of existingDrop.lists as unknown as (InferSchemaType<
-				typeof GearListSchema
-			> &
-				Document)[]) {
-				const newList = new GearList({
-					title: list.title,
-					category: list.category,
-					comment: list.comment,
-					drop: newDrop,
-				})
-				await newList.save()
-
-				newLists.push(newList)
-
-				const existingListItems = await GearListItem.find({
-					gearList: list._id,
-				})
-
-				for (const listItem of existingListItems) {
-					const newListItem = new GearListItem({
-						gearItem: listItem.gearItem,
-						quantity: listItem.quantity,
-						comment: listItem.comment,
-						prefs: listItem.prefs,
-						gearList: newList,
-						userThatUpdated: context.currentUser,
-					})
-					await newListItem.save()
-				}
-			}
-
-			newDrop.lists = newLists
+			newDrop.lists = newLists as any //Mongoose handles this but its typings arent smart
 
 			await newDrop.save()
 			return await newDrop.populate(['users'])
