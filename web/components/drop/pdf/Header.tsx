@@ -152,7 +152,7 @@ const Header = ({
 						)}
 						{wrapDate && (
 							<View style={styles.detailItem}>
-								<Text>Gear wrap: {format(gearCheckDate, 'dd MMM yyyy')}</Text>
+								<Text>Gear wrap: {format(wrapDate, 'dd MMM yyyy')}</Text>
 							</View>
 						)}
 					</View>
