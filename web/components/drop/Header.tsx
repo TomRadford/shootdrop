@@ -132,7 +132,7 @@ const DropHeader = ({
 										</div>
 									))}
 							</div>
-							{me && (
+							{me && drop && (
 								<div className="pt-2">
 									<AddIcon width={16} height={16} />
 								</div>
