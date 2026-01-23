@@ -13,6 +13,7 @@ import Button from '../elements/Button'
 import PageIcon from '../elements/icons/PageIcon'
 import RubbishIcon from '../elements/icons/RubbishIcon'
 import DuplicateIcon from '../elements/icons/DuplicateIcon'
+import AddIcon from '../elements/icons/AddIcon'
 
 const DropHeader = ({
 	drop,
@@ -109,25 +110,33 @@ const DropHeader = ({
 							setModalOpen(true)
 						}}
 					>
-						<div className="mb-5 flex -space-x-4 md:-space-x-2">
-							{drop &&
-								drop.users.map((user) => (
-									<div key={user.id}>
-										<Image
-											src={
-												user.profilePicture
-													? user.profilePicture
-													: `/img/default_user.png`
-											}
-											key={user.id}
-											width="30"
-											height="30"
-											className={`rounded-full`}
-											objectFit="cover"
-											alt={user.fullName}
-										/>
-									</div>
-								))}
+						<div className="flex flex-row  sm:gap-2 gap-0 min-h-max">
+							{' '}
+							<div className="mb-5 flex -space-x-4 md:-space-x-2">
+								{drop &&
+									drop.users.map((user) => (
+										<div key={user.id}>
+											<Image
+												src={
+													user.profilePicture
+														? user.profilePicture
+														: `/img/default_user.png`
+												}
+												key={user.id}
+												width="30"
+												height="30"
+												className={`rounded-full`}
+												objectFit="cover"
+												alt={user.fullName}
+											/>
+										</div>
+									))}
+							</div>
+							{me && drop && (
+								<div className="pt-2">
+									<AddIcon width={16} height={16} />
+								</div>
+							)}
 						</div>
 					</button>
 				</div>
