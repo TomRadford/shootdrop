@@ -117,45 +117,6 @@ DEV_MONGODB_URI=mongodb://appuser:yourpassword@localhost:27017/shootdrop
 
 ```
 
-## Email Service Migration
-
-The application has been migrated from SendGrid to Amazon SES for email delivery.
-
-### Required Environment Variables
-
-Add these to your `.env` file:
-
-```
-SES_REGION=us-east-1
-SES_FROM_EMAIL=no-reply@shootdrop.com
-```
-
-### AWS SES Setup
-
-1. **Verify your domain** in AWS SES console
-2. **Create an IAM user** with SES permissions:
-   ```json
-   {
-   	"Version": "2012-10-17",
-   	"Statement": [
-   		{
-   			"Effect": "Allow",
-   			"Action": ["ses:SendEmail", "ses:SendRawEmail"],
-   			"Resource": "*"
-   		}
-   	]
-   }
-   ```
-3. **Move out of sandbox** (if needed) by requesting production access
-4. **Set up your environment variables** with the IAM credentials
-
-### Migration Notes
-
-- The `@sendgrid/mail` dependency has been removed
-- All email functions maintain the same API
-- Enhanced error handling and validation added
-- Uses the same AWS credentials as S3 (if in same region)
-
 ## Author
 
 👤 **Tom Radford**
