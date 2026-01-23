@@ -1,5 +1,5 @@
 import config from './config'
-import sgMail from '@sendgrid/mail'
+import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses'
 import logger from './logger'
 import Mailgen from 'mailgen'
 
@@ -13,15 +13,57 @@ const mailGenerator = new Mailgen({
 	},
 })
 
-//SendGrid
-sgMail.setApiKey(config.SENDGRID_API_KEY)
+//SES Client setup
+const sesClient = new SESClient({
+	region: config.SES_REGION,
+	credentials: {
+		accessKeyId: config.AWS_ACCESS_KEY_ID,
+		secretAccessKey: config.AWS_SECRET_ACCESS_KEY,
+	},
+})
 
-//Generic mail
+//Generic mail function
 const sendMail = async (msg) => {
+	// Validate required fields
+	if (!msg.to || !msg.from?.email || !msg.subject || (!msg.text && !msg.html)) {
+		throw new Error(
+			'Missing required email fields: to, from.email, subject, and either text or html'
+		)
+	}
+
 	try {
-		await sgMail.send(msg)
+		const command = new SendEmailCommand({
+			Source: msg.from.email,
+			Destination: {
+				ToAddresses: Array.isArray(msg.to) ? msg.to : [msg.to],
+			},
+			Message: {
+				Subject: {
+					Data: msg.subject,
+					Charset: 'UTF-8',
+				},
+				Body: {
+					...(msg.text && {
+						Text: {
+							Data: msg.text,
+							Charset: 'UTF-8',
+						},
+					}),
+					...(msg.html && {
+						Html: {
+							Data: msg.html,
+							Charset: 'UTF-8',
+						},
+					}),
+				},
+			},
+		})
+
+		await sesClient.send(command)
+		logger.info(`Email sent successfully to ${msg.to}`)
 	} catch (e) {
-		logger.error(e)
+		logger.error('Failed to send email:', e)
+		throw e
 	}
 }
 
@@ -49,7 +91,7 @@ export const sendAccountRequest = async (user) => {
 		await sendMail({
 			to: config.SITE_ADMIN,
 			from: {
-				email: 'no-reply@shootdrop.com',
+				email: config.SES_FROM_EMAIL,
 				name: 'ShootDrop',
 			},
 			subject: `${user.fullName} has requested account activation on ShootDrop`,
@@ -57,10 +99,7 @@ export const sendAccountRequest = async (user) => {
 			html: mailGenerator.generate(mailgenMessage),
 		})
 	} catch (e) {
-		logger.error(e)
-		if (e.response) {
-			logger.error(e.response.body)
-		}
+		logger.error('Failed to send account request email:', e)
 	}
 }
 
@@ -86,7 +125,7 @@ export const sendPasswordReset = async (user, token) => {
 		await sendMail({
 			to: user.username,
 			from: {
-				email: 'no-reply@shootdrop.com',
+				email: config.SES_FROM_EMAIL,
 				name: 'ShootDrop',
 			},
 			subject: `Password Reset for ${user.fullName}`,
@@ -94,9 +133,6 @@ export const sendPasswordReset = async (user, token) => {
 			html: mailGenerator.generate(mailgenMessage),
 		})
 	} catch (e) {
-		logger.error(e)
-		if (e.response) {
-			logger.error(e.response.body)
-		}
+		logger.error('Failed to send password reset email:', e)
 	}
 }

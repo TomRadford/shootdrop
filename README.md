@@ -69,6 +69,7 @@ A list is tied to a drop, it consists of Gear Items in a particular category (ei
 - Apollo Server
 - MongoDB (with Mongoose ODM)
 - AWS S3
+- AWS SES (Email Service)
 
 ## Dev Setup
 

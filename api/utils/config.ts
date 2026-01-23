@@ -6,6 +6,8 @@ const PORT = process.env.PORT
 const NODE_ENV = process.env.NODE_ENV
 const HCAPTCHASECRET = process.env.HCAPTCHASECRET
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY
+const SES_REGION = process.env.SES_REGION
+const SES_FROM_EMAIL = process.env.SES_FROM_EMAIL || 'no-reply@shootdrop.com'
 const SITE_ADMIN = process.env.SITE_ADMIN
 
 const IS_DEV = NODE_ENV === 'development'
@@ -36,6 +38,8 @@ export default {
 	S3_BUCKET,
 	HCAPTCHASECRET,
 	SENDGRID_API_KEY,
+	SES_REGION,
+	SES_FROM_EMAIL,
 	SITE_ADMIN,
 	IS_DEV,
 }
